@@ -43,6 +43,8 @@ export interface User {
   uid: string
 }
 
+export interface Studio {}
+
 export type UserPrivilege =
   | 'missing'
   | 'invalid'
