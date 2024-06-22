@@ -10,6 +10,7 @@ import { useSearchParams } from 'next/navigation'
 import GameSection from './gamesection'
 import { IconButton } from '../(components)/iconButton'
 import { IoSchool, IoSchoolOutline } from 'react-icons/io5'
+import { getAllGames } from '@/api/games'
 
 export default function Games() {
   const [error, setError] = useState('')
@@ -33,14 +34,8 @@ export default function Games() {
   async function fetchGames() {
     let data: GamesList
     try {
-      data = (
-        await firestore.getDoc(
-          firestore.doc(
-            firestore.getFirestore(),
-            'gameslist/BrHoO8yuD3JdDFo8F2BC'
-          )
-        )
-      ).data() as GamesList
+      data = await (await getAllGames()).body
+      console.log(data)
       setGamesData({
         data: data.data.filter(
           (element) =>
