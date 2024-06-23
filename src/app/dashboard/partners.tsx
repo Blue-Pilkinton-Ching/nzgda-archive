@@ -5,7 +5,7 @@ import { useAuthState } from 'react-firebase-hooks/auth'
 import { getAuth } from 'firebase/auth'
 import { MdDeleteForever, MdDone, MdEdit } from 'react-icons/md'
 
-import { Partner } from '../../../types'
+import { Studio } from '../../../types'
 import Button from '../(components)/button'
 import Confirm from './confirm'
 
@@ -15,12 +15,12 @@ export default function Partners({
   invalidatePartners,
 }: {
   className: string
-  partners: Partner[]
+  partners: Studio[]
   invalidatePartners: () => void
 }) {
   const [user] = useAuthState(getAuth())
 
-  const [partnerData, setPartnerData] = useState<Partner[]>()
+  const [partnerData, setPartnerData] = useState<Studio[]>()
   const [confirmText, setConfirmText] = useState('')
   const [partnerToDelete, setPartnerToDelete] = useState('')
   const [editPartner, setEditPartner] = useState('')
@@ -87,9 +87,9 @@ export default function Partners({
         setEditPartner('')
         setPartnerName('')
 
-        let p = (partnerData as Partner[]).find(
+        let p = (partnerData as Studio[]).find(
           (x) => x.name === editPartner
-        ) as Partner
+        ) as Studio
 
         p.name = partnerName
 

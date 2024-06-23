@@ -1,7 +1,6 @@
 'use client'
 
-import { GamesList } from '../../../types'
-import * as firestore from 'firebase/firestore'
+import { Studio, Game } from '../../../types'
 import React, { useEffect, useState } from 'react'
 
 import '@/utils/client/firebase'
@@ -10,12 +9,13 @@ import { useSearchParams } from 'next/navigation'
 import GameSection from './gamesection'
 import { IconButton } from '../(components)/iconButton'
 import { IoSchool, IoSchoolOutline } from 'react-icons/io5'
-import { getAllGames } from '@/api/games'
+import { getAllPublicGames } from '@/api/games'
 
 export default function Games() {
   const [error, setError] = useState('')
 
-  const [gamesData, setGamesData] = useState<GamesList>()
+  const [games, setGames] = useState<Game[]>([])
+  const [studios, setStudios] = useState<Studio[]>([])
   const [partner, setPartner] = useState<string | null>()
 
   const [admin, setAdmin] = useState<boolean>()
@@ -32,32 +32,14 @@ export default function Games() {
   }, [params])
 
   async function fetchGames() {
-    let data: GamesList
-    try {
-      data = await (await getAllGames()).body
-      console.log(data)
-      setGamesData({
-        data: data.data.filter(
-          (element) =>
-            !element.hidden &&
-            data.partners.find((p) => p.name === element.partner)?.hidden !==
-              true &&
-            (element.exclude
-              ? isMobile()
-                ? !element.exclude.includes('mobileweb')
-                : !element.exclude.includes('desktop')
-              : true)
-        ),
-        partners: data.partners,
-      })
-      if (!data) {
-        console.error('Data not on firebase for some reason')
-        throw 'Data not on firebase for some reason'
-      }
-    } catch (error) {
-      console.error(error)
-      setError('Failed to fetch games :(')
-    }
+    // let data: Game[]
+    // try {
+    //   data = await getAllPublicGames()
+    //   setGames(data)
+    // } catch (error) {
+    //   console.error(error)
+    //   setError('Failed to fetch games :(')
+    // }
   }
 
   const isMobile = () => {
@@ -69,11 +51,11 @@ export default function Games() {
 
   return (
     <>
-      {gamesData ? (
+      {games ? (
         <>
           {partner ? (
             <>
-              <GameSection
+              {/* <GameSection
                 smallTitle={`${partner}`}
                 largeTitle={`${
                   educational ? 'Educational' : ''
@@ -98,36 +80,22 @@ export default function Games() {
                           color="#00A98F"
                         />
                       )}
-                    </IconButton> */}
-                    <Dropdown
-                      options={gamesData.partners
-                        .filter((x) => x.hidden !== true)
-                        .map((x) => x.name)}
-                    />
+                    </IconButton> 
+                    <Dropdown options={studios?.map((x) => x.name)} />
                   </div>
                 }
-                games={gamesData.data
-                  .filter(
-                    (x) =>
-                      x.partner === partner &&
-                      (admin ? true : x.approved === true) &&
-                      (educational ? x.educational : true) &&
-                      (x.playableOnHeihei == undefined
-                        ? true
-                        : x.playableOnHeihei)
-                  )
-                  .sort(
-                    (a, b) =>
-                      (b.sort ? b.sort : b.id * 100) -
-                      (a.sort ? a.sort : a.id * 100)
-                  )}
-              />
+                games={games.sort(
+                  (a, b) =>
+                    (b.sort ? b.sort : b.id * 100) -
+                    (a.sort ? a.sort : a.id * 100)
+                )}
+              /> */}
             </>
           ) : null}
           <br />
           <br />
           <br />
-          <GameSection
+          {/* <GameSection
             smallTitle={educational ? 'Educational Games' : 'Online Games'}
             largeTitle={
               educational ? 'Educational Online Games' : 'Play Games Online'
@@ -154,45 +122,31 @@ export default function Games() {
                           color="#00A98F"
                         />
                       )}
-                    </IconButton> */}
-                    <Dropdown
-                      options={gamesData.partners
-                        .filter((x) => x.hidden !== true)
-                        .map((x) => x.name)}
-                    />
+                    </IconButton> 
+                    <Dropdown options={studios.map((x) => x.name)} />
                   </div>
                 </>
               )
             }
-            games={gamesData.data
-              .filter(
-                (x) =>
-                  (educational ? x.educational : true) &&
-                  (admin ? true : x.approved === true) &&
-                  (x.playableOnHeihei == undefined ? true : x.playableOnHeihei)
+            games={games
+              .filter((x) =>
+                x.playableOnHeihei == undefined ? true : x.playableOnHeihei
               )
               .sort(
                 (a, b) =>
                   (b.sort ? b.sort : b.id * 100) -
                   (a.sort ? a.sort : a.id * 100)
               )}
-          />
+          /> */}
           <br />
           <br />
           <br />
-          {gamesData.data.filter(
-            (x) => x.app && (educational ? x.educational : true)
-          ).length === 0 ? null : (
+          {games.filter((x) => x.isApp).length === 0 ? null : (
             <GameSection
               smallTitle={educational ? 'Educational Apps' : 'Apps'}
               largeTitle={educational ? 'Educational Apps' : 'Download an App'}
-              games={gamesData.data
-                .filter(
-                  (x) =>
-                    x.app &&
-                    (educational ? x.educational : true) &&
-                    (admin ? true : x.approved === true)
-                )
+              games={games
+                .filter((x) => x.isApp)
                 .sort(
                   (a, b) =>
                     (b.sort ? b.sort : b.id * 100) -

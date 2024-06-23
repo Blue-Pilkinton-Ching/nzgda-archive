@@ -1,6 +1,6 @@
 'use client'
 
-import { GamesList, Partner, User, UserTypes } from '../../../../types'
+import { GamesList, Studio, User, UserTypes } from '../../../../types'
 import { useEffect, useState } from 'react'
 import { useAuthState } from 'react-firebase-hooks/auth'
 import { getAuth } from 'firebase/auth'
@@ -12,7 +12,7 @@ import GameForm from '../gameform'
 export default function Page() {
   const [user] = useAuthState(getAuth())
 
-  const [partners, setPartners] = useState<Partner[]>([])
+  const [partners, setPartners] = useState<Studio[]>([])
   const [users, setUsers] = useState<UserTypes>()
 
   const [message, setMessage] = useState('')

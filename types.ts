@@ -3,27 +3,20 @@ export interface Game {
   name: string
   description: string
   thumbnail: string
-  screenshot?: string
+  banner?: string
   approved: number
-  partner: string
+  studio: Studio
   url?: string
-  userId: number
-  type: string
-  tags?: string
-  uploadStatus: string
-  iosLink?: string
-  androidLink?: string
-  fileSize?: number
-  exclude?: string
+  tags: string
+  exclude: string
   width?: number
   height?: number
-  orientation?: string
-  createdAt?: string
-  updatedAt?: string
-  playableOnHeihei?: boolean
-  displayAppBadge?: boolean
+  createdAt: string
+  updatedAt: string
+  isApp: boolean
   educational: boolean
-  isGameExternal: boolean
+  playableOnHeihei?: boolean
+  sort: number
 }
 export interface UserTypes {
   admins: User[]
@@ -32,8 +25,7 @@ export interface UserTypes {
 
 export interface AdminDashboard {
   users: UserTypes
-  partners: Partner[]
-  gameslist: GameListItem[]
+  partners: Studio[]
   authRequests: User[]
 }
 
@@ -53,28 +45,7 @@ export type UserPrivilege =
   | 'admin'
   | 'privileged'
 
-export interface GameListItem {
+export interface Studio {
   id: number
   name: string
-  thumbnail: string
-  hidden: boolean
-  partner: string
-  exclude: string
-  app?: boolean
-  featured: boolean
-  banner?: string
-  educational?: boolean
-  approved?: boolean
-  sort?: number
-  playableOnHeihei?: boolean
-}
-
-export interface Partner {
-  hidden: boolean
-  name: string
-}
-
-export interface GamesList {
-  data: GameListItem[]
-  partners: Partner[]
 }

@@ -1,6 +1,6 @@
 'use client'
 
-import { Game, GamesList, Partner, UserTypes } from '../../../../../types'
+import { Game, GamesList, Studio, UserTypes } from '../../../../../types'
 import { useEffect, useState } from 'react'
 import { useAuthState } from 'react-firebase-hooks/auth'
 import { getAuth } from 'firebase/auth'
@@ -17,7 +17,7 @@ export default function EditGame() {
   const [message, setMessage] = useState('Loading Game...')
 
   const [game, setGame] = useState<Game>()
-  const [partners, setPartners] = useState<Partner[]>([])
+  const [partners, setPartners] = useState<Studio[]>([])
 
   const [users, setUsers] = useState<UserTypes>()
 

@@ -1,25 +1,25 @@
-import superagent from 'superagent'
+import request from 'superagent'
 
 export async function requestPrivilege(email: string) {
-  const res = await superagent.post(`/api/requests`).send({ email })
+  const res = await request.post(`/api/requests`).send({ email })
 
   return res
 }
 
 export async function getAllPrivilegeRequests() {
-  const res = await superagent.get(`/api/requests`)
+  const res = await request.get(`/api/requests`)
 
   return res
 }
 
 export async function allowPrivilegeRequest(email: string, studio: number) {
-  const res = await superagent.patch(`/api/requests`).send({ email, studio })
+  const res = await request.patch(`/api/requests`).send({ email, studio })
 
   return res
 }
 
 export async function denyPrivilegeRequest(email: string) {
-  const res = await superagent.post(`/api/requests`).send({ email })
+  const res = await request.post(`/api/requests`).send({ email })
 
   return res
 }

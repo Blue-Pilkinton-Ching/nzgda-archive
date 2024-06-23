@@ -6,7 +6,7 @@ import Input from './input'
 import Image from 'next/image'
 import '../../utils/client/firebase'
 import { ChangeEvent, useEffect, useState } from 'react'
-import { Game, Partner } from '../../../types'
+import { Game, Studio } from '../../../types'
 import { useRouter } from 'next/navigation'
 import { useAuthState } from 'react-firebase-hooks/auth'
 import { getAuth } from 'firebase/auth'
@@ -22,7 +22,7 @@ export default function GameForm({
   admin: boolean
   edit: boolean
   id?: number
-  partners: Partner[]
+  partners: Studio[]
   game?: Game
 }) {
   const [name, setName] = useState('')

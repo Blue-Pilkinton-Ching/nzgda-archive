@@ -1,7 +1,7 @@
 'use client'
 
 import { IconButton } from '../(components)/iconButton'
-import { Partner, User, UserTypes } from '../../../types'
+import { Studio, User, UserTypes } from '../../../types'
 import { FaCheck, FaXmark } from 'react-icons/fa6'
 import { MdDeleteForever } from 'react-icons/md'
 import Confirm from './confirm'
@@ -19,7 +19,7 @@ export default function Users({
   className: string
   authRequests: User[]
   users: UserTypes
-  partners: Partner[]
+  partners: Studio[]
   invalidateUsers: () => void
 }) {
   const [confirmText, setConfirmText] = useState('')

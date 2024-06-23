@@ -1,13 +1,13 @@
-import superagent from 'superagent'
+import request from 'superagent'
 
 export async function getAllAdmins() {
-  const res = await superagent.get('/api/admins')
+  const res = await request.get('/api/admins')
 
   return res
 }
 
 export async function revokeAdmin() {
-  const res = await superagent.delete('/api/admins')
+  const res = await request.delete('/api/admins')
 
   return res
 }
