@@ -25,17 +25,15 @@ export interface UserTypes {
 
 export interface AdminDashboard {
   users: UserTypes
-  partners: Studio[]
+  studios: Studio[]
   authRequests: User[]
 }
 
 export interface User {
-  partner?: string
+  studio: number
   email: string
   uid: string
 }
-
-export interface Studio {}
 
 export type UserPrivilege =
   | 'missing'

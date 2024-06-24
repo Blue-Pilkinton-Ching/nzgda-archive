@@ -1,7 +1,12 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  env: {
-    API_BACKEND_URL: 'localhost:3006',
+  rewrites: async () => {
+    return [
+      {
+        source: '/api/:slug*',
+        destination: `http://localhost:3006/:slug*`,
+      },
+    ]
   },
   images: {
     remotePatterns: [

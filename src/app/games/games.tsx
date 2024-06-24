@@ -32,14 +32,19 @@ export default function Games() {
   }, [params])
 
   async function fetchGames() {
-    // let data: Game[]
-    // try {
-    //   data = await getAllPublicGames()
-    //   setGames(data)
-    // } catch (error) {
-    //   console.error(error)
-    //   setError('Failed to fetch games :(')
-    // }
+    let data: Game[]
+    try {
+      let res = await getAllPublicGames()
+      if (res.ok) {
+        data = res.body
+        console.log(res.body)
+      } else {
+        throw new Error(res.text)
+      }
+    } catch (error) {
+      console.error(error)
+      setError('Failed to fetch games :(')
+    }
   }
 
   const isMobile = () => {

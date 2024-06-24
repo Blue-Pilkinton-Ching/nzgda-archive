@@ -1,13 +1,16 @@
+import { User } from 'firebase/auth'
 import request from 'superagent'
 
-export async function getAllAdmins() {
-  const res = await request.get('/api/admins')
-
-  return res
+export function getAllAdmins() {
+  return request.get('/api/admins').ok((res) => true)
 }
 
-export async function revokeAdmin() {
-  const res = await request.delete('/api/admins')
+export function revokeAdmin() {
+  return request.delete('/api/admins').ok((res) => true)
+}
 
-  return res
+export async function getPrivilege(user: User) {
+  return request
+    .get(`/api/admins/${user.uid}`)
+    .set('Authorization', `Bearer ${await user.getIdToken(true)}`).ok((res) => true)
 }
