@@ -11,26 +11,29 @@ import { getAuth } from 'firebase/auth'
 
 export default function Users({
   className,
-  authRequests,
+  requests: requestsProp,
   users,
-  partners,
+  studios,
   invalidateUsers,
 }: {
   className: string
-  authRequests: User[]
-  users: UserTypes
-  partners: Studio[]
+  requests: User[]
+  users: User[]
+  studios: Studio[]
   invalidateUsers: () => void
 }) {
   const [confirmText, setConfirmText] = useState('')
   const [confirmAction, setConfirmAction] = useState<() => void>()
 
+  const [admins, setAdmins] = useState()
+  const [studioAdmin, setStudioAdmin] = useState()
+
   const [requests, setRequests] = useState<User[]>([])
   const [user] = useAuthState(getAuth())
 
   useEffect(() => {
-    setRequests(authRequests)
-  }, [authRequests])
+    setRequests(requestsProp)
+  }, [requestsProp])
 
   async function acceptAuthRequest(authRequest: User) {
     let res
@@ -123,7 +126,7 @@ export default function Users({
     }
   }
 
-  async function setPartner(user: User, partner: string) {
+  async function setUser(user: User, partner: string) {
     setRequests(
       requests.map((element) => {
         if (element.uid === user.uid) {
@@ -169,14 +172,14 @@ export default function Users({
                         'None'
                       }
                       onChange={(event) =>
-                        setPartner(element, event.target.value)
+                        setUser(element, event.target.value)
                       }
                       className="cursor-pointer text-ellipsis max-w-44 py-0.5 px-2 rounded-lg flex-1 border-zinc-500 border shadow-md focus:border-black outline-none text-lg"
                     >
                       <option value={'None'}>None</option>
 
                       <optgroup label="Shown">
-                        {partners.map((element) => {
+                        {studios.map((element) => {
                           return element.hidden === false ? (
                             <option key={element.name} value={element.name}>
                               {element.name}
@@ -185,7 +188,7 @@ export default function Users({
                         })}
                       </optgroup>
                       <optgroup label="Hidden">
-                        {partners.map((element) => {
+                        {studios.map((element) => {
                           return element.hidden === true ? (
                             <option key={element.name} value={element.name}>
                               {element.name}
@@ -264,7 +267,7 @@ export default function Users({
                 </tr>
               )
             })}
-            {users.privileged.map((element, index) => {
+            {.map((element, index) => {
               return (
                 <tr key={index} className="*:p-1 odd:bg-white even:bg-pink-50">
                   <td className="w-24 h-10 my-1">

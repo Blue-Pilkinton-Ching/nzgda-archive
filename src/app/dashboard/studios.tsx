@@ -9,14 +9,14 @@ import { Studio } from '../../../types'
 import Button from '../(components)/button'
 import Confirm from './confirm'
 
-export default function Partners({
+export default function Studios({
   className,
-  partners,
-  invalidatePartners,
+  studios,
+  invalidateStudios: invalidatePartners,
 }: {
   className: string
-  partners: Studio[]
-  invalidatePartners: () => void
+  studios: Studio[]
+  invalidateStudios: () => void
 }) {
   const [user] = useAuthState(getAuth())
 
@@ -28,8 +28,8 @@ export default function Partners({
   const [partnerName, setPartnerName] = useState('')
 
   useEffect(() => {
-    setPartnerData(partners)
-  }, [partners])
+    setPartnerData(studios)
+  }, [studios])
 
   async function onToggleVisibility(partner: {
     name: string

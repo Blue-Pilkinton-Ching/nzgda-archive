@@ -1,34 +1,29 @@
 import request from 'superagent'
+import { User } from '../../types'
+import { User as FirebaseUser } from 'firebase/auth'
 
-export async function requestPrivilege(uid: string) {
-  const res = await request
+export async function requestPrivilege(user: User, firebaseUser: FirebaseUser) {
+  return request
     .post(`/api/requests`)
-    .send({ uid })
+    .send(user)
     .ok((res) => true)
-
-  return res
+    .set('Authorization', `Bearer ${await firebaseUser.getIdToken(true)}`)
 }
 
 export async function getAllPrivilegeRequests() {
-  const res = await request.get(`/api/requests`).ok((res) => true)
-
-  return res
+  return request.get(`/api/requests`).ok((res) => true)
 }
 
 export async function allowPrivilegeRequest(uid: string, studio: number) {
-  const res = await request
+  return request
     .patch(`/api/requests`)
     .send({ uid, studio })
     .ok((res) => true)
-
-  return res
 }
 
 export async function denyPrivilegeRequest(uid: string) {
-  const res = await request
+  return request
     .post(`/api/requests`)
     .send({ uid })
     .ok((res) => true)
-
-  return res
 }

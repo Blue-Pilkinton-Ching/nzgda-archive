@@ -1,40 +1,33 @@
 'use client'
 import { useAuthState } from 'react-firebase-hooks/auth'
-import { AdminDashboard } from '../../../types'
+import { DashboardData } from '../../../types'
 import Dashboard from './dashboard'
-import { getAuth } from 'firebase/auth'
+import { User, getAuth } from 'firebase/auth'
 import { useEffect, useState } from 'react'
+import { getDashboardData } from '@/api/dashboard'
 
 export default function Page() {
   const [user] = useAuthState(getAuth())
 
-  const [data, setData] = useState<AdminDashboard | null>(null)
+  const [adminUser, setAdminUser] = useState(false)
 
-  const [admin, setAdmin] = useState(false)
+  const [dashboardData, setDashboardData] = useState<DashboardData | null>(null)
 
   useEffect(() => {
     if (user) {
-      fetchDashboardData()
+      fetchDashboardData(user)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user])
 
-  async function fetchDashboardData() {
+  async function fetchDashboardData(u: User) {
     try {
-      const res = await fetch(`${process.env.API_BACKEND_URL}/dashboard`, {
-        method: 'GET',
-        headers: {
-          Authorization: 'Bearer ' + (await user?.getIdToken(true)),
-          'Content-Type': 'application/json',
-        },
-      })
-
-      const json = await res.json()
+      const res = await getDashboardData(u)
 
       switch (res.status) {
         case 200:
-          setAdmin(res.headers.get('privilege') === 'admin')
-          setData(json)
+          setAdminUser(res.headers['studio'] === '0')
+          setDashboardData(res.body)
           break
         case 401:
           alert(`You are not authorized to access this page.`)
@@ -51,11 +44,11 @@ export default function Page() {
 
   return (
     <>
-      {data ? (
+      {dashboardData ? (
         <Dashboard
-          data={data}
-          admin={admin}
-          invalidateData={fetchDashboardData}
+          data={dashboardData}
+          adminUser={adminUser}
+          invalidateData={() => fetchDashboardData(user as User)}
         />
       ) : (
         <p className="text-xl font-semibold my-5">Loading dashboard...</p>

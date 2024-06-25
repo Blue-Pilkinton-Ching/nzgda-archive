@@ -1,26 +1,26 @@
 'use client'
 import { useEffect, useState } from 'react'
-import { AdminDashboard as DashboardData, GameListItem } from '../../../types'
+import { DashboardData, User } from '../../../types'
 import Button from '../(components)/button'
 import Users from './users'
 import GamesList from './gameslist'
-import Partners from './partners'
 import { useAuthState } from 'react-firebase-hooks/auth'
 import { getAuth } from 'firebase/auth'
 
 import '@/utils/client/firebase'
+import Studios from './studios'
 
 export default function Dashboard({
   data,
   invalidateData,
-  admin,
+  adminUser,
 }: {
-  admin: boolean
+  adminUser: boolean
   data: DashboardData
   invalidateData: () => void
 }) {
   const [dashboardData, setDashboardData] = useState<DashboardData>()
-  const [panel, setPanel] = useState<'users' | 'games' | 'partners'>('games')
+  const [panel, setPanel] = useState<'users' | 'games' | 'studios'>('games')
 
   const [user] = useAuthState(getAuth())
 
@@ -36,23 +36,10 @@ export default function Dashboard({
     )
   }
 
-  //   console.log(dashboardData.gameslist)
-  //   console.log(
-  //     dashboardData.gameslist.filter(
-  //       (x) =>
-  //         (x.hidden === false || x.hidden === undefined) &&
-  //         x.approved === true &&
-  //         (admin
-  //           ? true
-  //           : x.partner ===
-  //             data.users.privileged.find((u) => u.uid === user?.uid)?.partner)
-  //     )
-  //   )
-
   return (
     <>
       <div className="max-w-[800px] text-wrap mx-auto text-left mt-20 text-lg mb-12 font-sans text-black">
-        {admin ? (
+        {adminUser ? (
           <div className="flex justify-center gap-10">
             <Button
               onClick={() => setPanel('games')}
@@ -71,8 +58,8 @@ export default function Dashboard({
               Users & Settings
             </Button>
             <Button
-              onClick={() => setPanel('partners')}
-              inverted={panel !== 'partners'}
+              onClick={() => setPanel('studios')}
+              inverted={panel !== 'studios'}
               className="bg-black text-white"
               invertedClassName="bg-white text-black"
             >
@@ -86,46 +73,45 @@ export default function Dashboard({
           className={`${
             panel === 'games' ? 'block' : 'hidden'
           } shadow-lg p-4 rounded`}
-          admin={admin}
-          games={dashboardData.gameslist
+          admin={adminUser}
+          games={dashboardData.games
             .filter(
               (x) =>
                 (x.hidden === false || x.hidden === undefined) &&
                 x.approved === true &&
-                (admin
+                (adminUser
                   ? true
-                  : x.partner ===
-                    data.users.privileged.find((u) => u.uid === user?.uid)
-                      ?.partner)
+                  : x.studio.id ===
+                    data.users.find((u) => u.uid === user?.uid)?.studio)
             )
             .sort((a, b) => b.id - a.id)}
-          hiddenGames={dashboardData.gameslist.filter((x) => x.hidden)}
+          hiddenGames={dashboardData.games.filter((x) => x.hidden)}
           unApprovedGames={
-            admin
-              ? dashboardData.gameslist.filter(
+            adminUser
+              ? dashboardData.games.filter(
                   (x) => x.approved === false || x.approved === undefined
                 )
               : undefined
           }
         ></GamesList>
-        {admin ? (
+        {adminUser ? (
           <>
             <Users
               invalidateUsers={invalidateData}
-              partners={dashboardData.partners}
+              studios={dashboardData.studios}
               users={dashboardData.users}
               className={`${
                 panel === 'users' ? 'block' : 'hidden'
               } shadow-lg p-4 rounded`}
-              authRequests={dashboardData.authRequests}
+              requests={dashboardData.requests}
             ></Users>
-            <Partners
-              invalidatePartners={invalidateData}
-              partners={dashboardData.partners}
+            <Studios
+              invalidateStudios={invalidateData}
+              studios={dashboardData.studios}
               className={`${
-                panel === 'partners' ? 'block' : 'hidden'
+                panel === 'studios' ? 'block' : 'hidden'
               } shadow-lg p-4 rounded`}
-            ></Partners>
+            ></Studios>
           </>
         ) : null}
       </div>

@@ -6,28 +6,15 @@ export async function getGameByID(id: number) {
 }
 
 export async function addGame(game: Game) {
-  const res = await request
+  return request
     .post('/api/game')
     .send(game)
     .ok((res) => true)
-
-  return res
-}
-
-export async function editGameByID(game: Game) {
-  const res = await request
-    .patch(`/api/game`)
-    .send(game)
-    .ok((res) => true)
-
-  return res
 }
 
 export async function deleteGameByID(id: number) {
-  const res = await request
+  return request
     .delete(`/api/game`)
     .send({ id })
     .ok((res) => true)
-
-  return res
 }

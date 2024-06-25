@@ -4,7 +4,7 @@ export interface Game {
   description: string
   thumbnail: string
   banner?: string
-  approved: number
+  approved: boolean
   studio: Studio
   url?: string
   tags: string
@@ -17,16 +17,18 @@ export interface Game {
   educational: boolean
   playableOnHeihei?: boolean
   sort: number
+  hidden: boolean
 }
 export interface UserTypes {
   admins: User[]
   privileged: User[]
 }
 
-export interface AdminDashboard {
-  users: UserTypes
+export interface DashboardData {
+  games: Game[]
+  users: User[]
+  requests: User[]
   studios: Studio[]
-  authRequests: User[]
 }
 
 export interface User {
@@ -41,7 +43,6 @@ export type UserPrivilege =
   | 'error'
   | 'noprivilege'
   | 'admin'
-  | 'privileged'
 
 export interface Studio {
   id: number
