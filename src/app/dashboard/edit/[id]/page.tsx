@@ -109,7 +109,7 @@ export default function EditGame() {
         <GameForm
           edit
           game={game}
-          partners={partners}
+          studios={partners}
           id={Number(params.id)}
           admin={
             users?.privileged.find((u) => u.uid === user?.uid) == undefined

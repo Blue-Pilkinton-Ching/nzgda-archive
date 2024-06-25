@@ -31,56 +31,6 @@ export default function Studios({
     setPartnerData(studios)
   }, [studios])
 
-  async function onToggleVisibility(partner: {
-    name: string
-    hidden: boolean
-  }) {
-    const shouldHide = !partner.hidden
-
-    let res
-
-    setPartnerData(
-      partnerData?.map((x) => {
-        if (x.name === partner.name) {
-          x.hidden = shouldHide
-        }
-        return x
-      })
-    )
-
-    try {
-      res = await fetch(
-        `${process.env.API_BACKEND_URL}/dashboard/partners/visibility`,
-        {
-          body: JSON.stringify({ hidden: shouldHide, name: partner.name }),
-          method: 'PATCH',
-          headers: {
-            Authorization: 'Bearer ' + (await user?.getIdToken(true)),
-          },
-        }
-      )
-    } catch (error) {
-      alert('An error occured while setting partner visibility')
-      console.error(error)
-      return
-    }
-
-    switch (res.status) {
-      case 200:
-        return
-      case 401:
-        alert('You are Unauthorized to make that action')
-        return
-      case 500:
-        alert('An error occured while setting partner visibility')
-        return
-      default:
-        alert('An unknown error occured')
-        console.error(res.status, res.statusText, res.body)
-        return
-    }
-  }
-
   async function onEditPartner(partner: string) {
     if (editPartner === partner) {
       if (editPartner !== partnerName) {
@@ -132,7 +82,7 @@ export default function Studios({
     }
   }
 
-  async function deletePartner() {
+  async function deleteStudio() {
     let res
     try {
       res = await fetch(`${process.env.API_BACKEND_URL}/dashboard/partners`, {
@@ -163,7 +113,7 @@ export default function Studios({
     }
   }
 
-  async function addPartner(event: FormEvent<HTMLFormElement>) {
+  async function addStudio(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
 
     let res
@@ -206,13 +156,13 @@ export default function Studios({
     <div className={className}>
       <Confirm
         text={confirmText}
-        onConfirm={deletePartner}
+        onConfirm={deleteStudio}
         onCancel={() => setConfirmText('')}
       />
-      <h1 className="text-4xl pl-2 font-bold">Partners</h1>
+      <h1 className="text-4xl pl-2 font-bold">Studios</h1>
 
       <form
-        onSubmit={addPartner}
+        onSubmit={addStudio}
         className="flex justify-between items-center gap-8"
       >
         <input
@@ -227,7 +177,7 @@ export default function Studios({
           className="bg-black text-white"
           invertedClassName="bg-white text-black"
         >
-          Add Partner
+          Add Studio
         </Button>
       </form>
       <br />
@@ -264,19 +214,6 @@ export default function Studios({
                       <MdDone className="w-full" size={'35px'} />
                     ) : (
                       <MdEdit className="w-full" size={'30px'} />
-                    )}
-                  </IconButton>
-                </td>
-                <td>
-                  <IconButton
-                    onClick={() => {
-                      onToggleVisibility(element)
-                    }}
-                  >
-                    {element.hidden ? (
-                      <IoEyeOff className="w-full" size={'30px'} />
-                    ) : (
-                      <IoEye className="w-full" size={'30px'} />
                     )}
                   </IconButton>
                 </td>

@@ -8,7 +8,7 @@ import {
   MdUnarchive,
 } from 'react-icons/md'
 import { IconButton } from '../(components)/iconButton'
-import { GameListItem } from '../../../types'
+import { Game } from '../../../types'
 import { useAuthState } from 'react-firebase-hooks/auth'
 import { getAuth } from 'firebase/auth'
 import { useEffect, useState } from 'react'
@@ -19,7 +19,7 @@ import Link from 'next/link'
 import { FaCrown } from 'react-icons/fa'
 import { GoDotFill } from 'react-icons/go'
 
-export default function GamesList({
+export default function Games({
   games,
   hiddenGames,
   className,
@@ -28,20 +28,20 @@ export default function GamesList({
   unApprovedGames,
 }: {
   admin: boolean
-  games: GameListItem[]
-  hiddenGames: GameListItem[]
-  unApprovedGames?: GameListItem[]
+  games: Game[]
+  hiddenGames: Game[]
+  unApprovedGames?: Game[]
   className: string
   invalidateGames: () => void
 }) {
   const [user] = useAuthState(getAuth())
 
-  const [currentGames, setCurrentGames] = useState<GameListItem[]>([])
+  const [currentGames, setCurrentGames] = useState<Game[]>([])
   const [deleteText, setDeleteText] = useState('')
   const [hideText, setHideText] = useState('')
 
   const [gameToDelete, setGameToDelete] = useState(0)
-  const [gameToHide, setGameToHide] = useState<GameListItem>()
+  const [gameToHide, setGameToHide] = useState<Game>()
 
   const router = useRouter()
 
@@ -49,7 +49,7 @@ export default function GamesList({
     setCurrentGames(games)
   }, [games])
 
-  async function onToggleVisibility(listItem: GameListItem) {
+  async function onToggleVisibility(listItem: Game) {
     const shouldHide = !listItem.hidden
 
     let res
@@ -97,7 +97,7 @@ export default function GamesList({
     }
   }
 
-  async function onApprove(listItem: GameListItem) {
+  async function onApprove(listItem: Game) {
     let res
 
     try {
@@ -168,7 +168,7 @@ export default function GamesList({
     }
   }
 
-  async function onToggleFeature(listItem: GameListItem) {
+  async function onToggleFeature(listItem: Game) {
     const shouldFeature = !(listItem.featured || false)
 
     let res
@@ -226,7 +226,7 @@ export default function GamesList({
       />
       <Confirm
         text={hideText}
-        onConfirm={() => onToggleVisibility(gameToHide as GameListItem)}
+        onConfirm={() => onToggleVisibility(gameToHide as Game)}
         onCancel={() => setHideText('')}
       />
       {admin && unApprovedGames && unApprovedGames.length > 0 ? (

@@ -1,19 +1,20 @@
 'use client'
 
-import { GamesList, Studio, Admin, UserTypes } from '../../../../types'
+import { Game, Studio, Admin } from '../../../../types'
 import { useEffect, useState } from 'react'
 import { useAuthState } from 'react-firebase-hooks/auth'
 import { getAuth } from 'firebase/auth'
-
-import * as firestore from 'firebase/firestore'
+import type { User } from 'firebase/auth'
 
 import GameForm from '../gameform'
+import { getAllAdmins, getPrivilege } from '@/api/admins'
 
 export default function Page() {
   const [user] = useAuthState(getAuth())
 
-  const [partners, setPartners] = useState<Studio[]>([])
-  const [users, setUsers] = useState<UserTypes>()
+  const [admins, setAdmins] = useState<Studio[]>([])
+
+  const [isAdmin, setIsAdmin] = useState<boolean>(false)
 
   const [message, setMessage] = useState('')
 
@@ -22,48 +23,18 @@ export default function Page() {
       window.location.href = '/dashboard'
       return
     } else {
-      fetchPartners()
-      fetchUsers()
+      getStudio(user)
     }
 
-    async function fetchPartners() {
+    async function getStudio(u: User) {
       let data
-      try {
-        data = (
-          await firestore.getDoc(
-            firestore.doc(
-              firestore.getFirestore(),
-              'gameslist/BrHoO8yuD3JdDFo8F2BC'
-            )
-          )
-        ).data() as GamesList
-        if (!data) {
-          setMessage("Couldn't find data :(")
-          throw 'Partner data not on firebase for some reason'
-        }
-        setPartners(data?.partners)
-      } catch (error) {
-        console.error(error)
-        setMessage('Failed to fetch games :(')
-      }
-    }
+      let res
 
-    async function fetchUsers() {
-      let data
       try {
-        data = (await (
-          await fetch(`${process.env.API_BACKEND_URL}/dashboard/users`, {
-            headers: {
-              Authorization: 'Bearer ' + (await user?.getIdToken(true)),
-            },
-          })
-        ).json()) as UserTypes
-        console.log(data)
-        if (!data) {
-          setMessage("Couldn't find data :(")
-          throw 'User data not on firebase for some reason'
-        }
-        setUsers(data)
+        res = await getAllAdmins(u)
+
+        setIsAdmin(res.headers['studio'] === '0')
+        setAdmins(res.body)
       } catch (error) {
         console.error(error)
         setMessage('Failed to fetch users :(')
@@ -76,13 +47,7 @@ export default function Page() {
       {message ? (
         <p>{message}</p>
       ) : (
-        <GameForm
-          edit={false}
-          partners={partners}
-          admin={
-            users?.privileged.find((u) => u.uid === user?.uid) == undefined
-          }
-        />
+        <GameForm edit={false} studios={admins} admin={isAdmin} />
       )}
     </>
   )

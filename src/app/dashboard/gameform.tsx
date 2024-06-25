@@ -10,44 +10,34 @@ import { Game, Studio } from '../../../types'
 import { useRouter } from 'next/navigation'
 import { useAuthState } from 'react-firebase-hooks/auth'
 import { getAuth } from 'firebase/auth'
-import JSZip from 'jszip'
 
 export default function GameForm({
   edit,
   id,
-  partners,
+  studios,
   game,
   admin,
 }: {
   admin: boolean
   edit: boolean
   id?: number
-  partners: Studio[]
+  studios: Studio[]
   game?: Game
 }) {
   const [name, setName] = useState('')
   const [description, setDescription] = useState('')
-  const [ios, setIos] = useState('')
-  const [android, setAndroid] = useState('')
   const [externalURL, setExternalURL] = useState('')
   const [width, setWidth] = useState('')
   const [height, setHeight] = useState('')
   const [tags, setTags] = useState('')
   const [playableOnHeihei, setPlayableOnHeihei] = useState<boolean>(false)
-  const [excludeBrowserMobile, setExcludeBrowserMobile] =
-    useState<boolean>(false)
-  const [excludeBrowserDesktop, setExcludeBrowserDesktop] =
-    useState<boolean>(false)
-  const [partner, setPartner] = useState('')
+  const [studio, setStudio] = useState<number>(-1)
   const [displayAppBadge, setDisplayAppBadge] = useState(false)
   const [thumbnail, setThumbnail] = useState<File>()
   const [thumbnailWarning, setThumbnailWarning] = useState('')
-  const [gameFolder, setGameFolder] = useState<File>()
-  const [gameWarning, setGameWarning] = useState('')
   const [banner, setBanner] = useState<File>()
   const [bannerWarning, setBannerWarning] = useState('')
   const [isEducational, setIsEducational] = useState(false)
-  const [isGameExternal, setIsGameExternal] = useState(false)
 
   const [submitting, setSubmitting] = useState(false)
 
@@ -72,12 +62,6 @@ export default function GameForm({
       case 'Description':
         setDescription(event.target.value)
         break
-      case 'Ios Link':
-        setIos(event.target.value)
-        break
-      case 'Android Link':
-        setAndroid(event.target.value)
-        break
       case 'Embed External Game URL':
         setExternalURL(event.target.value)
         break
@@ -93,14 +77,8 @@ export default function GameForm({
       case 'Playable on Heihei':
         setPlayableOnHeihei(event.target.value === 'false')
         break
-      case 'Exclude on mobile browser':
-        setExcludeBrowserMobile(event.target.value === 'false')
-        break
-      case 'Exclude on desktop browser':
-        setExcludeBrowserDesktop(event.target.value === 'false')
-        break
-      case 'Partner / Studio':
-        setPartner(event.target.value)
+      case 'Studio':
+        setStudio(Number(event.target.value))
         break
       case 'Downloadable App':
         setDisplayAppBadge(event.target.value === 'false')
@@ -151,40 +129,6 @@ export default function GameForm({
           setBanner(target3.files[0])
         }
         break
-      case 'Change Game Folder':
-        const target2 = event.target as HTMLInputElement
-
-        if (target2.files && target2.files[0]) {
-          if (target2.files.length > 1) {
-            setGameWarning('Only one file is allowed!')
-            setGameFolder(undefined)
-            break
-          }
-          if (target2.files[0].size > 1048576 * 95) {
-            setGameWarning('File size should be less than 95mb!')
-            setGameFolder(undefined)
-            break
-          }
-          if (target2.files[0].type !== 'application/x-zip-compressed') {
-            setGameWarning('Upload should be a compressed .zip !')
-            setGameFolder(undefined)
-            break
-          }
-
-          const zip = await new JSZip().loadAsync(target2.files[0])
-
-          if (!zip.files[`index.html`]) {
-            setGameWarning(
-              'Zip should contain an index.html file at its route!'
-            )
-            setGameFolder(undefined)
-            break
-          }
-
-          setGameWarning('')
-          setGameFolder(target2.files[0])
-        }
-        break
       case 'Educational':
         setIsEducational(event.target.value === 'false')
         break
@@ -194,7 +138,7 @@ export default function GameForm({
   async function formSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault()
 
-    if (thumbnailWarning || gameWarning || bannerWarning) {
+    if (thumbnailWarning || bannerWarning) {
       alert('Please fix the errors before submitting')
       return
     }
@@ -205,34 +149,26 @@ export default function GameForm({
     if (edit && id) {
       const form = new FormData()
 
-      form.append(
-        'data',
-        JSON.stringify({
-          name,
-          description,
-          iosLink: ios,
-          androidLink: android,
-          url: externalURL,
-          width: Number(width) ? Number(width) : null,
-          height: Number(height) ? Number(height) : null,
-          tags: tags.split(','),
-          playableOnHeihei,
-          exclude: [
-            excludeBrowserMobile ? 'mobileweb' : '',
-            excludeBrowserDesktop ? 'desktop' : '',
-          ].toString(),
-          partner: partner === 'None' ? '' : partner,
-          displayAppBadge,
-          educational: isEducational,
-        })
-      )
+      let data = {
+        name,
+        description,
+        url: externalURL,
+        width: Number(width) ? Number(width) : null,
+        height: Number(height) ? Number(height) : null,
+        tags: tags,
+        playableOnHeihei,
+        // studio_id: studio,
+        isApp: displayAppBadge,
+        educational: isEducational,
+        approved: false,
+        featured: false,
+        hidden: false,
+      }
+
+      form.append('data', JSON.stringify(data))
 
       if (thumbnail) {
         form.append('thumbnail', thumbnail)
-      }
-
-      if (gameFolder) {
-        form.append('game', gameFolder)
       }
 
       if (banner) {
@@ -247,7 +183,7 @@ export default function GameForm({
         },
       })
     } else if (thumbnail != undefined) {
-      if (!externalURL && !gameFolder && !banner) {
+      if (!externalURL && !banner) {
         alert(
           'You must upload a game, a banner, or provide an external game link'
         )
@@ -256,33 +192,25 @@ export default function GameForm({
 
       const form = new FormData()
 
-      form.append(
-        'data',
-        JSON.stringify({
-          name,
-          description,
-          iosLink: ios,
-          androidLink: android,
-          url: externalURL,
-          width: Number(width) ? Number(width) : null,
-          height: Number(height) ? Number(height) : null,
-          tags: tags.split(','),
-          playableOnHeihei,
-          exclude: [
-            excludeBrowserMobile ? 'mobileweb' : '',
-            excludeBrowserDesktop ? 'desktop' : '',
-          ].toString(),
-          partner: partner === 'None' ? '' : partner,
-          displayAppBadge,
-          educational: isEducational,
-        })
-      )
+      const data: any = {
+        name,
+        description,
+        url: externalURL,
+        width: Number(width) ? Number(width) : null,
+        height: Number(height) ? Number(height) : null,
+        tags: tags,
+        playableOnHeihei,
+        studio_id: studio,
+        isApp: displayAppBadge,
+        educational: isEducational,
+        approved: false,
+        featured: false,
+        hidden: false,
+      }
+
+      form.append('data', JSON.stringify(data))
 
       form.append('thumbnail', thumbnail)
-
-      if (gameFolder) {
-        form.append('game', gameFolder)
-      }
 
       if (banner) {
         form.append('banner', banner)
@@ -322,8 +250,6 @@ export default function GameForm({
   async function resetGame() {
     setName(game?.name || '')
     setDescription(game?.description || '')
-    setIos(game?.iosLink || '')
-    setAndroid(game?.androidLink || '')
     setExternalURL(game?.url || '')
     setWidth(game?.width?.toString() || '')
     setHeight(game?.height?.toString() || '')
@@ -331,14 +257,9 @@ export default function GameForm({
     setPlayableOnHeihei(
       game?.playableOnHeihei == undefined ? true : game?.playableOnHeihei
     )
-    setExcludeBrowserMobile(game?.exclude?.includes('mobileweb') || false)
-    setExcludeBrowserDesktop(game?.exclude?.includes('desktop') || false)
-    setPartner(game?.partner || 'None')
-    setDisplayAppBadge(game?.displayAppBadge || false)
+    setStudio(game?.studio_id || -1)
+    setDisplayAppBadge(game?.isApp || false)
     setIsEducational(game?.educational || false)
-    setIsGameExternal(
-      game?.isGameExternal == undefined ? true : game?.isGameExternal
-    )
   }
 
   return (
@@ -389,51 +310,28 @@ export default function GameForm({
               {admin ? (
                 <>
                   <label
-                    htmlFor="Partner / Studio"
+                    htmlFor="Studio"
                     className="text-left text-base font-bold mb-1"
                   >
-                    Partner / Studio
+                    Studio
                   </label>
                   <p className="text-zinc-500 text-sm mb-3">
-                    Name of this games partner / studio
+                    Name of this games Studio
                   </p>
                   <select
-                    id="Partner / Studio"
-                    name="Partner / Studio"
-                    value={partner}
-                    onChange={(event) =>
-                      onGameInputChange(event, 'Partner / Studio')
-                    }
+                    id="Studio"
+                    name="Studio"
+                    value={studio}
+                    onChange={(event) => onGameInputChange(event, 'Studio')}
                     className="cursor-pointer mb-3 py-0.5 px-2 rounded-lg flex-1 border-zinc-500 border shadow-md focus:border-black outline-none text-lg"
                   >
-                    <option value={'None'}>None</option>
-
-                    {game &&
-                    game.partner &&
-                    partners.find((x) => x.name === game.partner) ===
-                      undefined ? (
-                      <option value={game.partner}>{game.partner}</option>
-                    ) : (
-                      ''
-                    )}
-                    <optgroup label="Shown">
-                      {partners.map((element) => {
-                        return element.hidden === false ? (
-                          <option key={element.name} value={element.name}>
-                            {element.name}
-                          </option>
-                        ) : null
-                      })}
-                    </optgroup>
-                    <optgroup label="Hidden">
-                      {partners.map((element) => {
-                        return element.hidden === true ? (
-                          <option key={element.name} value={element.name}>
-                            {element.name}
-                          </option>
-                        ) : null
-                      })}
-                    </optgroup>
+                    {studios.map((element) => {
+                      return (
+                        <option key={element.id} value={element.name}>
+                          {element.name}
+                        </option>
+                      )
+                    })}
                   </select>
                 </>
               ) : null}
@@ -444,30 +342,14 @@ export default function GameForm({
                 maxLength={200}
                 name={'Tags'}
               />
-              <Input
-                onChange={onGameInputChange}
-                value={ios}
-                type="url"
-                maxLength={1000}
-                name={'Ios Link'}
-                tooltip="If your game has an AppStore link you can add that here"
-              />
-              <Input
-                onChange={onGameInputChange}
-                value={android}
-                type="url"
-                maxLength={1000}
-                name={'Android Link'}
-                tooltip="If your game has an Google Play Store link you can add that here"
-              />
-              <Input
+              {/* <Input
                 onChange={onGameInputChange}
                 value={isEducational}
                 type="checkbox"
                 maxLength={0}
                 name={'Educational'}
                 tooltip="Display this game as having educational value"
-              />
+              /> */}
               <Input
                 onChange={onGameInputChange}
                 value={displayAppBadge}
@@ -484,35 +366,15 @@ export default function GameForm({
                 maxLength={0}
                 name={'Playable on Heihei'}
               />
+
               <Input
                 onChange={onGameInputChange}
-                value={excludeBrowserMobile}
-                type="checkbox"
-                maxLength={0}
-                name={'Exclude on mobile browser'}
-                tooltip="Don't display this game on mobile devices."
+                value={externalURL}
+                type="url"
+                maxLength={2048}
+                name={'Embed External Game URL'}
+                tooltip="If your game is hosted on another site, you can add the embed url here"
               />
-              <Input
-                onChange={onGameInputChange}
-                value={excludeBrowserDesktop}
-                type="checkbox"
-                maxLength={0}
-                name={'Exclude on desktop browser'}
-                tooltip="Don't display this game on desktop devices."
-              />
-              <br />
-              {isGameExternal === true ||
-              isGameExternal == undefined ||
-              edit === false ? (
-                <Input
-                  onChange={onGameInputChange}
-                  value={externalURL}
-                  type="url"
-                  maxLength={2048}
-                  name={'Embed External Game URL'}
-                  tooltip="If your game is hosted on another site, you can add the embed url here"
-                />
-              ) : null}
               <Input
                 onChange={onGameInputChange}
                 value={width}
@@ -568,34 +430,6 @@ export default function GameForm({
                 </div>
                 <br />
                 <label
-                  htmlFor="Change Game Folder"
-                  className="text-left text-base font-bold mb-1"
-                >
-                  {edit ? 'Change Game' : 'Upload Game'}
-                </label>
-                <p className="text-zinc-500 text-sm mb-3">
-                  Game should be uploaded as a compressed .zip file. Maximum
-                  size is 95mb. <br />
-                  <br />
-                  You should have a index.html file at the root of the zip. Your
-                  files should not be contained inside an additional folder.
-                </p>
-                <input
-                  multiple={false}
-                  type="file"
-                  name="Change Game Folder"
-                  accept="application/x-zip-compressed"
-                  id="Change Game Folder"
-                  onChange={(event) =>
-                    onGameInputChange(event, 'Change Game Folder')
-                  }
-                />
-                <div className="py-3 text-rose-600">
-                  {gameWarning ? (
-                    <p className="text-lg font-semibold">{gameWarning}</p>
-                  ) : null}
-                </div>
-                <label
                   htmlFor="Change Banner"
                   className="text-left text-base font-bold mb-1"
                 >
@@ -611,7 +445,7 @@ export default function GameForm({
                   type="file"
                   name="Change Banner"
                   accept="image/png"
-                  id="Change Thumbnail"
+                  id="Change Banner"
                   onChange={(event) =>
                     onGameInputChange(event, 'Change Banner')
                   }

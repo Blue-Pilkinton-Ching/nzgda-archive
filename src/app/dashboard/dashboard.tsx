@@ -3,12 +3,12 @@ import { useEffect, useState } from 'react'
 import { DashboardData, Admin } from '../../../types'
 import Button from '../(components)/button'
 import Users from './users'
-import GamesList from './gameslist'
 import { useAuthState } from 'react-firebase-hooks/auth'
 import { getAuth } from 'firebase/auth'
 
 import '@/utils/client/firebase'
 import Studios from './studios'
+import Games from './games'
 
 export default function Dashboard({
   data,
@@ -55,7 +55,7 @@ export default function Dashboard({
               className="bg-black text-white"
               invertedClassName="bg-white text-black"
             >
-              Users & Settings
+              Users
             </Button>
             <Button
               onClick={() => setPanel('studios')}
@@ -63,12 +63,12 @@ export default function Dashboard({
               className="bg-black text-white"
               invertedClassName="bg-white text-black"
             >
-              Partners
+              Studios
             </Button>
           </div>
         ) : null}
         <br />
-        <GamesList
+        <Games
           invalidateGames={invalidateData}
           className={`${
             panel === 'games' ? 'block' : 'hidden'
@@ -93,7 +93,7 @@ export default function Dashboard({
                 )
               : undefined
           }
-        ></GamesList>
+        ></Games>
         {adminUser ? (
           <>
             <Users
