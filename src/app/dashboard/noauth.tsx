@@ -5,7 +5,7 @@ import Button from '../(components)/button'
 import '@/utils/client/firebase'
 import { getAuth } from 'firebase/auth'
 import { useAuthState } from 'react-firebase-hooks/auth'
-import { User } from '../../../types'
+import { Admin } from '../../../types'
 
 export default function NoAuth() {
   const [user] = useAuthState(getAuth())
@@ -20,7 +20,7 @@ export default function NoAuth() {
         throw new Error('User not verified or not logged in!')
       }
 
-      let u: User = {
+      let u: Admin = {
         uid: user.uid,
         email: user.email,
         studio: 0,

@@ -1,13 +1,13 @@
 import request from 'superagent'
-import { User } from '../../types'
-import { User as FirebaseUser } from 'firebase/auth'
+import { Admin } from '../../types'
+import { User } from 'firebase/auth'
 
-export async function requestPrivilege(user: User, firebaseUser: FirebaseUser) {
+export async function requestPrivilege(admin: Admin, user: User) {
   return request
     .post(`/api/requests`)
-    .send(user)
+    .send(admin)
     .ok((res) => true)
-    .set('Authorization', `Bearer ${await firebaseUser.getIdToken(true)}`)
+    .set('Authorization', `Bearer ${await user.getIdToken(true)}`)
 }
 
 export async function getAllPrivilegeRequests() {

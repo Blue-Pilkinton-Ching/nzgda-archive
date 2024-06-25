@@ -1,7 +1,7 @@
 'use client'
 
 import { IconButton } from '../(components)/iconButton'
-import { Studio, User, UserTypes } from '../../../types'
+import { Studio, Admin, UserTypes } from '../../../types'
 import { FaCheck, FaXmark } from 'react-icons/fa6'
 import { MdDeleteForever } from 'react-icons/md'
 import Confirm from './confirm'
@@ -17,25 +17,25 @@ export default function Users({
   invalidateUsers,
 }: {
   className: string
-  requests: User[]
-  users: User[]
+  requests: Admin[]
+  users: Admin[]
   studios: Studio[]
   invalidateUsers: () => void
 }) {
   const [confirmText, setConfirmText] = useState('')
   const [confirmAction, setConfirmAction] = useState<() => void>()
 
-  const [admins, setAdmins] = useState()
-  const [studioAdmin, setStudioAdmin] = useState()
+  const [admins, setAdmins] = useState<Admin[]>()
+  const [studioAdmins, setStudioAdmins] = useState<Admin[]>()
 
-  const [requests, setRequests] = useState<User[]>([])
+  const [requests, setRequests] = useState<Admin[]>([])
   const [user] = useAuthState(getAuth())
 
   useEffect(() => {
     setRequests(requestsProp)
   }, [requestsProp])
 
-  async function acceptAuthRequest(authRequest: User) {
+  async function acceptAuthRequest(authRequest: Admin) {
     let res
     try {
       res = await fetch(`${process.env.API_BACKEND_URL}/dashboard/users`, {
@@ -65,7 +65,7 @@ export default function Users({
     }
   }
 
-  async function deleteUser(deletedUser: User) {
+  async function deleteUser(deletedUser: Admin) {
     let res
     try {
       res = await fetch(`${process.env.API_BACKEND_URL}/dashboard/users`, {
@@ -96,7 +96,7 @@ export default function Users({
     }
   }
 
-  async function denyAuthRequest(authRequest: User) {
+  async function denyAuthRequest(authRequest: Admin) {
     let res
     try {
       res = await fetch(`${process.env.API_BACKEND_URL}/dashboard/requests`, {
@@ -126,11 +126,11 @@ export default function Users({
     }
   }
 
-  async function setUser(user: User, partner: string) {
+  async function setUser(user: Admin, studio: number) {
     setRequests(
       requests.map((element) => {
         if (element.uid === user.uid) {
-          element.partner = partner
+          element.studio = studio
         }
         return element
       })
@@ -156,7 +156,7 @@ export default function Users({
               <th className="w-14 text-center">Deny</th>
             </tr>
           </thead>
-          <tbody className="w-full">
+          {/* <tbody className="w-full">
             {requests.map((element, index) => {
               return (
                 <tr key={index} className="*:p-1 odd:bg-white even:bg-pink-50">
@@ -233,7 +233,7 @@ export default function Users({
                 </tr>
               )
             })}
-          </tbody>
+          </tbody> */}
         </table>
       </div>
       <br />
@@ -251,53 +251,64 @@ export default function Users({
             </tr>
           </thead>
           <tbody className="w-full">
-            {users.admins.map((element, index) => {
-              return (
-                <tr key={index} className="*:p-1 odd:bg-white even:bg-pink-50">
-                  <td className="w-24">
-                    <p className="text-center font-semibold">Admin</p>
-                  </td>
-                  <td>
-                    <div>{element.email}</div>
-                  </td>
-                  <td>
-                    <div className="h-10"></div>
-                  </td>
-                  <td />
-                </tr>
-              )
-            })}
-            {.map((element, index) => {
-              return (
-                <tr key={index} className="*:p-1 odd:bg-white even:bg-pink-50">
-                  <td className="w-24 h-10 my-1">
-                    <p className="text-center font-semibold">Normal</p>
-                  </td>
-                  <td>
-                    <div>{element.email}</div>
-                  </td>
-                  <td>
-                    <div className="text-nowrap">{element.partner}</div>
-                  </td>
-                  <td>
-                    <IconButton
-                      onClick={() => {
-                        setConfirmAction(() => {
-                          return () => {
-                            deleteUser(element)
-                          }
-                        })
-                        setConfirmText(
-                          'Are you sure you want to revoke the Authorization of this user? This action is irreversible.'
-                        )
-                      }}
+            {admins !== undefined
+              ? admins.map((element, index) => {
+                  return (
+                    <tr
+                      key={index}
+                      className="*:p-1 odd:bg-white even:bg-pink-50"
                     >
-                      <MdDeleteForever className="w-full" size={'30px'} />
-                    </IconButton>
-                  </td>
-                </tr>
-              )
-            })}
+                      <td className="w-24">
+                        <p className="text-center font-semibold">Admin</p>
+                      </td>
+                      <td>
+                        <div>{element.email}</div>
+                      </td>
+                      <td>
+                        <div className="h-10"></div>
+                      </td>
+                      <td />
+                    </tr>
+                  )
+                })
+              : null}
+
+            {studioAdmins !== undefined
+              ? studioAdmins.map((element, index) => {
+                  return (
+                    <tr
+                      key={index}
+                      className="*:p-1 odd:bg-white even:bg-pink-50"
+                    >
+                      <td className="w-24 h-10 my-1">
+                        <p className="text-center font-semibold">Normal</p>
+                      </td>
+                      <td>
+                        <div>{element.email}</div>
+                      </td>
+                      <td>
+                        <div className="text-nowrap">{element.email}</div>
+                      </td>
+                      <td>
+                        <IconButton
+                          onClick={() => {
+                            setConfirmAction(() => {
+                              return () => {
+                                deleteUser(element)
+                              }
+                            })
+                            setConfirmText(
+                              'Are you sure you want to revoke the Authorization of this user? This action is irreversible.'
+                            )
+                          }}
+                        >
+                          <MdDeleteForever className="w-full" size={'30px'} />
+                        </IconButton>
+                      </td>
+                    </tr>
+                  )
+                })
+              : null}
           </tbody>
         </table>
       </div>

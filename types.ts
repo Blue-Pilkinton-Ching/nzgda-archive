@@ -20,18 +20,18 @@ export interface Game {
   hidden: boolean
 }
 export interface UserTypes {
-  admins: User[]
-  privileged: User[]
+  admins: Admin[]
+  privileged: Admin[]
 }
 
 export interface DashboardData {
   games: Game[]
-  users: User[]
-  requests: User[]
+  admins: Admin[]
+  requests: Admin[]
   studios: Studio[]
 }
 
-export interface User {
+export interface Admin {
   studio: number
   email: string
   uid: string

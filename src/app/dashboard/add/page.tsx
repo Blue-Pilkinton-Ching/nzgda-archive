@@ -1,6 +1,6 @@
 'use client'
 
-import { GamesList, Studio, User, UserTypes } from '../../../../types'
+import { GamesList, Studio, Admin, UserTypes } from '../../../../types'
 import { useEffect, useState } from 'react'
 import { useAuthState } from 'react-firebase-hooks/auth'
 import { getAuth } from 'firebase/auth'

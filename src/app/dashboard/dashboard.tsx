@@ -1,6 +1,6 @@
 'use client'
 import { useEffect, useState } from 'react'
-import { DashboardData, User } from '../../../types'
+import { DashboardData, Admin } from '../../../types'
 import Button from '../(components)/button'
 import Users from './users'
 import GamesList from './gameslist'
@@ -82,7 +82,7 @@ export default function Dashboard({
                 (adminUser
                   ? true
                   : x.studio.id ===
-                    data.users.find((u) => u.uid === user?.uid)?.studio)
+                    data.admins.find((u) => u.uid === user?.uid)?.studio)
             )
             .sort((a, b) => b.id - a.id)}
           hiddenGames={dashboardData.games.filter((x) => x.hidden)}
@@ -99,7 +99,7 @@ export default function Dashboard({
             <Users
               invalidateUsers={invalidateData}
               studios={dashboardData.studios}
-              users={dashboardData.users}
+              users={dashboardData.admins}
               className={`${
                 panel === 'users' ? 'block' : 'hidden'
               } shadow-lg p-4 rounded`}
