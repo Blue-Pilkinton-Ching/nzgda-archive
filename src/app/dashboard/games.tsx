@@ -55,26 +55,17 @@ export default function Games({
 
     let res
 
-    setCurrentGames(
-      currentGames.map((x) => {
-        if (x.id === game.id) {
-          x.hidden = shouldHide
-        }
-        return x
-      })
-    )
-
     try {
-      res = await fetch(
-        `${process.env.API_BACKEND_URL}/dashboard/${game.id}/visibility`,
-        {
-          body: JSON.stringify({ hidden: shouldHide }),
-          method: 'PATCH',
-          headers: {
-            Authorization: 'Bearer ' + (await user?.getIdToken(true)),
-          },
-        }
+      const form = new FormData()
+
+      form.append(
+        'data',
+        JSON.stringify({
+          hidden: shouldHide,
+        })
       )
+
+      res = await editGameByID(form, user as User, game.id)
     } catch (error) {
       alert('An error occured while setting game visibility')
       console.error(error)
@@ -93,7 +84,7 @@ export default function Games({
         return
       default:
         alert('An unknown error occured')
-        console.error(res.status, res.statusText, res.body)
+        console.error(res.status, res.text, res.body)
         return
     }
   }
