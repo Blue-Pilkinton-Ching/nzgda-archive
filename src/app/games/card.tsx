@@ -3,21 +3,21 @@
 import Link from 'next/link'
 import URLName from '@/utils/client/get-url-friendly-name'
 
-import { GameListItem } from '../../../types'
+import { Game } from '../../../types'
 import CardContent from './card-content'
 import { getAnalytics, logEvent } from 'firebase/analytics'
 
-export default function Card({ game }: { game: GameListItem }) {
+export default function Card({ game }: { game: Game }) {
   function onClick() {
     logEvent(getAnalytics(), 'click_game', {
       game_name: game.name,
-      isApp: game.app || false,
-      partner: game.partner || 'None',
+      isApp: game.isApp,
+      studio: game.studio_id,
     })
     logEvent(getAnalytics(), `click_${game.name}`, {
       game_name: game.name,
-      isApp: game.app || false,
-      partner: game.partner || 'None',
+      isApp: game.isApp,
+      studio: game.studio_id,
     })
   }
 

@@ -1,5 +1,5 @@
 import { useWindowSize } from '@uidotdev/usehooks'
-import { GameListItem } from '../../../types'
+import { Game } from '../../../types'
 import Card from './card'
 import React from 'react'
 import { ScrollableGamesSection } from './scrollable-games-section'
@@ -11,7 +11,7 @@ export default function GameSection({
   titleChildren,
   scrollable = false,
 }: {
-  games: GameListItem[]
+  games: Game[]
   smallTitle: string
   largeTitle: string
   titleChildren?: React.ReactNode
@@ -87,7 +87,7 @@ export default function GameSection({
             <>
               <div className="h-[180px] flex items-center justify-center">
                 <p className="text-neutral-400 text-2xl font-bold">
-                  Couldn&apos;t find any educational games!
+                  Couldn&apos;t find any games!
                 </p>
               </div>
             </>

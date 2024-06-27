@@ -14,11 +14,9 @@ import { getAllPublicGames } from '@/api/games'
 export default function Games() {
   const [error, setError] = useState('')
 
-  const [games, setGames] = useState<Game[]>([])
+  const [games, setGames] = useState<Game[]>()
   const [studios, setStudios] = useState<Studio[]>([])
-  const [partner, setPartner] = useState<string | null>()
-
-  const [admin, setAdmin] = useState<boolean>()
+  const [studio, setStudio] = useState<string | null>()
 
   const [educational, setEducational] = useState(false)
 
@@ -26,18 +24,19 @@ export default function Games() {
 
   useEffect(() => {
     fetchGames()
-    setPartner(params.get('partner'))
-    setAdmin(params.get('admin') === 'true' || false)
+    setStudio(params.get('partner'))
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [params])
 
   async function fetchGames() {
-    let data: Game[]
     try {
       let res = await getAllPublicGames()
       if (res.ok) {
-        data = res.body
-        console.log(res.body)
+        if (params.get('admin') === 'true') {
+          setGames(res.body)
+        } else {
+          setGames((res.body as Game[]).filter((x) => x.approved))
+        }
       } else {
         throw new Error(res.text)
       }
@@ -47,27 +46,20 @@ export default function Games() {
     }
   }
 
-  const isMobile = () => {
-    const userAgent = navigator.userAgent
-    return /android|webos|iphone|ipad|ipod|blackberry|iemobile|opera mini/i.test(
-      userAgent
-    )
-  }
-
   return (
     <>
       {games ? (
         <>
-          {partner ? (
+          {studio ? (
             <>
-              {/* <GameSection
-                smallTitle={`${partner}`}
+              <GameSection
+                smallTitle={`${studio}`}
                 largeTitle={`${
                   educational ? 'Educational' : ''
-                } Games by ${partner}`}
+                } Games by ${studio}`}
                 titleChildren={
                   <div className="flex items-center gap-4">
-                    {/* <IconButton
+                    <IconButton
                       onClick={() => {
                         setEducational(!educational)
                       }}
@@ -85,7 +77,7 @@ export default function Games() {
                           color="#00A98F"
                         />
                       )}
-                    </IconButton> 
+                    </IconButton>
                     <Dropdown options={studios?.map((x) => x.name)} />
                   </div>
                 }
@@ -94,19 +86,19 @@ export default function Games() {
                     (b.sort ? b.sort : b.id * 100) -
                     (a.sort ? a.sort : a.id * 100)
                 )}
-              /> */}
+              />
             </>
           ) : null}
           <br />
           <br />
           <br />
-          {/* <GameSection
+          <GameSection
             smallTitle={educational ? 'Educational Games' : 'Online Games'}
             largeTitle={
               educational ? 'Educational Online Games' : 'Play Games Online'
             }
             titleChildren={
-              partner ? null : (
+              studio ? null : (
                 <>
                   <div className="flex items-center gap-4">
                     {/* <IconButton
@@ -127,22 +119,17 @@ export default function Games() {
                           color="#00A98F"
                         />
                       )}
-                    </IconButton> 
+                    </IconButton> */}
                     <Dropdown options={studios.map((x) => x.name)} />
                   </div>
                 </>
               )
             }
-            games={games
-              .filter((x) =>
-                x.playableOnHeihei == undefined ? true : x.playableOnHeihei
-              )
-              .sort(
-                (a, b) =>
-                  (b.sort ? b.sort : b.id * 100) -
-                  (a.sort ? a.sort : a.id * 100)
-              )}
-          /> */}
+            games={games.sort(
+              (a, b) =>
+                (b.sort ? b.sort : b.id * 100) - (a.sort ? a.sort : a.id * 100)
+            )}
+          />
           <br />
           <br />
           <br />
