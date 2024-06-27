@@ -10,7 +10,7 @@ import { Game, Studio } from '../../../types'
 import { useRouter } from 'next/navigation'
 import { useAuthState } from 'react-firebase-hooks/auth'
 import { User, getAuth } from 'firebase/auth'
-import { addGame, editGame } from '@/api/game'
+import { addGame, editGameByID } from '@/api/game'
 
 export default function GameForm({
   edit,
@@ -170,7 +170,7 @@ export default function GameForm({
         form.append('banner', banner)
       }
 
-      res = await editGame(form, user as User)
+      res = await editGameByID(form, user as User, (game as Game).id)
     } else if (thumbnail != undefined) {
       if (!externalURL && !banner) {
         alert(

@@ -1,5 +1,6 @@
 import request from 'superagent'
 import type { User } from 'firebase/auth'
+import { Game } from '../../types'
 
 export async function getGameByID(id: number) {
   return request.get(`/api/game/${id}`).ok((res) => true)
@@ -26,11 +27,11 @@ export async function addGame(form: FormData, user: User) {
   return req
 }
 
-export async function editGame(form: FormData, user: User) {
+export async function editGameByID(form: FormData, user: User, id: number) {
   const data = await JSON.parse(form.get('data') as any as string)
 
   const req = request
-    .patch('/api/game')
+    .patch(`/api/game/${id}`)
     .accept('application/json')
     .send(data)
     .ok((res) => true)

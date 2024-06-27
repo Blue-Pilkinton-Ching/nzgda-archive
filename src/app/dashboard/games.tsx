@@ -10,7 +10,7 @@ import {
 import { IconButton } from '../(components)/iconButton'
 import { Game } from '../../../types'
 import { useAuthState } from 'react-firebase-hooks/auth'
-import { getAuth } from 'firebase/auth'
+import { User, getAuth } from 'firebase/auth'
 import { useEffect, useState } from 'react'
 import Confirm from './confirm'
 import { useRouter } from 'next/navigation'
@@ -18,6 +18,7 @@ import Button from '../(components)/button'
 import Link from 'next/link'
 import { FaCrown } from 'react-icons/fa'
 import { GoDotFill } from 'react-icons/go'
+import { editGameByID } from '@/api/game'
 
 export default function Games({
   games,
@@ -97,19 +98,17 @@ export default function Games({
     }
   }
 
-  async function onApprove(listItem: Game) {
+  async function onApprove(game: Game) {
     let res
 
     try {
-      res = await fetch(
-        `${process.env.API_BACKEND_URL}/dashboard/${listItem.id}/approve`,
-        {
-          method: 'PATCH',
-          headers: {
-            Authorization: 'Bearer ' + (await user?.getIdToken(true)),
-          },
-        }
-      )
+      let form = new FormData()
+
+      const data = JSON.stringify({ approved: true })
+
+      form.append('data', data)
+
+      res = await editGameByID(form, user as User, game.id)
     } catch (error) {
       alert('An error occured while approving game')
       console.error(error)
@@ -128,7 +127,7 @@ export default function Games({
         return
       default:
         alert('An unknown error occured')
-        console.error(res.status, res.statusText, res.body)
+        console.error(res.status, res.text, res.body)
         return
     }
   }
