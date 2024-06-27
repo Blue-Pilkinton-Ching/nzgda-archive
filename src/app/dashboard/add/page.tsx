@@ -1,19 +1,17 @@
 'use client'
 
-import { Game, Studio, Admin } from '../../../../types'
+import { Studio } from '../../../../types'
 import { useEffect, useState } from 'react'
 import { useAuthState } from 'react-firebase-hooks/auth'
 import { getAuth } from 'firebase/auth'
-import type { User } from 'firebase/auth'
 
 import GameForm from '../gameform'
-import { getAllAdmins, getPrivilege } from '@/api/admins'
+import { getAllStudios } from '@/api/studios'
 
 export default function Page() {
   const [user] = useAuthState(getAuth())
 
-  const [admins, setAdmins] = useState<Studio[]>([])
-
+  const [studios, setStudios] = useState<Studio[]>([])
   const [isAdmin, setIsAdmin] = useState<boolean>(false)
 
   const [message, setMessage] = useState('')
@@ -23,18 +21,17 @@ export default function Page() {
       window.location.href = '/dashboard'
       return
     } else {
-      getStudio(user)
+      getStudio()
     }
 
-    async function getStudio(u: User) {
-      let data
+    async function getStudio() {
       let res
 
       try {
-        res = await getAllAdmins(u)
+        res = await getAllStudios()
 
         setIsAdmin(res.headers['studio'] === '0')
-        setAdmins(res.body)
+        setStudios(res.body)
       } catch (error) {
         console.error(error)
         setMessage('Failed to fetch users :(')
@@ -47,7 +44,7 @@ export default function Page() {
       {message ? (
         <p>{message}</p>
       ) : (
-        <GameForm edit={false} studios={admins} admin={isAdmin} />
+        <GameForm edit={false} studios={studios} admin={isAdmin} />
       )}
     </>
   )

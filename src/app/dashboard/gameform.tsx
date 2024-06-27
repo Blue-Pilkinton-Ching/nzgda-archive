@@ -9,7 +9,8 @@ import { ChangeEvent, useEffect, useState } from 'react'
 import { Game, Studio } from '../../../types'
 import { useRouter } from 'next/navigation'
 import { useAuthState } from 'react-firebase-hooks/auth'
-import { getAuth } from 'firebase/auth'
+import { User, getAuth } from 'firebase/auth'
+import { addGame, editGame } from '@/api/game'
 
 export default function GameForm({
   edit,
@@ -30,7 +31,6 @@ export default function GameForm({
   const [width, setWidth] = useState('')
   const [height, setHeight] = useState('')
   const [tags, setTags] = useState('')
-  const [playableOnHeihei, setPlayableOnHeihei] = useState<boolean>(false)
   const [studio, setStudio] = useState<number>(-1)
   const [displayAppBadge, setDisplayAppBadge] = useState(false)
   const [thumbnail, setThumbnail] = useState<File>()
@@ -73,9 +73,6 @@ export default function GameForm({
         break
       case 'Tags':
         setTags(event.target.value)
-        break
-      case 'Playable on Heihei':
-        setPlayableOnHeihei(event.target.value === 'false')
         break
       case 'Studio':
         setStudio(Number(event.target.value))
@@ -143,10 +140,9 @@ export default function GameForm({
       return
     }
 
-    setSubmitting(true)
-
     let res
     if (edit && id) {
+      setSubmitting(true)
       const form = new FormData()
 
       let data = {
@@ -156,8 +152,7 @@ export default function GameForm({
         width: Number(width) ? Number(width) : null,
         height: Number(height) ? Number(height) : null,
         tags: tags,
-        playableOnHeihei,
-        // studio_id: studio,
+        studio_id: studio,
         isApp: displayAppBadge,
         educational: isEducational,
         approved: false,
@@ -175,13 +170,7 @@ export default function GameForm({
         form.append('banner', banner)
       }
 
-      res = await fetch(`${process.env.API_BACKEND_URL}/dashboard/${id}`, {
-        method: 'PATCH',
-        body: form,
-        headers: {
-          Authorization: 'Bearer ' + (await user?.getIdToken(true)),
-        },
-      })
+      res = await editGame(form, user as User)
     } else if (thumbnail != undefined) {
       if (!externalURL && !banner) {
         alert(
@@ -189,6 +178,7 @@ export default function GameForm({
         )
         return
       }
+      setSubmitting(true)
 
       const form = new FormData()
 
@@ -199,7 +189,6 @@ export default function GameForm({
         width: Number(width) ? Number(width) : null,
         height: Number(height) ? Number(height) : null,
         tags: tags,
-        playableOnHeihei,
         studio_id: studio,
         isApp: displayAppBadge,
         educational: isEducational,
@@ -216,13 +205,7 @@ export default function GameForm({
         form.append('banner', banner)
       }
 
-      res = await fetch(`${process.env.API_BACKEND_URL}/dashboard/add`, {
-        method: 'POST',
-        body: form,
-        headers: {
-          Authorization: 'Bearer ' + (await user?.getIdToken(true)),
-        },
-      })
+      res = await addGame(form, user as User)
     } else {
       return
     }
@@ -242,7 +225,7 @@ export default function GameForm({
       default:
         alert('An unknown error occured')
         setSubmitting(false)
-        console.error(res.status, res.statusText, res.body)
+        console.error(res.status, res.text, res.body)
         return
     }
   }
@@ -254,9 +237,6 @@ export default function GameForm({
     setWidth(game?.width?.toString() || '')
     setHeight(game?.height?.toString() || '')
     setTags(game?.tags?.toString() || '')
-    setPlayableOnHeihei(
-      game?.playableOnHeihei == undefined ? true : game?.playableOnHeihei
-    )
     setStudio(game?.studio_id || -1)
     setDisplayAppBadge(game?.isApp || false)
     setIsEducational(game?.educational || false)
@@ -358,15 +338,7 @@ export default function GameForm({
                 maxLength={0}
                 name={'Downloadable App'}
               />
-              <Input
-                onChange={onGameInputChange}
-                value={playableOnHeihei}
-                type="checkbox"
-                tooltip={`Display this game inside the 'Play Online Games' catagory`}
-                maxLength={0}
-                name={'Playable on Heihei'}
-              />
-
+              <br />
               <Input
                 onChange={onGameInputChange}
                 value={externalURL}
@@ -380,7 +352,7 @@ export default function GameForm({
                 value={width}
                 type="number"
                 maxLength={4}
-                tooltip="Ideally your game's canvas should extend infinitely. If this is the case, leave this value blank or set to 0. Otherwise enter the canvas's max width in px."
+                tooltip="If you aren't embedding a game, leave this value blank. If you are embedding a game, ideally your game's canvas should extend infinitely. If it does, leave this value blank. Otherwise enter the canvas's max width in px. (eg: 1920)"
                 name={'Max Width'}
               />
               <Input
@@ -388,7 +360,7 @@ export default function GameForm({
                 value={height}
                 type="number"
                 maxLength={4}
-                tooltip="Same as width, but for height."
+                tooltip="Same as width, but for height. (eg: 1080)"
                 name={'Max Height'}
               />
               <br />

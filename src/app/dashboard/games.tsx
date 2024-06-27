@@ -49,14 +49,14 @@ export default function Games({
     setCurrentGames(games)
   }, [games])
 
-  async function onToggleVisibility(listItem: Game) {
-    const shouldHide = !listItem.hidden
+  async function onToggleVisibility(game: Game) {
+    const shouldHide = !game.hidden
 
     let res
 
     setCurrentGames(
       currentGames.map((x) => {
-        if (x.id === listItem.id) {
+        if (x.id === game.id) {
           x.hidden = shouldHide
         }
         return x
@@ -65,7 +65,7 @@ export default function Games({
 
     try {
       res = await fetch(
-        `${process.env.API_BACKEND_URL}/dashboard/${listItem.id}/visibility`,
+        `${process.env.API_BACKEND_URL}/dashboard/${game.id}/visibility`,
         {
           body: JSON.stringify({ hidden: shouldHide }),
           method: 'PATCH',

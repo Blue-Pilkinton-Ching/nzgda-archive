@@ -2,15 +2,7 @@ import request from 'superagent'
 import { Studio } from '../../types'
 
 export async function getAllStudios() {
-  const res = await request.get('/api/studios')
-
-  return res
-}
-
-export async function addStudio(studio: Studio) {
-  const res = await request.post('/api/studios').send(studio)
-
-  return res
+  return await request.get('/api/studios').ok((res) => true)
 }
 
 export async function editStudio(studio: Studio) {

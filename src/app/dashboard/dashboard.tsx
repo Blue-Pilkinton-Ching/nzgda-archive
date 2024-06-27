@@ -77,20 +77,18 @@ export default function Dashboard({
           games={dashboardData.games
             .filter(
               (x) =>
-                (x.hidden === false || x.hidden === undefined) &&
-                x.approved === true &&
+                !x.hidden &&
+                x.approved &&
                 (adminUser
                   ? true
-                  : x.studio.id ===
+                  : x.studio_id ===
                     data.admins.find((u) => u.uid === user?.uid)?.studio)
             )
             .sort((a, b) => b.id - a.id)}
           hiddenGames={dashboardData.games.filter((x) => x.hidden)}
           unApprovedGames={
             adminUser
-              ? dashboardData.games.filter(
-                  (x) => x.approved === false || x.approved === undefined
-                )
+              ? dashboardData.games.filter((x) => !x.approved)
               : undefined
           }
         ></Games>
