@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useRef, useState } from 'react'
-import { Game, GamesList } from '../../../../../types'
+import { Game } from '../../../../../types'
 import { useParams } from 'next/navigation'
 import Image from 'next/image'
 
@@ -12,13 +12,14 @@ import google from '../../../../../public/images/google-badge.svg'
 import apple from '../../../../../public/images/apple-badge.svg'
 
 import back from '../../../../../public/images/back.svg'
-import * as firestore from 'firebase/firestore'
 import '@/utils/client/firebase'
 import GameSection from '@/app/games/gamesection'
+import { getAllGames } from '@/api/games'
+import { getGameByID } from '@/api/game'
 
 export default function Page() {
   const [game, setGame] = useState<Game | null>()
-  const [games, setGames] = useState<GamesList>()
+  const [games, setGames] = useState<Game[]>()
   const [error, setError] = useState('')
   const gameView = useRef<HTMLIFrameElement>(null)
   const [isFullscreen, setFullscreen] = useState(false)
@@ -29,77 +30,37 @@ export default function Page() {
   useEffect(() => {
     document.addEventListener('fullscreenchange', onFullscreenChange)
 
-    getData()
+    getGame()
     fetchGames()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   async function fetchGames() {
-    let data: GamesList
     try {
-      data = (
-        await firestore.getDoc(
-          firestore.doc(
-            firestore.getFirestore(),
-            'gameslist/BrHoO8yuD3JdDFo8F2BC'
-          )
-        )
-      ).data() as GamesList
-      setGames({
-        data: data.data.filter(
-          (element) =>
-            !element.hidden &&
-            data.partners.find((p) => p.name === element.partner)?.hidden !==
-              true &&
-            (element.exclude
-              ? isMobile()
-                ? !element.exclude.includes('mobileweb')
-                : !element.exclude.includes('desktop')
-              : true)
-        ),
-        partners: data.partners,
-      })
-      if (!data) {
-        console.error('Data not on firebase for some reason')
-        throw 'Data not on firebase for some reason'
-      }
+      let res = await getAllGames()
+      setGames(res.body.filter((x: Game) => x.approved))
     } catch (error) {
       console.error(error)
       setError('Failed to fetch games :(')
     }
   }
 
-  const isMobile = () => {
-    const userAgent = navigator.userAgent
-    return /android|webos|iphone|ipad|ipod|blackberry|iemobile|opera mini/i.test(
-      userAgent
-    )
-  }
-
   function onFullscreenChange() {
     setFullscreen(document.fullscreenElement != null)
   }
 
-  async function getData() {
-    let game: Game
-
-    const query = firestore.query(
-      firestore.collection(firestore.getFirestore(), 'games'),
-      firestore.where('id', '==', Number(params.id)),
-      firestore.limit(1)
-    )
-
+  async function getGame() {
     try {
-      const snapshot = await firestore.getDocs(query)
+      const res = await getGameByID(Number(params.id))
 
-      game = snapshot.docs[0].data() as Game
+      console.log(res.body)
+
+      setGame(res.body)
     } catch (error) {
       console.error(error)
       setError('Failed to fetch Game :(')
       return
     }
-
-    setGame(game)
   }
 
   if (error) {
@@ -110,6 +71,31 @@ export default function Page() {
     return (
       <p className="text-5xl font-semibold text-maingreen">Fetching Game...</p>
     )
+  }
+
+  const iframeStyles = iosFullscreen
+    ? {
+        position: 'fixed' as const,
+        top: 0,
+        left: 0,
+        width: '100vw',
+        height: 'min(calc(100vw / 1.7777777778),100vh)',
+        zIndex: 9999,
+      }
+    : {
+        maxWidth: isFullscreen ? '100%' : game.width || undefined,
+        maxHeight:
+          game.height && game.height < 800
+            ? game.height
+            : isFullscreen
+            ? 'calc(100vh - 64px)'
+            : 800,
+      }
+
+  const containerStyles = {
+    maxWidth: isFullscreen
+      ? 'calc((100vh - 64px) * 1.7778)'
+      : game.width || undefined,
   }
 
   return (
@@ -129,7 +115,7 @@ export default function Page() {
             <p className="sm:text-xl text-lg whitespace-pre-line">
               {game.description}
             </p>
-            <div className="flex justify-center gap-8">
+            {/* <div className="flex justify-center gap-8">
               {game.androidLink ? (
                 <div>
                   <Link href={game.androidLink} target="_blank">
@@ -152,7 +138,7 @@ export default function Page() {
               ) : (
                 ''
               )}
-            </div>
+            </div> */}
           </div>
           <div
             ref={gameView}
@@ -168,36 +154,13 @@ export default function Page() {
                   src={game.url}
                   allowFullScreen
                   className="w-full shadow-lg overflow-hidden aspect-video"
-                  style={
-                    iosFullscreen
-                      ? {
-                          position: 'fixed',
-                          top: 0,
-                          left: 0,
-                          width: '100vw',
-                          height: 'min(calc(100vw / 1.7777777778),100vh)',
-                          zIndex: 9999,
-                        }
-                      : {
-                          maxWidth: isFullscreen ? '100%' : game.width,
-                          maxHeight:
-                            game.height && game.height < 800
-                              ? game.height
-                              : isFullscreen
-                              ? 'calc(100vh - 64px)'
-                              : 800,
-                        }
-                  }
+                  style={iframeStyles}
                   scrolling="no"
                   id="heihei-game"
                   frameBorder={0}
                 ></iframe>
                 <div
-                  style={{
-                    maxWidth: isFullscreen
-                      ? 'calc((100vh - 64px) * 1.7778)'
-                      : game.width,
-                  }}
+                  style={containerStyles}
                   className="w-full h-16 flex justify-between flex-row-reverse items-center px-3"
                 >
                   <button
@@ -243,10 +206,10 @@ export default function Page() {
                   </div>
                 </div>
               </>
-            ) : game.screenshot ? (
+            ) : game.banner ? (
               <div className="w-full h-full shadow-lg rounded-xl">
                 <Image
-                  src={game.screenshot}
+                  src={game.banner}
                   quality={100}
                   fill
                   alt={'game visual'}
@@ -271,13 +234,10 @@ export default function Page() {
             scrollable
             smallTitle={``}
             largeTitle={``}
-            games={games.data
-              .filter((x) => x.approved === true)
-              .sort(
-                (a, b) =>
-                  (b.sort ? b.sort : b.id * 100) -
-                  (a.sort ? a.sort : a.id * 100)
-              )}
+            games={games.sort(
+              (a, b) =>
+                (b.sort ? b.sort : b.id * 100) - (a.sort ? a.sort : a.id * 100)
+            )}
           />
         ) : null}
       </div>

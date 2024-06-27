@@ -9,7 +9,7 @@ import { useSearchParams } from 'next/navigation'
 import GameSection from './gamesection'
 import { IconButton } from '../(components)/iconButton'
 import { IoSchool, IoSchoolOutline } from 'react-icons/io5'
-import { getAllPublicGames } from '@/api/games'
+import { getAllGames } from '@/api/games'
 
 export default function Games() {
   const [error, setError] = useState('')
@@ -30,7 +30,7 @@ export default function Games() {
 
   async function fetchGames() {
     try {
-      let res = await getAllPublicGames()
+      let res = await getAllGames()
       if (res.ok) {
         if (params.get('admin') === 'true') {
           setGames(res.body)
