@@ -9,7 +9,7 @@ import { useEffect, useState } from 'react'
 import { useAuthState } from 'react-firebase-hooks/auth'
 import { getAuth } from 'firebase/auth'
 import type { User } from 'firebase/auth'
-import { allowPrivilegeRequest } from '@/api/requests'
+import { allowPrivilegeRequest, denyPrivilegeRequest } from '@/api/requests'
 import { revokeAdmin } from '@/api/admins'
 
 export default function Users({
@@ -89,12 +89,11 @@ export default function Users({
 
   async function denyAuthRequest(authRequest: Admin) {
     let res
+
+    console.log(authRequest)
+
     try {
-      res = await fetch(`${process.env.API_BACKEND_URL}/dashboard/requests`, {
-        body: JSON.stringify({ user: authRequest }),
-        method: 'DELETE',
-        headers: { Authorization: 'Bearer ' + (await user?.getIdToken(true)) },
-      })
+      res = await denyPrivilegeRequest(authRequest.uid, user as User)
     } catch (error) {
       alert('An error occured while removing user')
       console.error(error)
@@ -112,7 +111,7 @@ export default function Users({
         return
       default:
         alert('An unknown error occured')
-        console.error(res.status, res.statusText, res.body)
+        console.error(res.status, res.text, res.body)
         return
     }
   }

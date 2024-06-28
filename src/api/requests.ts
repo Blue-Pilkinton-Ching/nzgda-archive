@@ -19,8 +19,10 @@ export async function allowPrivilegeRequest(admin: Admin, user: User) {
 }
 
 export async function denyPrivilegeRequest(uid: string, user: User) {
+  console.log(uid)
+
   return request
-    .post(`/api/requests`)
+    .delete(`/api/requests`)
     .send({ uid })
     .ok((res) => true)
     .set('Authorization', `Bearer ${await user.getIdToken(true)}`)
