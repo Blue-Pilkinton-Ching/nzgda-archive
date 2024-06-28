@@ -1,6 +1,5 @@
 import request from 'superagent'
 import type { User } from 'firebase/auth'
-import { Game } from '../../types'
 
 export async function getGameByID(id: number) {
   return request.get(`/api/game/${id}`).ok((res) => true)

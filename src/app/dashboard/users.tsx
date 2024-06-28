@@ -8,26 +8,24 @@ import Confirm from './confirm'
 import { useEffect, useState } from 'react'
 import { useAuthState } from 'react-firebase-hooks/auth'
 import { getAuth } from 'firebase/auth'
+import type { User } from 'firebase/auth'
+import { allowPrivilegeRequest } from '@/api/requests'
 
 export default function Users({
   className,
   requests: requestsProp,
-  users,
+  admins,
   studios,
   invalidateUsers,
 }: {
   className: string
   requests: Admin[]
-  users: Admin[]
+  admins: Admin[]
   studios: Studio[]
   invalidateUsers: () => void
 }) {
   const [confirmText, setConfirmText] = useState('')
   const [confirmAction, setConfirmAction] = useState<() => void>()
-
-  const [admins, setAdmins] = useState<Admin[]>()
-  const [studioAdmins, setStudioAdmins] = useState<Admin[]>()
-
   const [requests, setRequests] = useState<Admin[]>([])
   const [user] = useAuthState(getAuth())
 
@@ -38,11 +36,7 @@ export default function Users({
   async function acceptAuthRequest(authRequest: Admin) {
     let res
     try {
-      res = await fetch(`${process.env.API_BACKEND_URL}/dashboard/users`, {
-        body: JSON.stringify({ user: authRequest }),
-        method: 'POST',
-        headers: { Authorization: 'Bearer ' + (await user?.getIdToken(true)) },
-      })
+      res = await allowPrivilegeRequest(authRequest, user as User)
     } catch (error) {
       alert('An error occured while adding user')
       console.error(error)
@@ -60,7 +54,7 @@ export default function Users({
         return
       default:
         alert('An unknown error occured')
-        console.error(res.status, res.statusText, res.body)
+        console.error(res.status, res.text, res.body)
         return
     }
   }
@@ -126,13 +120,14 @@ export default function Users({
     }
   }
 
-  async function setUser(user: Admin, studio: number) {
+  async function setUser(user: Admin, studioName: string) {
     setRequests(
-      requests.map((element) => {
-        if (element.uid === user.uid) {
-          element.studio = studio
+      requests.map((request) => {
+        if (request.uid === user.uid) {
+          request.studio = studios.find((studio) => studio.name === studioName)
+            ?.id as number
         }
-        return element
+        return request
       })
     )
   }
@@ -156,59 +151,51 @@ export default function Users({
               <th className="w-14 text-center">Deny</th>
             </tr>
           </thead>
-          {/* <tbody className="w-full">
-            {requests.map((element, index) => {
+          <tbody className="w-full">
+            {requests.map((request, index) => {
               return (
                 <tr key={index} className="*:p-1 odd:bg-white even:bg-pink-50">
                   <td>
-                    <div>{element.email}</div>
+                    <div>{request.email}</div>
                   </td>
                   <td>
                     <select
                       id="Partner / Studio"
                       name="Partner / Studio"
                       value={
-                        requests.find((x) => x.uid === element.uid)?.partner ||
-                        'None'
+                        studios.find((s) => s.id === request.studio)?.name ||
+                        '-- select --'
                       }
-                      onChange={(event) =>
-                        setUser(element, event.target.value)
-                      }
+                      onChange={(event) => setUser(request, event.target.value)}
                       className="cursor-pointer text-ellipsis max-w-44 py-0.5 px-2 rounded-lg flex-1 border-zinc-500 border shadow-md focus:border-black outline-none text-lg"
                     >
-                      <option value={'None'}>None</option>
-
-                      <optgroup label="Shown">
-                        {studios.map((element) => {
-                          return element.hidden === false ? (
-                            <option key={element.name} value={element.name}>
-                              {element.name}
-                            </option>
-                          ) : null
-                        })}
-                      </optgroup>
-                      <optgroup label="Hidden">
-                        {studios.map((element) => {
-                          return element.hidden === true ? (
-                            <option key={element.name} value={element.name}>
-                              {element.name}
-                            </option>
-                          ) : null
-                        })}
-                      </optgroup>
+                      <option disabled>-- select --</option>
+                      {studios.map((studio) => {
+                        return (
+                          <option key={studio.id} value={studio.name}>
+                            {studio.name}
+                          </option>
+                        )
+                      })}
                     </select>
                   </td>
                   <td>
                     <IconButton
                       onClick={() => {
-                        setConfirmAction(() => {
-                          return () => {
-                            acceptAuthRequest(element)
-                          }
-                        })
-                        setConfirmText(
-                          `Are you sure you want to add this user as a member of ${element.partner}?`
-                        )
+                        if (request.studio) {
+                          setConfirmAction(() => {
+                            return () => {
+                              acceptAuthRequest(request)
+                            }
+                          })
+                          setConfirmText(
+                            `Are you sure you want to add this user as a member of ${
+                              studios.find((s) => s.id === request.studio)?.name
+                            }?`
+                          )
+                        } else {
+                          alert('You need to select a studio!')
+                        }
                       }}
                     >
                       <FaCheck className="w-full" size={'30px'} />
@@ -219,7 +206,7 @@ export default function Users({
                       onClick={() => {
                         setConfirmAction(() => {
                           return () => {
-                            denyAuthRequest(element)
+                            denyAuthRequest(request)
                           }
                         })
                         setConfirmText(
@@ -233,7 +220,7 @@ export default function Users({
                 </tr>
               )
             })}
-          </tbody> */}
+          </tbody>
         </table>
       </div>
       <br />
@@ -244,71 +231,46 @@ export default function Users({
         <table className="w-full ">
           <thead>
             <tr className="*:p-1">
-              <th className="w-24 text-center">Privilege</th>
               <th>Email Address</th>
               <th className="w-14 text-left">Studio</th>
               <th className="w-14 text-center">Revoke</th>
             </tr>
           </thead>
           <tbody className="w-full">
-            {admins !== undefined
-              ? admins.map((element, index) => {
-                  return (
-                    <tr
-                      key={index}
-                      className="*:p-1 odd:bg-white even:bg-pink-50"
-                    >
-                      <td className="w-24">
-                        <p className="text-center font-semibold">Admin</p>
-                      </td>
-                      <td>
-                        <div>{element.email}</div>
-                      </td>
-                      <td>
-                        <div className="h-10"></div>
-                      </td>
-                      <td />
-                    </tr>
-                  )
-                })
-              : null}
-
-            {studioAdmins !== undefined
-              ? studioAdmins.map((element, index) => {
-                  return (
-                    <tr
-                      key={index}
-                      className="*:p-1 odd:bg-white even:bg-pink-50"
-                    >
-                      <td className="w-24 h-10 my-1">
-                        <p className="text-center font-semibold">Normal</p>
-                      </td>
-                      <td>
-                        <div>{element.email}</div>
-                      </td>
-                      <td>
-                        <div className="text-nowrap">{element.email}</div>
-                      </td>
-                      <td>
-                        <IconButton
-                          onClick={() => {
-                            setConfirmAction(() => {
-                              return () => {
-                                deleteUser(element)
-                              }
-                            })
-                            setConfirmText(
-                              'Are you sure you want to revoke the Authorization of this user? This action is irreversible.'
-                            )
-                          }}
-                        >
-                          <MdDeleteForever className="w-full" size={'30px'} />
-                        </IconButton>
-                      </td>
-                    </tr>
-                  )
-                })
-              : null}
+            {admins.map((element, index) => {
+              return (
+                <tr key={index} className="*:p-1 odd:bg-white even:bg-pink-50">
+                  <td>
+                    <div>{element.email}</div>
+                  </td>
+                  <td>
+                    <div className="text-nowrap">
+                      {studios.find((x) => x.id === element.studio)?.name || (
+                        <strong>Admin</strong>
+                      )}
+                    </div>
+                  </td>
+                  {element.studio === 0 ? null : (
+                    <td>
+                      <IconButton
+                        onClick={() => {
+                          setConfirmAction(() => {
+                            return () => {
+                              deleteUser(element)
+                            }
+                          })
+                          setConfirmText(
+                            'Are you sure you want to revoke the Authorization of this user? This action is irreversible.'
+                          )
+                        }}
+                      >
+                        <MdDeleteForever className="w-full" size={'30px'} />
+                      </IconButton>
+                    </td>
+                  )}
+                </tr>
+              )
+            })}
           </tbody>
         </table>
       </div>

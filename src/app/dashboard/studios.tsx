@@ -2,17 +2,18 @@ import { IoEye, IoEyeOff } from 'react-icons/io5'
 import { IconButton } from '../(components)/iconButton'
 import { FormEvent, useEffect, useState } from 'react'
 import { useAuthState } from 'react-firebase-hooks/auth'
-import { getAuth } from 'firebase/auth'
+import { User, getAuth } from 'firebase/auth'
 import { MdDeleteForever, MdDone, MdEdit } from 'react-icons/md'
 
 import { Studio } from '../../../types'
 import Button from '../(components)/button'
 import Confirm from './confirm'
+import { addStudio } from '@/api/studios'
 
 export default function Studios({
   className,
   studios,
-  invalidateStudios: invalidatePartners,
+  invalidateStudios: invalidateStudios,
 }: {
   className: string
   studios: Studio[]
@@ -98,7 +99,7 @@ export default function Studios({
 
     switch (res.status) {
       case 200:
-        invalidatePartners()
+        invalidateStudios()
         return
       case 401:
         alert('You are Unauthorized to make that action')
@@ -113,22 +114,18 @@ export default function Studios({
     }
   }
 
-  async function addStudio(event: FormEvent<HTMLFormElement>) {
+  async function createStudio(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
 
-    let res
-
     const currentTarget = event.currentTarget[0] as HTMLFormElement
-    const pName = currentTarget.value
+    const studioName = currentTarget.value
 
     currentTarget.value = ''
 
+    let res
+
     try {
-      res = await fetch(`${process.env.API_BACKEND_URL}/dashboard/partners`, {
-        body: JSON.stringify(pName),
-        method: 'POST',
-        headers: { Authorization: 'Bearer ' + (await user?.getIdToken(true)) },
-      })
+      res = await addStudio(studioName, user as User)
     } catch (error) {
       alert('An error occured while adding partner')
       console.error(error)
@@ -137,7 +134,7 @@ export default function Studios({
 
     switch (res.status) {
       case 200:
-        invalidatePartners()
+        invalidateStudios()
         return
       case 401:
         alert('You are Unauthorized to make that action')
@@ -147,7 +144,7 @@ export default function Studios({
         return
       default:
         alert('An unknown error occured')
-        console.error(res.status, res.statusText, res.body)
+        console.error(res.status, res.text, res.body)
         return
     }
   }
@@ -162,7 +159,7 @@ export default function Studios({
       <h1 className="text-4xl pl-2 font-bold">Studios</h1>
 
       <form
-        onSubmit={addStudio}
+        onSubmit={createStudio}
         className="flex justify-between items-center gap-8"
       >
         <input

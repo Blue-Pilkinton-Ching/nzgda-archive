@@ -10,20 +10,18 @@ export async function requestPrivilege(admin: Admin, user: User) {
     .set('Authorization', `Bearer ${await user.getIdToken(true)}`)
 }
 
-export async function getAllPrivilegeRequests() {
-  return request.get(`/api/requests`).ok((res) => true)
-}
-
-export async function allowPrivilegeRequest(uid: string, studio: number) {
+export async function allowPrivilegeRequest(admin: Admin, user: User) {
   return request
     .patch(`/api/requests`)
-    .send({ uid, studio })
+    .send(admin)
     .ok((res) => true)
+    .set('Authorization', `Bearer ${await user.getIdToken(true)}`)
 }
 
-export async function denyPrivilegeRequest(uid: string) {
+export async function denyPrivilegeRequest(uid: string, user: User) {
   return request
     .post(`/api/requests`)
     .send({ uid })
     .ok((res) => true)
+    .set('Authorization', `Bearer ${await user.getIdToken(true)}`)
 }

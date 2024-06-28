@@ -97,7 +97,7 @@ export default function Dashboard({
             <Users
               invalidateUsers={invalidateData}
               studios={dashboardData.studios}
-              users={dashboardData.admins}
+              admins={dashboardData.admins}
               className={`${
                 panel === 'users' ? 'block' : 'hidden'
               } shadow-lg p-4 rounded`}
