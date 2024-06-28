@@ -6,10 +6,12 @@ export async function getAllStudios() {
   return await request.get('/api/studios').ok((res) => true)
 }
 
-export async function editStudio(studio: Studio) {
-  const res = await request.patch('/api/studios').send(studio)
-
-  return res
+export async function editStudio(studio: Studio, user: User) {
+  return await request
+    .patch('/api/studios')
+    .send(studio)
+    .set('Authorization', `Bearer ${await user.getIdToken(true)}`)
+    .ok((res) => true)
 }
 export async function addStudio(studio: string, user: User) {
   const res = await request
@@ -21,6 +23,10 @@ export async function addStudio(studio: string, user: User) {
   return res
 }
 
-export async function deleteStudioByID(id: number) {
-  const res = await request.delete(`/api/studios`).send({ id })
+export async function deleteStudioByID(id: number, user: User) {
+  return await request
+    .delete(`/api/studios`)
+    .send({ id })
+    .set('Authorization', `Bearer ${await user.getIdToken(true)}`)
+    .ok((res) => true)
 }

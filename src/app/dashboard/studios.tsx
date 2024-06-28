@@ -1,4 +1,3 @@
-import { IoEye, IoEyeOff } from 'react-icons/io5'
 import { IconButton } from '../(components)/iconButton'
 import { FormEvent, useEffect, useState } from 'react'
 import { useAuthState } from 'react-firebase-hooks/auth'
@@ -8,11 +7,11 @@ import { MdDeleteForever, MdDone, MdEdit } from 'react-icons/md'
 import { Studio } from '../../../types'
 import Button from '../(components)/button'
 import Confirm from './confirm'
-import { addStudio } from '@/api/studios'
+import { addStudio, deleteStudioByID, editStudio } from '@/api/studios'
 
 export default function Studios({
   className,
-  studios,
+  studios: oldStudios,
   invalidateStudios: invalidateStudios,
 }: {
   className: string
@@ -21,41 +20,30 @@ export default function Studios({
 }) {
   const [user] = useAuthState(getAuth())
 
-  const [partnerData, setPartnerData] = useState<Studio[]>()
   const [confirmText, setConfirmText] = useState('')
-  const [partnerToDelete, setPartnerToDelete] = useState('')
-  const [editPartner, setEditPartner] = useState('')
+  const [studioToDelete, setStudioToDelete] = useState(0)
+  const [editingStudio, setEditingStudio] = useState('')
+  const [studios, setStudios] = useState<Studio[]>(oldStudios)
 
-  const [partnerName, setPartnerName] = useState('')
+  const [studioName, setStudioName] = useState('')
 
   useEffect(() => {
-    setPartnerData(studios)
-  }, [studios])
+    setStudios(oldStudios)
+  }, [oldStudios])
 
-  async function onEditPartner(partner: string) {
-    if (editPartner === partner) {
-      if (editPartner !== partnerName) {
-        setEditPartner('')
-        setPartnerName('')
+  async function onEditPartner(studio: string) {
+    if (editingStudio === studio) {
+      if (editingStudio !== studioName) {
+        setEditingStudio('')
+        setStudioName('')
 
-        let p = (partnerData as Studio[]).find(
-          (x) => x.name === editPartner
-        ) as Studio
+        let studio = studios.find((x) => x.name === editingStudio) as Studio
 
-        p.name = partnerName
+        studio.name = studioName
 
         let res
         try {
-          res = await fetch(
-            `${process.env.API_BACKEND_URL}/dashboard/partners/${editPartner}`,
-            {
-              body: JSON.stringify({ partner: partnerName }),
-              method: 'PATCH',
-              headers: {
-                Authorization: 'Bearer ' + (await user?.getIdToken(true)),
-              },
-            }
-          )
+          res = await editStudio(studio, user as User)
         } catch (error) {
           alert('An error occured while setting new partner name')
           console.error(error)
@@ -73,24 +61,20 @@ export default function Studios({
             return
           default:
             alert('An unknown error occured')
-            console.error(res.status, res.statusText, res.body)
+            console.error(res.status, res.text, res.body)
             return
         }
       }
     } else {
-      setEditPartner(partner)
-      setPartnerName(partner)
+      setEditingStudio(studio)
+      setStudioName(studio)
     }
   }
 
   async function deleteStudio() {
     let res
     try {
-      res = await fetch(`${process.env.API_BACKEND_URL}/dashboard/partners`, {
-        body: JSON.stringify(partnerToDelete),
-        method: 'DELETE',
-        headers: { Authorization: 'Bearer ' + (await user?.getIdToken(true)) },
-      })
+      res = await deleteStudioByID(studioToDelete, user as User)
     } catch (error) {
       alert('An error occured while deleting partner')
       console.error(error)
@@ -109,7 +93,7 @@ export default function Studios({
         return
       default:
         alert('An unknown error occured')
-        console.error(res.status, res.statusText, res.body)
+        console.error(res.status, res.text, res.body)
         return
     }
   }
@@ -183,22 +167,21 @@ export default function Studios({
           <tr>
             <th className="pl-2">Partner</th>
             <th className="w-16 text-center">Edit</th>
-            <th className="w-16 text-center">Hide</th>
             <th className="w-16 text-center">Delete</th>
           </tr>
         </thead>
         <tbody>
-          {partnerData?.map((element, key) => {
+          {studios.map((element, key) => {
             return (
               <tr key={key} className="even:bg-zinc-100 odd:bg-white">
                 <td className="pl-2">
-                  {editPartner === element.name ? (
+                  {editingStudio === element.name ? (
                     <>
                       <input
                         type="text"
                         className="bg-transparent outline-none shadow-md border border-black px-1.5 rounded-md -translate-x-2"
-                        value={partnerName}
-                        onChange={(e) => setPartnerName(e.target.value)}
+                        value={studioName}
+                        onChange={(e) => setStudioName(e.target.value)}
                       />
                     </>
                   ) : (
@@ -207,7 +190,7 @@ export default function Studios({
                 </td>
                 <td>
                   <IconButton onClick={() => onEditPartner(element.name)}>
-                    {editPartner === element.name ? (
+                    {editingStudio === element.name ? (
                       <MdDone className="w-full" size={'35px'} />
                     ) : (
                       <MdEdit className="w-full" size={'30px'} />
@@ -217,7 +200,7 @@ export default function Studios({
                 <td>
                   <IconButton
                     onClick={() => {
-                      setPartnerToDelete(element.name)
+                      setStudioToDelete(element.id)
                       setConfirmText(
                         'Are you sure you want to delete this partner? This action is irreversible.'
                       )
