@@ -10,6 +10,7 @@ import { useAuthState } from 'react-firebase-hooks/auth'
 import { getAuth } from 'firebase/auth'
 import type { User } from 'firebase/auth'
 import { allowPrivilegeRequest } from '@/api/requests'
+import { revokeAdmin } from '@/api/admins'
 
 export default function Users({
   className,
@@ -59,14 +60,10 @@ export default function Users({
     }
   }
 
-  async function deleteUser(deletedUser: Admin) {
+  async function deleteUser(admin: Admin) {
     let res
     try {
-      res = await fetch(`${process.env.API_BACKEND_URL}/dashboard/users`, {
-        body: JSON.stringify({ user: deletedUser }),
-        method: 'DELETE',
-        headers: { Authorization: 'Bearer ' + (await user?.getIdToken(true)) },
-      })
+      res = await revokeAdmin(admin.uid, user as User)
     } catch (error) {
       alert('An error occured while adding user')
       console.error(error)
@@ -85,7 +82,7 @@ export default function Users({
         return
       default:
         alert('An unknown error occured')
-        console.error(res.status, res.statusText, res.body)
+        console.error(res.status, res.text, res.body)
         return
     }
   }
@@ -237,26 +234,26 @@ export default function Users({
             </tr>
           </thead>
           <tbody className="w-full">
-            {admins.map((element, index) => {
+            {admins.map((admin, index) => {
               return (
                 <tr key={index} className="*:p-1 odd:bg-white even:bg-pink-50">
                   <td>
-                    <div>{element.email}</div>
+                    <div>{admin.email}</div>
                   </td>
                   <td>
                     <div className="text-nowrap">
-                      {studios.find((x) => x.id === element.studio)?.name || (
+                      {studios.find((x) => x.id === admin.studio)?.name || (
                         <strong>Admin</strong>
                       )}
                     </div>
                   </td>
-                  {element.studio === 0 ? null : (
+                  {admin.studio === 0 ? null : (
                     <td>
                       <IconButton
                         onClick={() => {
                           setConfirmAction(() => {
                             return () => {
-                              deleteUser(element)
+                              deleteUser(admin)
                             }
                           })
                           setConfirmText(

@@ -8,8 +8,12 @@ export async function getAllAdmins(user: User) {
     .set('Authorization', `Bearer ${await user.getIdToken(true)}`)
 }
 
-export function revokeAdmin() {
-  return request.delete('/api/admins').ok((res) => true)
+export async function revokeAdmin(adminUID: string, user: User) {
+  return request
+    .delete('/api/admins')
+    .ok((res) => true)
+    .send({ uid: adminUID })
+    .set('Authorization', `Bearer ${await user.getIdToken(true)}`)
 }
 
 export async function getPrivilege(user: User) {
