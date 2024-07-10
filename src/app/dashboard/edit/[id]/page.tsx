@@ -1,26 +1,24 @@
 'use client'
 
-import { Game, GamesList, Studio, UserTypes } from '../../../../../types'
+import { Admin, Game, Studio, UserTypes } from '../../../../../types'
 import { useEffect, useState } from 'react'
 import { useAuthState } from 'react-firebase-hooks/auth'
-import { getAuth } from 'firebase/auth'
+import { getAuth, User } from 'firebase/auth'
 
 import '@/utils/client/firebase'
 
 import { useParams } from 'next/navigation'
-import * as firestore from 'firebase/firestore'
 import GameForm from '../../gameform'
+import { getGameByID } from '@/api/game'
+import { getAllStudios } from '@/api/studios'
+import { getAllAdmins } from '@/api/admins'
 
 export default function EditGame() {
   const [user] = useAuthState(getAuth())
-
   const [message, setMessage] = useState('Loading Game...')
-
   const [game, setGame] = useState<Game>()
-  const [partners, setPartners] = useState<Studio[]>([])
-
-  const [users, setUsers] = useState<UserTypes>()
-
+  const [studios, setStudios] = useState<Studio[]>([])
+  const [admins, setAdmins] = useState<Admin[]>()
   const params = useParams<{ id: string }>()
 
   useEffect(() => {
@@ -35,40 +33,27 @@ export default function EditGame() {
     async function fetchPartners() {
       let data
       try {
-        data = (
-          await firestore.getDoc(
-            firestore.doc(
-              firestore.getFirestore(),
-              'gameslist/BrHoO8yuD3JdDFo8F2BC'
-            )
-          )
-        ).data() as GamesList
+        data = (await getAllStudios()).body
         if (!data) {
-          setMessage("Couldn't find data :(")
-          throw 'Partner data not on firebase for some reason'
+          setMessage("Couldn't retrieve studios :(")
+          throw `Couldn't retrieve studios :(`
         }
-        setPartners(data?.partners)
+        setStudios(data)
       } catch (error) {
         console.error(error)
-        setMessage('Failed to fetch games :(')
+        setMessage('Failed to game data :(')
       }
     }
 
     async function fetchUsers() {
       let data
       try {
-        data = (await (
-          await fetch(`${process.env.API_BACKEND_URL}/dashboard/users`, {
-            headers: {
-              Authorization: 'Bearer ' + (await user?.getIdToken(true)),
-            },
-          })
-        ).json()) as UserTypes
+        data = (await getAllAdmins(user as User)).body
         if (!data) {
           setMessage("Couldn't find data :(")
           throw 'User data not on firebase for some reason'
         }
-        setUsers(data)
+        setAdmins(data)
       } catch (error) {
         console.error(error)
         setMessage('Failed to fetch users :(')
@@ -76,21 +61,10 @@ export default function EditGame() {
     }
 
     async function fetchGame() {
-      const query = firestore.query(
-        firestore.collection(firestore.getFirestore(), 'games'),
-        firestore.limit(1),
-        firestore.where('id', '==', Number(params.id))
-      )
-
       let data
 
       try {
-        const querySnapshot = await firestore.getDocs(query)
-        if (!querySnapshot || querySnapshot.docs.length === 0) {
-          setMessage('Error fetching game :(')
-          throw 'Game data not on firebase for some reason'
-        }
-        data = querySnapshot.docs[0].data() as Game
+        data = (await getGameByID(Number(params.id))).body as Game
       } catch (error) {
         console.error(error)
         setMessage('Failed to fetch game data :(')
@@ -109,11 +83,9 @@ export default function EditGame() {
         <GameForm
           edit
           game={game}
-          studios={partners}
+          studios={studios}
           id={Number(params.id)}
-          admin={
-            users?.privileged.find((u) => u.uid === user?.uid) == undefined
-          }
+          admin={admins?.find((u) => u.uid === user?.uid) == undefined}
         />
       )}
     </>
