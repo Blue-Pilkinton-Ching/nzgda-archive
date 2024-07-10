@@ -33,10 +33,9 @@ export default function Studios({
 
   async function onEditPartner(studio: string) {
     if (editingStudio === studio) {
+      setEditingStudio('')
+      setStudioName('')
       if (editingStudio !== studioName) {
-        setEditingStudio('')
-        setStudioName('')
-
         let studio = studios.find((x) => x.name === editingStudio) as Studio
 
         studio.name = studioName
@@ -151,7 +150,7 @@ export default function Studios({
           maxLength={100}
           required
           type="text"
-          placeholder="Enter new partner name..."
+          placeholder="Enter new studio name..."
           className="py-0.5 mt-3 px-2 rounded-lg flex-1 border border-white focus:border-black outline-none text-lg"
         />
         <Button

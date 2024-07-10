@@ -47,9 +47,9 @@ export async function editGameByID(form: FormData, user: User, id: number) {
   return req
 }
 
-export async function deleteGameByID(id: number) {
+export async function deleteGameByID(id: number, user: User) {
   return request
-    .delete(`/api/game`)
-    .send({ id })
+    .delete(`/api/game/${id}`)
     .ok((res) => true)
+    .set('Authorization', `Bearer ${await user.getIdToken(true)}`)
 }

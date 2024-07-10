@@ -18,7 +18,7 @@ import Button from '../(components)/button'
 import Link from 'next/link'
 import { FaCrown } from 'react-icons/fa'
 import { GoDotFill } from 'react-icons/go'
-import { editGameByID } from '@/api/game'
+import { editGameByID, deleteGameByID } from '@/api/game'
 
 export default function Games({
   games,
@@ -126,15 +126,7 @@ export default function Games({
   async function deleteGame() {
     let res
     try {
-      res = await fetch(
-        `${process.env.API_BACKEND_URL}/dashboard/${gameToDelete}`,
-        {
-          method: 'DELETE',
-          headers: {
-            Authorization: 'Bearer ' + (await user?.getIdToken(true)),
-          },
-        }
-      )
+      res = await deleteGameByID(gameToDelete, user as User)
     } catch (error) {
       alert(`'An error occured while deleting game ${gameToDelete}'`)
       console.error(error)
@@ -153,7 +145,7 @@ export default function Games({
         return
       default:
         alert('An unknown error occured')
-        console.error(res.status, res.statusText, res.body)
+        console.error(res.status, res.text, res.body)
         return
     }
   }
