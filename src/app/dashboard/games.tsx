@@ -167,16 +167,13 @@ export default function Games({
     )
 
     try {
-      res = await fetch(
-        `${process.env.API_BACKEND_URL}/dashboard/${listItem.id}/feature`,
-        {
-          body: JSON.stringify({ featured: shouldFeature }),
-          method: 'PATCH',
-          headers: {
-            Authorization: 'Bearer ' + (await user?.getIdToken(true)),
-          },
-        }
-      )
+      let form = new FormData()
+
+      const data = JSON.stringify({ featured: shouldFeature })
+
+      form.append('data', data)
+
+      res = await editGameByID(form, user as User, listItem.id)
     } catch (error) {
       alert('An error occured while setting game feature')
       console.error(error)
@@ -194,7 +191,7 @@ export default function Games({
         return
       default:
         alert('An unknown error occured')
-        console.error(res.status, res.statusText, res.body)
+        console.error(res.status, res.text, res.body)
         return
     }
   }
@@ -228,7 +225,7 @@ export default function Games({
           <table className="w-full">
             <thead>
               <tr className="*:p-1">
-                <th>ID</th>
+                <th className="w-14">ID</th>
                 <th>Name</th>
                 <th className={`w-14 text-center`}>Approve</th>
                 <th className="w-14 text-center">Reject</th>
@@ -252,7 +249,7 @@ export default function Games({
                         {element.name}
                       </div>
                     </td>
-                    <td className={` ${admin ? 'block' : 'hidden'}`}>
+                    <td className={` ${admin ? '' : 'hidden'}`}>
                       <IconButton
                         onClick={() => {
                           onApprove(element)
@@ -298,9 +295,9 @@ export default function Games({
       <table className="w-full">
         <thead>
           <tr className="*:p-1">
-            <th>ID</th>
+            <th className="w-14">ID</th>
             <th>Name</th>
-            <th className={`w-14 text-center ${admin ? 'block' : 'hidden'}`}>
+            <th className={`w-14 text-center ${admin ? '' : 'hidden'}`}>
               Feature
             </th>
             <th className="w-14 text-center">Edit</th>
@@ -320,7 +317,7 @@ export default function Games({
                     {element.name}
                   </div>
                 </td>
-                <td className={` ${admin ? 'block' : 'hidden'}`}>
+                <td className={`${admin ? '' : 'hidden'} w-14`}>
                   <IconButton
                     onClick={() => {
                       onToggleFeature(element)
