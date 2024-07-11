@@ -4,7 +4,7 @@ import logo from '../../../public/images/game-logo.png'
 import Games from './games'
 import { Suspense } from 'react'
 import GameBackground from '../(components)/game-background'
-import SideContent from './side-content'
+import FeaturedContent from './featured-content'
 
 export default function Page() {
   return (
@@ -22,7 +22,7 @@ export default function Page() {
             </p>
           </div>
           <div className="flex-1 hidden sm:block">
-            <SideContent />
+            <FeaturedContent />
           </div>
         </section>
         <section>
