@@ -24,13 +24,13 @@
   0% {
     transform: perspective(1000px) rotateY(0deg);
   }
-  10% {
+  15% {
     transform: perspective(1000px) rotateY(20deg);
   }
-  30% {
+  35% {
     transform: perspective(1000px) rotateY(-8deg);
   }
-  65% {
+  70% {
     transform: perspective(1000px) rotateY(3deg);
   }
   100% {
@@ -42,13 +42,13 @@
   0% {
     transform: perspective(1000px) rotateY(0deg);
   }
-  10% {
+  15% {
     transform: perspective(1000px) rotateY(-20deg);
   }
-  30% {
+  35% {
     transform: perspective(1000px) rotateY(8deg);
   }
-  65% {
+  70% {
     transform: perspective(1000px) rotateY(-3deg);
   }
   100% {
