@@ -159,8 +159,6 @@ export default function Games({
       currentGames.map((x) => {
         if (x.id === listItem.id) {
           x.featured = shouldFeature
-        } else {
-          x.featured = false
         }
         return x
       })

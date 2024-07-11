@@ -14,7 +14,7 @@ export default function GameBackground({
       <div className="absolute right-0 w-[40%] lg:w-fit -z-10">
         <Image quality={100} src={background} alt={'background'}></Image>
       </div>
-      <div className="sm:p-10 p-5 min-h-svh">{children}</div>
+      <div className="xl:p-10 sm:p-6 p-5 min-h-svh">{children}</div>
       <Footer />
     </>
   )
