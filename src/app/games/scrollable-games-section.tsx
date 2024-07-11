@@ -1,6 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react'
 import { MdArrowBackIos, MdArrowForwardIos } from 'react-icons/md'
-import { GameListItem } from '../../../types'
 
 export function ScrollableGamesSection({ cards }: { cards: React.ReactNode }) {
   const [scrollValue, setScrollValue] = useState(0)
