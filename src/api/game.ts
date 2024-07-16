@@ -6,21 +6,19 @@ export async function getGameByID(id: number) {
 }
 
 export async function addGame(form: FormData, user: User) {
-  const data = await JSON.parse(form.get('data') as any as string)
-
   const req = request
     .post('/api/game')
+    .field('data', form.get('data') as any as string)
     .accept('application/json')
-    .send(data)
     .ok((res) => true)
     .set('Authorization', `Bearer ${await user.getIdToken(true)}`)
 
   if (form.get('thumbnail')) {
-    req.attach('thumbnail', !form.get('thumbnail'))
+    req.attach('thumbnail', form.get('thumbnail') as any)
   }
 
   if (form.get('banner')) {
-    req.attach('banner', !form.get('banner'))
+    req.attach('banner', form.get('banner') as any)
   }
 
   return req
