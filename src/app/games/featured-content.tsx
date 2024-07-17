@@ -12,7 +12,7 @@ import CarouselArrow from './carousel-arrow'
 
 export default function FeaturedContent() {
   const [featuredGames, setFeaturedGames] = useState<Game[]>()
-  const [featuredIndex, setFeaturedIndex] = useState(2)
+  const [featuredIndex, setFeaturedIndex] = useState(0)
   const [wobble, setWobble] = useState({ active: false, direction: 'left' })
 
   const [loading, setLoading] = useState(true)
@@ -71,7 +71,7 @@ export default function FeaturedContent() {
                 <Image
                   quality={90}
                   src={
-                    // featuredGames[featuredIndex].banner ||
+                    featuredGames[featuredIndex].banner ||
                     `https://placehold.co/800x450.jpg?text=${featuredGames[featuredIndex].name}`
                   }
                   alt="Placeholder"
