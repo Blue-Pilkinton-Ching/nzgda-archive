@@ -1,6 +1,6 @@
 import Image from 'next/image'
 
-import logo from '../../../public/images/game-logo.png'
+import logo from '../../../public/images/NZGDA.png'
 import Games from './games'
 import { Suspense } from 'react'
 import GameBackground from '../(components)/game-background'
@@ -10,18 +10,24 @@ export default function Page() {
   return (
     <>
       <GameBackground>
-        <section className="flex justify-between items-center gap-4 xl:h-[500px] lg:h-[400px] h-[350px]">
-          <div className="lg:min-w-[500px] min-w-[300px] w-min">
-            <div className="lg:w-[350px] min-w-[240px] w-full">
-              <Image quality={100} src={logo} alt="game-characters"></Image>
+        <section className="flex justify-between items-center mb-5 sm:min-h-[300px]">
+          <div className="flex flex-col h-full xl:py-5 lg:w-[800px] xl:w-[900px] lg:h-[22vw] w-full aspect-video xl:h-[min(25vw,450px)]">
+            <div className="lg:w-[350px] min-w-[240px] w-full h-[50%] items-center flex mb-3">
+              <Image
+                quality={100}
+                src={logo}
+                alt="logo"
+                className="w-[80%] sm:mx-0 mx-auto min-w-[280px] xl:w-full drop-shadow-md"
+              ></Image>
             </div>
-            <br />
-            <p className="lg:max-w-[500px] sm:max-w-[350px] lg:text-lg mb-5 sm:mb-0">
-              Play, laugh, and learn! HEIHEI tākaro is a safe place for our
-              tamariki. Watch shows on TVNZ On Demand, or Play games right here.
+            <p className="max-w-[min(calc(100vw-40px),500px)] w-max lg:w-auto text-lg text-justify sm:text-start">
+              The NZGDA games directory is the official archive of New Zealand
+              made video games. <br />
+              <br />
+              Discover our games and the kiwi companies that made them.
             </p>
           </div>
-          <div className="flex-1 hidden sm:block">
+          <div className="w-full hidden sm:block">
             <FeaturedContent />
           </div>
         </section>

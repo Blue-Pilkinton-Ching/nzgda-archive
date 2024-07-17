@@ -67,7 +67,7 @@ export default function Games() {
       {games ? (
         <>
           <GameSection
-            smallTitle={`${studio}`}
+            smallTitle={studio ? studio : 'All Games'}
             largeTitle={studio ? `Games by ${studio}` : `All Games`}
             titleChildren={
               <div className="flex items-center gap-4">
