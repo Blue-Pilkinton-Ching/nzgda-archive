@@ -57,8 +57,10 @@ export default function FeaturedContent() {
           />
 
           <div className="h-full max-h-[315px] xl:max-h-[min(27vw,450px)] ">
-            {/* <Link href={`/game/${feature.id}/${urlName(feature.name)}`}> */}
-            <Link href={`#`} className="relative max-w-[80%] aspect-video">
+            <Link
+              href={`/game/${featuredGames[featuredIndex].id}/${urlName(featuredGames[featuredIndex].name)}`}
+              className="relative max-w-[80%] aspect-video"
+            >
               <div
                 className={`hover:scale-[1.02] active:scale-100 duration-100 ${
                   wobble.active
