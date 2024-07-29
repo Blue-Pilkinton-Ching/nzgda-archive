@@ -276,7 +276,7 @@ export default function GameForm({
                 required
                 maxLength={100}
                 name={'Name'}
-                tooltip="This is the name that will be displayed on the HEIHEI website"
+                tooltip="This is the name that will be displayed on the website"
               />
               <Input
                 onChange={onGameInputChange}

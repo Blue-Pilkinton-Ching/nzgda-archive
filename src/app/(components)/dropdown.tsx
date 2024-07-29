@@ -55,7 +55,7 @@ export default function Dropdown({
               <li key={option}>
                 <Link
                   scroll={false}
-                  href={`/games?partner=${encodeURIComponent(option)}`}
+                  href={`/games?studio=${encodeURIComponent(option)}`}
                   className="block px-4 py-2 hover:bg-neutral-100"
                 >
                   {option}

@@ -26,7 +26,7 @@ export default function Games() {
   useEffect(() => {
     fetchGames()
     fetchStudios()
-    setStudio(params.get('partner'))
+    setStudio(params.get('studio'))
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [params])
 
@@ -64,7 +64,7 @@ export default function Games() {
 
   return (
     <>
-      {games ? (
+      {games && studios ? (
         <>
           <GameSection
             smallTitle={studio ? studio : 'All Games'}
@@ -93,10 +93,15 @@ export default function Games() {
                 <Dropdown options={studios?.map((x) => x.name)} />
               </div>
             }
-            games={games.sort(
-              (a, b) =>
-                (b.sort ? b.sort : b.id * 100) - (a.sort ? a.sort : a.id * 100)
-            )}
+            games={
+              studio
+                ? games.filter((x) => x.studio_id === Number(studio))
+                : games.sort(
+                    (a, b) =>
+                      (b.sort ? b.sort : b.id * 100) -
+                      (a.sort ? a.sort : a.id * 100)
+                  )
+            }
           />
         </>
       ) : error ? (
