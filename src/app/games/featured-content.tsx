@@ -40,21 +40,21 @@ export default function FeaturedContent() {
     <>
       {featuredGames != undefined && featuredGames.length > 0 ? (
         <div className="justify-end xl:gap-8 gap-5 hidden lg:flex">
-          <CarouselArrow
-            isLeft={true}
-            onClick={() => {
-              setWobble({ active: true, direction: 'left' })
-              setFeaturedIndex(
-                (i) =>
-                  ((i - 1 + featuredGames.length) % featuredGames.length) %
-                  featuredGames.length
-              )
-              setTimeout(
-                () => setWobble({ active: false, direction: 'left' }),
-                400
-              ) // Increased timeout
-            }}
-          />
+          {featuredGames.length > 1 ? (
+            <CarouselArrow
+              isLeft={true}
+              onClick={() => {
+                setWobble({ active: true, direction: 'right' })
+                setFeaturedIndex(
+                  (i) => ((i + 1) % featuredGames.length) % featuredGames.length
+                )
+                setTimeout(
+                  () => setWobble({ active: false, direction: 'right' }),
+                  400
+                ) // Increased timeout
+              }}
+            />
+          ) : null}
 
           <div className="h-full max-h-[315px] xl:max-h-[min(27vw,450px)] ">
             <Link
@@ -92,17 +92,19 @@ export default function FeaturedContent() {
               </div>
             </Link>
           </div>
-          <CarouselArrow
-            isLeft={false}
-            onClick={() => {
-              setWobble({ active: true, direction: 'right' })
-              setFeaturedIndex((i) => (i + 1) % featuredGames.length)
-              setTimeout(
-                () => setWobble({ active: false, direction: 'right' }),
-                400
-              ) // Increased timeout
-            }}
-          />
+          {featuredGames.length > 1 ? (
+            <CarouselArrow
+              isLeft={false}
+              onClick={() => {
+                setWobble({ active: true, direction: 'right' })
+                setFeaturedIndex((i) => (i + 1) % featuredGames.length)
+                setTimeout(
+                  () => setWobble({ active: false, direction: 'right' }),
+                  400
+                ) // Increased timeout
+              }}
+            />
+          ) : null}
         </div>
       ) : loading ? null : (
         <div className="xl:mr-44 lg:mr-[12%] my-16 hidden sm:block float-right">
