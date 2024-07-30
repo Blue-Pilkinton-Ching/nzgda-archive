@@ -31,7 +31,7 @@ export default function GameForm({
   const [width, setWidth] = useState('')
   const [height, setHeight] = useState('')
   const [tags, setTags] = useState('')
-  const [studio, setStudio] = useState<number>(-1)
+  const [studio, setStudio] = useState<number>(0)
   const [displayAppBadge, setDisplayAppBadge] = useState(false)
   const [thumbnail, setThumbnail] = useState<File>()
   const [thumbnailWarning, setThumbnailWarning] = useState('')
@@ -75,7 +75,7 @@ export default function GameForm({
         setTags(event.target.value)
         break
       case 'Studio':
-        setStudio(Number(event.target.value))
+        setStudio(studios.find((s) => s.name === event.target.value)?.id || -1)
         break
       case 'Downloadable App':
         setDisplayAppBadge(event.target.value === 'false')
@@ -152,7 +152,7 @@ export default function GameForm({
         width: Number(width) ? Number(width) : null,
         height: Number(height) ? Number(height) : null,
         tags: tags,
-        studio_id: studio,
+        studio_id: admin ? studio : -1,
         isApp: displayAppBadge,
         educational: isEducational,
         approved: false,
@@ -189,7 +189,7 @@ export default function GameForm({
         width: Number(width) ? Number(width) : null,
         height: Number(height) ? Number(height) : null,
         tags: tags,
-        studio_id: studio,
+        studio_id: admin ? studio : -1,
         isApp: displayAppBadge,
         educational: isEducational,
         approved: false,
@@ -237,7 +237,7 @@ export default function GameForm({
     setWidth(game?.width?.toString() || '')
     setHeight(game?.height?.toString() || '')
     setTags(game?.tags?.toString() || '')
-    setStudio(game?.studio_id || -1)
+    setStudio(game?.studio_id || 0)
     setDisplayAppBadge(game?.isApp || false)
     setIsEducational(game?.educational || false)
   }
@@ -301,7 +301,7 @@ export default function GameForm({
                   <select
                     id="Studio"
                     name="Studio"
-                    value={studio}
+                    value={studios.find((s) => s.id === studio)?.name}
                     onChange={(event) => onGameInputChange(event, 'Studio')}
                     className="cursor-pointer mb-3 py-0.5 px-2 rounded-lg flex-1 border-zinc-500 border shadow-md focus:border-black outline-none text-lg"
                   >

@@ -53,6 +53,7 @@ export default function EditGame() {
           setMessage("Couldn't find data :(")
           throw 'User data not on firebase for some reason'
         }
+
         setAdmins(data)
       } catch (error) {
         console.error(error)
@@ -85,7 +86,7 @@ export default function EditGame() {
           game={game}
           studios={studios}
           id={Number(params.id)}
-          admin={admins?.find((u) => u.uid === user?.uid) == undefined}
+          admin={admins?.find((u) => u.uid === user?.uid)?.studio === 0}
         />
       )}
     </>

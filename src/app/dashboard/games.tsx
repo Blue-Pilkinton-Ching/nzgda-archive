@@ -206,7 +206,7 @@ export default function Games({
         onConfirm={() => onToggleVisibility(gameToHide as Game)}
         onCancel={() => setHideText('')}
       />
-      {admin && unApprovedGames && unApprovedGames.length > 0 ? (
+      {unApprovedGames && unApprovedGames.length > 0 ? (
         <>
           <div className="flex justify-between">
             <h1 className="text-4xl font-bold">Unapproved Games</h1>
@@ -225,8 +225,12 @@ export default function Games({
               <tr className="*:p-1">
                 <th className="w-14">ID</th>
                 <th>Name</th>
-                <th className={`w-14 text-center`}>Approve</th>
-                <th className="w-14 text-center">Reject</th>
+                {admin ? (
+                  <>
+                    <th className={`w-14 text-center`}>Approve</th>
+                    <th className="w-14 text-center">Reject</th>
+                  </>
+                ) : null}
               </tr>
             </thead>
             <tbody>
@@ -247,27 +251,31 @@ export default function Games({
                         {element.name}
                       </div>
                     </td>
-                    <td className={` ${admin ? '' : 'hidden'}`}>
-                      <IconButton
-                        onClick={() => {
-                          onApprove(element)
-                        }}
-                      >
-                        <MdDone className="w-full" size={'28px'} />
-                      </IconButton>
-                    </td>
-                    <td>
-                      <IconButton
-                        onClick={() => {
-                          setDeleteText(
-                            `Are you sure you want to reject this game proposal?`
-                          )
-                          setGameToDelete(element.id)
-                        }}
-                      >
-                        <MdClose className="w-full" size={'28px'} />
-                      </IconButton>
-                    </td>
+                    {admin ? (
+                      <>
+                        <td className={` ${admin ? '' : 'hidden'}`}>
+                          <IconButton
+                            onClick={() => {
+                              onApprove(element)
+                            }}
+                          >
+                            <MdDone className="w-full" size={'28px'} />
+                          </IconButton>
+                        </td>
+                        <td>
+                          <IconButton
+                            onClick={() => {
+                              setDeleteText(
+                                `Are you sure you want to reject this game proposal?`
+                              )
+                              setGameToDelete(element.id)
+                            }}
+                          >
+                            <MdClose className="w-full" size={'28px'} />
+                          </IconButton>
+                        </td>
+                      </>
+                    ) : null}
                   </tr>
                 )
               })}
@@ -372,7 +380,7 @@ export default function Games({
                 <th>ID</th>
                 <th>Name</th>
                 <th className="w-14 text-center">Unarchive</th>
-                <th className="w-28 text-center">Perm Delete</th>
+                <th className="w-28 text-center">Delete</th>
               </tr>
             </thead>
             <tbody>

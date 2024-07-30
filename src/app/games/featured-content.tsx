@@ -74,6 +74,7 @@ export default function FeaturedContent() {
               >
                 <Image
                   quality={90}
+                  priority
                   src={
                     featuredGames[featuredIndex].banner ||
                     `https://placehold.co/800x450.jpg?text=${featuredGames[featuredIndex].name}`

@@ -3,10 +3,11 @@
 import { Studio } from '../../../../types'
 import { useEffect, useState } from 'react'
 import { useAuthState } from 'react-firebase-hooks/auth'
-import { getAuth } from 'firebase/auth'
+import { getAuth, User } from 'firebase/auth'
 
 import GameForm from '../gameform'
 import { getAllStudios } from '@/api/studios'
+import { getPrivilege } from '@/api/admins'
 
 export default function Page() {
   const [user] = useAuthState(getAuth())
@@ -21,17 +22,29 @@ export default function Page() {
       window.location.href = '/dashboard'
       return
     } else {
-      getStudio()
+      getData()
     }
 
-    async function getStudio() {
+    async function getData() {
       let res
 
       try {
-        res = await getAllStudios()
+        const [studiosRes, privilegeRes] = await Promise.allSettled([
+          getAllStudios(),
+          getPrivilege(user as User),
+        ])
 
-        setIsAdmin(res.headers['studio'] === '0')
-        setStudios(res.body)
+        if (studiosRes.status === 'fulfilled') {
+          setStudios(studiosRes.value.body)
+        } else {
+          throw studiosRes.reason
+        }
+
+        if (privilegeRes.status === 'fulfilled') {
+          setIsAdmin(privilegeRes.value.header.studio === '0')
+        } else {
+          throw privilegeRes.reason
+        }
       } catch (error) {
         console.error(error)
         setMessage('Failed to fetch users :(')

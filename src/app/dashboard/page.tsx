@@ -27,7 +27,9 @@ export default function Page() {
       switch (res.status) {
         case 200:
           setAdminUser(res.headers['studio'] === '0')
+
           setDashboardData(res.body)
+
           break
         case 401:
           alert(`You are not authorized to access this page.`)
