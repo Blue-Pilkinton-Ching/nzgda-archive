@@ -5,7 +5,7 @@ import { Game } from '../../../../../types'
 import { useParams } from 'next/navigation'
 import Image from 'next/image'
 
-import logo from '../../../../../public/images/heihei-logo.png'
+import logo from '../../../../../public/images/NZGDA.png'
 import Link from 'next/link'
 
 import google from '../../../../../public/images/google-badge.svg'
@@ -201,7 +201,7 @@ export default function Page() {
                       {isFullscreen ? 'EXIT' : 'FULLSCREEN'}
                     </p>
                   </button>
-                  <div className="w-8 h-8 pb-9">
+                  <div className="w-24 h-12 flex items-center">
                     <Image quality={10} src={logo} alt={'logo'}></Image>
                   </div>
                 </div>
