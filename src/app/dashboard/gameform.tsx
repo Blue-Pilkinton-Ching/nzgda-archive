@@ -248,7 +248,7 @@ export default function GameForm({
         <div className="flex gap-4">
           <button
             onClick={() => router.push('/dashboard')}
-            className={`duration-100 text-maingreen ${
+            className={`duration-100 text-mainred ${
               edit ? '*:mb-4' : ''
             } hover:scale-110 active:scale-95 hover:rotate-6 active:-rotate-12`}
           >

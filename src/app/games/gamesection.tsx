@@ -40,10 +40,10 @@ export default function GameSection({
   return (
     <>
       <div className="flex justify-between sm:items-center gap-0 sm:gap-3 flex-col-reverse sm:flex-row">
-        <h3 className="text-3xl font-bold sm:hidden block text-maingreen">
+        <h3 className="text-3xl font-bold sm:hidden block text-mainred">
           {smallTitle}
         </h3>
-        <h3 className="text-3xl font-bold hidden sm:block text-maingreen">
+        <h3 className="text-3xl font-bold hidden sm:block text-mainred">
           {largeTitle}
         </h3>
         <br />

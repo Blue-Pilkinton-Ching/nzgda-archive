@@ -20,7 +20,7 @@ export default function CardContent({ game }: { game: Game }) {
         className="rounded-lg lg:hidden"
       ></Image>
       {game.isApp ? (
-        <div className="bg-maingreen absolute w-11 h-7 bottom-0 right-0 z-10 rounded-br-lg rounded-tl-lg text-white text-xs font-semibold">
+        <div className="bg-mainred absolute w-11 h-7 bottom-0 right-0 z-10 rounded-br-lg rounded-tl-lg text-white text-xs font-semibold">
           <p className="text-center items-center justify-center h-full flex">
             App
           </p>

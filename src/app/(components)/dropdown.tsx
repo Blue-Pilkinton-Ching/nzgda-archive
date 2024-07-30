@@ -13,7 +13,7 @@ export default function Dropdown({
         <button
           id="dropdownDefaultButton"
           data-dropdown-toggle="dropdown"
-          className="text-white bg-maingreen focus:ring-4 ring-green-200 peer/button hover:ring-4 group-hover/button:ring-4 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center w-44"
+          className="text-white bg-mainred focus:ring-4 ring-green-200 peer/button hover:ring-4 group-hover/button:ring-4 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center w-44"
           type="button"
         >
           Filter by Studio{' '}
@@ -39,7 +39,7 @@ export default function Dropdown({
           className="my-2 inset-x-0 mx-auto absolute z-10 hidden peer-focus/button:block group-hover/button:block hover:block bg-white divide-y divide-gray-100 rounded-lg shadow w-44"
         >
           <ul
-            className="py-2 text-sm text-maingreen shadow-md"
+            className="py-2 text-sm text-mainred shadow-md"
             aria-labelledby="dropdownDefaultButton"
           >
             <li>

@@ -5,7 +5,7 @@ import { Game } from '../../../../../types'
 import { useParams } from 'next/navigation'
 import Image from 'next/image'
 
-import logo from '../../../../../public/images/heihei-logo-green.png'
+import logo from '../../../../../public/images/heihei-logo.png'
 import Link from 'next/link'
 
 import google from '../../../../../public/images/google-badge.svg'
@@ -64,12 +64,12 @@ export default function Page() {
   }
 
   if (error) {
-    return <p className="text-5xl font-semibold text-maingreen">{error}</p>
+    return <p className="text-5xl font-semibold text-mainred">{error}</p>
   }
 
   if (!game) {
     return (
-      <p className="text-5xl font-semibold text-maingreen">Fetching Game...</p>
+      <p className="text-5xl font-semibold text-mainred">Fetching Game...</p>
     )
   }
 
@@ -103,7 +103,7 @@ export default function Page() {
       <div className="flex items-center xl:min-h-[calc(100vh-80px)] xl:mb-10 min-h-[calc(100vh-40px)] mb-5">
         <div className="flex flex-1 flex-col-reverse xl:flex-row justify-evenly items-start gap-4 xl:gap-10 *:max-w-[800px] *:xl:max-w-none ">
           <div className="space-y-6 xl:min-w-[500px] xl:w-[500px] flex justify-center flex-col">
-            <h1 className="sm:text-4xl text-3xl text-maingreen font-semibold text-wrap flex items-center">
+            <h1 className="sm:text-4xl text-3xl text-mainred font-semibold text-wrap flex items-center">
               <Link
                 className="hover:scale-125 active:scale-95 duration-100 hover:rotate-12 active:-rotate-12 flex items-center mr-5 w-full max-w-12"
                 href={'/games'}
@@ -186,7 +186,7 @@ export default function Page() {
 
                       gameView.current?.requestFullscreen()
                     }}
-                    className="flex bg-maingreen h-9 w-40 rounded-full items-center justify-center hover:scale-105 duration-100 active:scale-95"
+                    className="flex bg-mainred h-9 w-40 rounded-full items-center justify-center hover:scale-105 duration-100 active:scale-95"
                   >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -217,7 +217,7 @@ export default function Page() {
                 ></Image>
               </div>
             ) : (
-              <p className="text-5xl font-semibold text-maingreen">
+              <p className="text-5xl font-semibold text-mainred">
                 Game doesn&apos;t exist!
               </p>
             )}
@@ -226,7 +226,7 @@ export default function Page() {
       </div>
       <div className="w-full my-5 xl:my-10">
         {/* <hr className="w-[80%] lg:w-[90%] mx-auto border-maingreen" /> */}
-        <h1 className="sm:text-4xl lg:px-7 text-3xl text-maingreen font-semibold text-wrap flex items-center">
+        <h1 className="sm:text-4xl lg:px-7 text-3xl text-mainred font-semibold text-wrap flex items-center">
           More Games you&apos;ll love!
         </h1>
         {games ? (

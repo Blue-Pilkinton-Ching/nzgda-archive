@@ -50,7 +50,7 @@ export function ScrollableGamesSection({ cards }: { cards: React.ReactNode }) {
               opacity: `${row.current?.scrollLeft === 0 ? '0' : '100'}`,
             }}
           >
-            <MdArrowBackIos size={36} className=" text-maingreen" />
+            <MdArrowBackIos size={36} className=" text-mainred" />
           </button>
           <button
             onClick={onClickRight}
@@ -72,7 +72,7 @@ export function ScrollableGamesSection({ cards }: { cards: React.ReactNode }) {
               }`,
             }}
           >
-            <MdArrowForwardIos size={36} className=" text-maingreen" />
+            <MdArrowForwardIos size={36} className=" text-mainred" />
           </button>
         </div>
       </div>
