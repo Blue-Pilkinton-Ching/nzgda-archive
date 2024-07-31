@@ -155,9 +155,6 @@ export default function GameForm({
         studio_id: admin ? studio : -1,
         isApp: displayAppBadge,
         educational: isEducational,
-        approved: false,
-        featured: false,
-        hidden: false,
       }
 
       form.append('data', JSON.stringify(data))
@@ -237,7 +234,7 @@ export default function GameForm({
     setWidth(game?.width?.toString() || '')
     setHeight(game?.height?.toString() || '')
     setTags(game?.tags?.toString() || '')
-    setStudio(game?.studio_id || 0)
+    setStudio(game?.studio_id || studios[0].id || 1)
     setDisplayAppBadge(game?.isApp || false)
     setIsEducational(game?.educational || false)
   }

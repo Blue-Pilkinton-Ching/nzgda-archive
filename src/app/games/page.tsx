@@ -9,7 +9,7 @@ import FeaturedContent from './featured-content'
 export default function Page() {
   return (
     <>
-      <GameBackground>
+      <GameBackground bothsides>
         <section className="flex justify-between items-center mb-5 sm:min-h-[300px]">
           <div className="flex flex-col h-full xl:py-5 lg:w-[800px] xl:w-[900px] lg:h-[22vw] w-full aspect-video xl:h-[min(25vw,450px)]">
             <div className="lg:w-[350px] min-w-[240px] w-full h-[50%] items-center flex mb-3">

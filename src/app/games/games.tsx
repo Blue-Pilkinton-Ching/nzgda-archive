@@ -62,6 +62,13 @@ export default function Games() {
     }
   }
 
+  console.log(
+    games?.filter(
+      (x) => x.studio_id === studios.find((s) => s.name === studio)?.id
+    ),
+    games
+  )
+
   return (
     <>
       {games && studios ? (
@@ -95,7 +102,10 @@ export default function Games() {
             }
             games={
               studio
-                ? games.filter((x) => x.studio_id === Number(studio))
+                ? games.filter(
+                    (x) =>
+                      x.studio_id === studios.find((s) => s.name === studio)?.id
+                  )
                 : games.sort(
                     (a, b) =>
                       (b.sort ? b.sort : b.id * 100) -

@@ -26,24 +26,20 @@ export default function Page() {
     }
 
     async function getData() {
-      let res
-
       try {
         const [studiosRes, privilegeRes] = await Promise.allSettled([
           getAllStudios(),
           getPrivilege(user as User),
         ])
 
-        if (studiosRes.status === 'fulfilled') {
+        if (
+          studiosRes.status === 'fulfilled' &&
+          privilegeRes.status === 'fulfilled'
+        ) {
           setStudios(studiosRes.value.body)
-        } else {
-          throw studiosRes.reason
-        }
-
-        if (privilegeRes.status === 'fulfilled') {
           setIsAdmin(privilegeRes.value.header.studio === '0')
         } else {
-          throw privilegeRes.reason
+          setMessage('Failed to fetch users :(')
         }
       } catch (error) {
         console.error(error)

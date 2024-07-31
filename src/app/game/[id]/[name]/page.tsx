@@ -100,7 +100,7 @@ export default function Page() {
 
   return (
     <>
-      <div className="flex items-center xl:min-h-[calc(100vh-80px)] xl:mb-10 min-h-[calc(100vh-40px)] mb-5">
+      <div className="flex items-center xl:min-h-[calc(100vh-80px-48px)] xl:mb-10 min-h-[calc(100vh-40px-48px)] mb-5">
         <div className="flex flex-1 flex-col-reverse xl:flex-row justify-evenly items-start gap-4 xl:gap-10 *:max-w-[800px] *:xl:max-w-none ">
           <div className="space-y-6 xl:min-w-[500px] xl:w-[500px] flex justify-center flex-col">
             <h1 className="sm:text-4xl text-3xl text-mainred font-semibold text-wrap flex items-center">
