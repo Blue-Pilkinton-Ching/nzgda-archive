@@ -29,34 +29,32 @@ export default function Page() {
 
   return (
     <>
-      <About>
-        {loading ? (
-          <div className="text-2xl font-bold">Loading...</div>
-        ) : error ? (
-          <div>{error}</div>
-        ) : studios.length > 0 ? (
-          <>
-            <H1>New Zealand Game Studios</H1>
-            <p className="max-w-[440px] mx-auto mb-10">
-              A list of some of the different Studios with Games you can find on
-              this site!
-            </p>
-            {studios.sort().map((studio: Studio) => (
-              <>
-                <Link
-                  className="block text-2xl mb-2 hover:scale-110 duration-200 active:scale-90"
-                  key={studio.id}
-                  href={`/studios/${studio.id}`}
-                >
-                  {studio.name}
-                </Link>
-              </>
-            ))}
-          </>
-        ) : (
-          <div>Couldn&apos;t find any studios</div>
-        )}
-      </About>
+      {loading ? (
+        <div className="text-2xl font-bold">Loading...</div>
+      ) : error ? (
+        <div>{error}</div>
+      ) : studios.length > 0 ? (
+        <>
+          <H1 href="/games">New Zealand Game Studios</H1>
+          <p className="max-w-[440px] mx-auto mb-10">
+            A list of some of the different Studios with Games you can find on
+            this site!
+          </p>
+          {studios.sort().map((studio: Studio) => (
+            <>
+              <Link
+                className="block text-2xl mb-2 hover:scale-110 duration-200 active:scale-90"
+                key={studio.id}
+                href={`/studios/${studio.id}`}
+              >
+                {studio.name}
+              </Link>
+            </>
+          ))}
+        </>
+      ) : (
+        <div>Couldn&apos;t find any studios</div>
+      )}
     </>
   )
 }
