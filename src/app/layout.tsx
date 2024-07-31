@@ -7,7 +7,7 @@ const rubik = Rubik({ subsets: ['latin'] })
 export const metadata: Metadata = {
   title: 'NZGDA Games',
   description:
-    'Play, laugh, and learn! HEIHEI tākaro is a safe place for our tamariki. Watch shows on TVNZ On Demand, or Play games right here.',
+    'The NZGDA games directory is the official archive of New Zealand made video games. Discover our games and the kiwi companies that made them.',
 }
 
 export default function RootLayout({

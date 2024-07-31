@@ -115,9 +115,13 @@ export default function Games() {
           />
         </>
       ) : error ? (
-        <p className=" text-mainred text-3xl">Failed to fetch games :(</p>
+        <p className=" text-3xl font-bold block text-mainred">
+          Failed to fetch games :(
+        </p>
       ) : (
-        <p className="text-mainred text-3xl">Fetching Games...</p>
+        <p className="text-3xl font-bold block text-mainred">
+          Fetching Games...
+        </p>
       )}
     </>
   )

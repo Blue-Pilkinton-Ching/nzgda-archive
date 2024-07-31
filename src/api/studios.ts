@@ -6,6 +6,10 @@ export async function getAllStudios() {
   return request.get('/api/studios').ok((res) => true)
 }
 
+export async function getStudioByID(id: number) {
+  return request.get(`/api/studios/${id}`).ok((res) => true)
+}
+
 export async function editStudio(studio: Studio, user: User) {
   return request
     .patch('/api/studios')

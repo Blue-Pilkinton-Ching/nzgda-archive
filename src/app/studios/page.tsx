@@ -1,7 +1,6 @@
 'use client'
 
 import { getAllStudios } from '@/api/studios'
-import About from '../about/about'
 import H1 from '../about/H1'
 import { Studio } from '../../../types'
 import { useEffect, useState } from 'react'
@@ -45,7 +44,7 @@ export default function Page() {
               <Link
                 className="block text-2xl mb-2 hover:scale-110 duration-200 active:scale-90"
                 key={studio.id}
-                href={`/studios/${studio.id}`}
+                href={`/studio/${studio.id}`}
               >
                 {studio.name}
               </Link>
