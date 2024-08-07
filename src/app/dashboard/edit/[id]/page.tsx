@@ -1,6 +1,6 @@
 'use client'
 
-import { Admin, Game, Studio, UserTypes } from '../../../../../types'
+import { Admin, Game, Studio } from '../../../../../types'
 import { useEffect, useState } from 'react'
 import { useAuthState } from 'react-firebase-hooks/auth'
 import { getAuth, User } from 'firebase/auth'
@@ -26,51 +26,45 @@ export default function EditGame() {
       window.location.href = '/dashboard'
       return
     } else {
-      Promise.all([fetchGame(), fetchPartners(), fetchUsers()])
-      setMessage('')
+      getData()
     }
 
-    async function fetchPartners() {
-      let data
+    async function getData() {
       try {
-        data = (await getAllStudios()).body
-        if (!data) {
-          setMessage("Couldn't retrieve studios :(")
-          throw `Couldn't retrieve studios :(`
+        const [gameRes, partnersRes, usersRes] = await Promise.allSettled([
+          fetchGame(),
+          fetchPartners(),
+          fetchUsers(),
+        ])
+
+        if (
+          gameRes.status === 'fulfilled' &&
+          partnersRes.status === 'fulfilled' &&
+          usersRes.status === 'fulfilled'
+        ) {
+          setGame(gameRes.value)
+          setStudios(partnersRes.value)
+          setAdmins(usersRes.value)
+          setMessage('')
+        } else {
+          setMessage('Failed to fetch game data :(')
         }
-        setStudios(data)
-      } catch (error) {
-        console.error(error)
-        setMessage('Failed to game data :(')
-      }
-    }
-
-    async function fetchUsers() {
-      let data
-      try {
-        data = (await getAllAdmins(user as User)).body
-        if (!data) {
-          setMessage("Couldn't find data :(")
-          throw 'User data not on firebase for some reason'
-        }
-
-        setAdmins(data)
-      } catch (error) {
-        console.error(error)
-        setMessage('Failed to fetch users :(')
-      }
-    }
-
-    async function fetchGame() {
-      let data
-
-      try {
-        data = (await getGameByID(Number(params.id))).body as Game
       } catch (error) {
         console.error(error)
         setMessage('Failed to fetch game data :(')
       }
-      setGame(data)
+    }
+
+    async function fetchPartners() {
+      return (await getAllStudios()).body
+    }
+
+    async function fetchUsers() {
+      return (await getAllAdmins(user as User)).body
+    }
+
+    async function fetchGame() {
+      return (await getGameByID(Number(params.id))).body as Game
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps

@@ -46,4 +46,7 @@ export type UserPrivilege =
 export interface Studio {
   id: number
   name: string
+  description: string
+  date_created: string
+  date_updated: string
 }

@@ -15,7 +15,7 @@ export default function Page() {
   const [studios, setStudios] = useState<Studio[]>([])
   const [isAdmin, setIsAdmin] = useState<boolean>(false)
 
-  const [message, setMessage] = useState('')
+  const [message, setMessage] = useState('Loading...')
 
   useEffect(() => {
     if (user == null) {
@@ -38,6 +38,7 @@ export default function Page() {
         ) {
           setStudios(studiosRes.value.body)
           setIsAdmin(privilegeRes.value.header.studio === '0')
+          setMessage('')
         } else {
           setMessage('Failed to fetch users :(')
         }
