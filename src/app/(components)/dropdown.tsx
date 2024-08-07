@@ -56,9 +56,11 @@ export default function Dropdown({
                 <Link
                   scroll={false}
                   href={`/games?studio=${encodeURIComponent(option)}`}
-                  className="block px-4 py-2 hover:bg-neutral-100"
+                  className="block px-4 py-2 hover:bg-neutral-100 active:*:scale-90"
                 >
-                  {option}
+                  <p className="w-min text-nowrap overflow-ellipsis duration-200">
+                    {option}
+                  </p>
                 </Link>
               </li>
             ))}
