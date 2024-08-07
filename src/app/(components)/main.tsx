@@ -19,11 +19,25 @@ export default function Main({
   return (
     <>
       <GameBackground bothsides>
-        <section className="flex justify-between items-center mb-5 sm:min-h-[300px]">
-          <div className="flex flex-col h-full xl:py-5 lg:w-[800px] xl:w-[900px] lg:h-[22vw] w-full aspect-video xl:h-[min(25vw,450px)]">
-            <div className="lg:w-[350px] min-w-[240px] w-full h-[50%] items-center flex mb-3">
+        <section className="flex justify-between mb-5 sm:min-h-[300px]">
+          <div
+            className={
+              title
+                ? 'justify-evenly flex-1 flex flex-col'
+                : 'flex flex-col h-full xl:py-5 lg:w-[800px] xl:w-[900px] lg:h-[22vw] w-full aspect-video xl:h-[min(25vw,450px)]'
+            }
+          >
+            <div
+              className={
+                title
+                  ? 'min-w-[240px] lg:max-w-[40vw]'
+                  : 'lg:w-[350px] min-w-[240px] w-full h-[50%] items-center flex mb-3 drop-shadow-md'
+              }
+            >
               {title ? (
-                <h1 className="text-7xl text-mainred font-bold">{title}</h1>
+                <h1 className="drop-shadow-md text-7xl text-mainred font-bold">
+                  {title}
+                </h1>
               ) : (
                 <Image
                   quality={100}

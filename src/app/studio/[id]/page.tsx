@@ -5,7 +5,9 @@ import { useEffect, useState } from 'react'
 import { Game, Studio } from '../../../../types'
 import { getStudioByID } from '@/api/studios'
 import { getAllGames } from '@/api/games'
-import { useSearchParams } from 'next/navigation'
+import { useParams, useSearchParams } from 'next/navigation'
+import { ScrollableGamesSection } from '@/app/games/scrollable-games-section'
+import GameSection from '@/app/games/gamesection'
 
 export default function Page() {
   const [data, setData] = useState<{ games: Game[]; studio: Studio }>({
@@ -15,7 +17,7 @@ export default function Page() {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
 
-  const params = useSearchParams()
+  const params = useParams<{ id: string }>()
 
   useEffect(() => {
     getData()
@@ -25,10 +27,12 @@ export default function Page() {
   async function getData() {
     const [gamesRes, studioRes] = await Promise.allSettled([
       getAllGames(),
-      getStudioByID(Number(params.get('id'))),
+      getStudioByID(Number(params.id)),
     ])
 
     if (gamesRes.status === 'fulfilled' && studioRes.status === 'fulfilled') {
+      console.log(studioRes.value.body)
+
       setData({
         games: gamesRes.value.body,
         studio: studioRes.value.body,
@@ -40,8 +44,21 @@ export default function Page() {
 
   return (
     <>
-      <Main title="PikPok" hideFeaturedContent description={'descrit'}>
-        <h1>Children Games</h1>
+      <Main
+        title={data.studio?.name || ''}
+        hideFeaturedContent
+        description={data.studio?.description || ''}
+      >
+        <div>
+          <GameSection
+            games={data.games.filter(
+              (element) =>
+                !element.hidden && element.studio_id === Number(params.id)
+            )}
+            smallTitle={'Games'}
+            largeTitle={`Games by ${data.studio?.name}`}
+          />
+        </div>
       </Main>
     </>
   )
