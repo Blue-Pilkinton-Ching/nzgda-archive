@@ -90,8 +90,6 @@ export default function Users({
   async function denyAuthRequest(authRequest: Admin) {
     let res
 
-    console.log(authRequest)
-
     try {
       res = await denyPrivilegeRequest(authRequest.uid, user as User)
     } catch (error) {

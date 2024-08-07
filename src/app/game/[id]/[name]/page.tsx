@@ -53,8 +53,6 @@ export default function Page() {
     try {
       const res = await getGameByID(Number(params.id))
 
-      console.log(res.body)
-
       setGame(res.body)
     } catch (error) {
       console.error(error)

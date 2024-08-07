@@ -91,8 +91,6 @@ export default function StudioForm({ edit, studio }: StudioFormProps) {
   async function editStudio() {
     let res
     try {
-      console.log(studio)
-
       res = await editStudioData(
         {
           name: formState.name,
@@ -101,7 +99,6 @@ export default function StudioForm({ edit, studio }: StudioFormProps) {
         } as Studio,
         user as User
       )
-      console.log(res)
     } catch (error) {
       alert('An error occured while editing studio')
       console.error(error)
