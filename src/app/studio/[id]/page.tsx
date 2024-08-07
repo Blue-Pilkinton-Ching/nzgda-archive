@@ -49,6 +49,7 @@ export default function Page() {
         hideFeaturedContent
         description={data.studio?.description || ''}
       >
+        <div>{data.studio.website}</div>
         <div>
           <GameSection
             games={data.games.filter(

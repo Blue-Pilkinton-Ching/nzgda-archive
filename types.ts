@@ -17,6 +17,11 @@ export interface Game {
   sort: number
   hidden: boolean
   featured: boolean
+  iosLink?: string
+  androidLink?: string
+  steamLink?: string
+  websiteLinks?: string
+  additionalLinks?: string
 }
 export interface UserTypes {
   admins: Admin[]
@@ -46,6 +51,7 @@ export type UserPrivilege =
 export interface Studio {
   id: number
   name: string
+  website: string
   description: string
   date_created: string
   date_updated: string

@@ -252,7 +252,7 @@ export default function GameForm({
             <Image src={back} alt={back} className="w-14 brightness-0"></Image>
           </button>
           <div className="flex flex-col justify-center-center">
-            <h1 className="text-4xl font-bold my-auto">
+            <h1 className="text-4xl font-bold my-auto text-wrap">
               {edit ? (!game ? 'Loading' : name) : name ? name : 'New Game'}
             </h1>
             <h2 className="text-1xl">{id}</h2>

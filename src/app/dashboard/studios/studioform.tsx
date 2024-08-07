@@ -17,10 +17,12 @@ export interface StudioFormProps {
 interface FormState {
   description: string
   name: string
+  website: string
 }
 
 type FormAction =
   | { type: 'description'; value: string }
+  | { type: 'website'; value: string }
   | { type: 'name'; value: string }
   | { type: 'reset'; value: Studio }
 
@@ -28,10 +30,16 @@ function reducer(state: FormState, action: FormAction): FormState {
   switch (action.type) {
     case 'description':
       return { ...state, description: action.value }
+    case 'website':
+      return { ...state, website: action.value }
     case 'name':
       return { ...state, name: action.value }
     case 'reset':
-      return { description: action.value.description, name: action.value.name }
+      return {
+        description: action.value.description,
+        name: action.value.name,
+        website: action.value.website,
+      }
     default:
       return state
   }
@@ -41,6 +49,7 @@ export default function StudioForm({ edit, studio }: StudioFormProps) {
   const [formState, dispatchFormState] = useReducer(reducer, {
     description: '',
     name: '',
+    website: '',
   })
 
   const [user] = useAuthState(getAuth())
@@ -60,7 +69,11 @@ export default function StudioForm({ edit, studio }: StudioFormProps) {
 
     try {
       res = await addStudio(
-        { name: formState.name, description: formState.description } as Studio,
+        {
+          name: formState.name,
+          description: formState.description,
+          website: formState.website,
+        } as Studio,
         user as User
       )
     } catch (error) {
@@ -90,11 +103,15 @@ export default function StudioForm({ edit, studio }: StudioFormProps) {
 
   async function editStudio() {
     let res
+
+    setSaving(true)
+
     try {
       res = await editStudioData(
         {
           name: formState.name,
           description: formState.description,
+          website: formState.website,
           id: studio?.id,
         } as Studio,
         user as User
@@ -104,6 +121,8 @@ export default function StudioForm({ edit, studio }: StudioFormProps) {
       console.error(error)
       return
     }
+
+    setSaving(false)
 
     switch (res.status) {
       case 200:
@@ -143,7 +162,7 @@ export default function StudioForm({ edit, studio }: StudioFormProps) {
                 ></Image>
               </button>
               <div className="flex flex-col justify-center-center">
-                <h1 className="text-4xl font-bold my-auto">
+                <h1 className="text-4xl font-bold my-auto text-wrap">
                   {edit
                     ? formState.name
                       ? formState.name
@@ -152,63 +171,78 @@ export default function StudioForm({ edit, studio }: StudioFormProps) {
                     ? formState.name
                     : 'New Studio'}
                 </h1>
-                {edit ? <h2 className="text-1xl">{studio?.id}</h2> : null}
+                {edit ? <h2 className="text-xl">{studio?.id}</h2> : null}
               </div>
             </div>
             <br />
-            <Input
-              name={'Name'}
-              value={formState.name}
-              tooltip={'The name of the studio to display on the website.'}
-              required
-              maxLength={2000}
-              onChange={(e) =>
-                dispatchFormState({
-                  type: 'name',
-                  value: e.currentTarget.value,
-                })
-              }
-            ></Input>
-            <Input
-              tooltip={
-                'The description of the studio to display on the website. There is a 2000 character limit.'
-              }
-              name={'Description'}
-              value={formState.description}
-              required
-              maxLength={2000}
-              onChange={(e) =>
-                dispatchFormState({
-                  type: 'description',
-                  value: e.currentTarget.value,
-                })
-              }
-            ></Input>
-            <div className="flex justify-center *:w-32 gap-4">
-              <Button
-                inverted
-                className="bg-black text-white"
-                invertedClassName="bg-white text-black"
-                onClick={edit ? editStudio : createStudio}
-              >
-                {edit ? 'Save' : 'Add Studio'}
-              </Button>
-              {edit ? (
+            <form onSubmit={edit ? editStudio : createStudio}>
+              <Input
+                name={'Name'}
+                value={formState.name}
+                tooltip={'The name of the studio to display on the website.'}
+                required
+                maxLength={2000}
+                onChange={(e) =>
+                  dispatchFormState({
+                    type: 'name',
+                    value: e.currentTarget.value,
+                  })
+                }
+              ></Input>
+              <Input
+                tooltip={
+                  'The description of the studio to display on the website. There is a 2000 character limit.'
+                }
+                name={'Description'}
+                value={formState.description}
+                required
+                maxLength={2000}
+                onChange={(e) =>
+                  dispatchFormState({
+                    type: 'description',
+                    value: e.currentTarget.value,
+                  })
+                }
+              ></Input>
+              <Input
+                tooltip={'The website of the studio.'}
+                name={'Website'}
+                value={formState.website}
+                required
+                type="url"
+                maxLength={2000}
+                onChange={(e) =>
+                  dispatchFormState({
+                    type: 'website',
+                    value: e.currentTarget.value,
+                  })
+                }
+              ></Input>
+              <div className="flex justify-center *:w-32 gap-4">
                 <Button
-                  onClick={(e) => {
-                    e.preventDefault()
-                    dispatchFormState({
-                      type: 'reset',
-                      value: studio as Studio,
-                    })
-                  }}
+                  inverted
                   className="bg-black text-white"
                   invertedClassName="bg-white text-black"
                 >
-                  Reset
+                  {edit ? 'Save' : 'Add Studio'}
                 </Button>
-              ) : null}
-            </div>
+                {edit ? (
+                  <Button
+                    onClick={(e) => {
+                      e.preventDefault()
+                      dispatchFormState({
+                        type: 'reset',
+                        value: studio as Studio,
+                      })
+                    }}
+                    className="bg-black text-white"
+                    invertedClassName="bg-white text-black"
+                  >
+                    Reset
+                  </Button>
+                ) : null}
+              </div>
+            </form>
           </div>
         </>
       )}
