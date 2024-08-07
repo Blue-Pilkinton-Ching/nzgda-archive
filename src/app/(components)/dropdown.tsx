@@ -45,10 +45,12 @@ export default function Dropdown({
             <li>
               <Link
                 href={`/games`}
-                className="block px-4 py-2 font-semibold hover:bg-neutral-100"
+                className="block px-4 py-2 font-semibold hover:bg-neutral-100 *:active:scale-90"
                 scroll={false}
               >
-                None
+                <p className="duration-200 w-min text-nowrap overflow-ellipsis ">
+                  None
+                </p>
               </Link>
             </li>
             {options.map((option) => (
@@ -56,7 +58,7 @@ export default function Dropdown({
                 <Link
                   scroll={false}
                   href={`/games?studio=${encodeURIComponent(option)}`}
-                  className="block px-4 py-2 hover:bg-neutral-100 active:*:scale-90"
+                  className="block px-4 py-2 hover:bg-neutral-100 *:active:scale-90"
                 >
                   <p className="w-min text-nowrap overflow-ellipsis duration-200">
                     {option}
