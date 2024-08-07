@@ -17,10 +17,10 @@ export async function editStudio(studio: Studio, user: User) {
     .set('Authorization', `Bearer ${await user.getIdToken(true)}`)
     .ok((res) => true)
 }
-export async function addStudio(studio: string, user: User) {
+export async function addStudio(studio: Studio, user: User) {
   const res = request
     .post('/api/studios')
-    .send({ name: studio })
+    .send({ studio })
     .set('Authorization', `Bearer ${await user.getIdToken(true)}`)
     .ok((res) => true)
 

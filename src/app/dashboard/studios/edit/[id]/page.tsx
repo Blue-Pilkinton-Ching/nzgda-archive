@@ -26,12 +26,16 @@ export default function Page() {
     async function getData() {
       try {
         const res = await getStudioByID(Number(params.id))
-        console.log(res.body)
+
+        if (res.status !== 200) {
+          throw new Error('Something went wrong, please try again later.')
+        }
+
         setStudio(res.body)
         setMessage('')
       } catch (error) {
         console.error(error)
-        setMessage('Failed to fetch users :(')
+        setMessage('Failed to fetch studio data :(')
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -42,7 +46,7 @@ export default function Page() {
       {message ? (
         <p className="font-semibold text-lg">{message}</p>
       ) : (
-        <StudioForm edit={false} studio={studio} />
+        <StudioForm edit={true} studio={studio} />
       )}
     </>
   )
