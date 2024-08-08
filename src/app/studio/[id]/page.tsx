@@ -54,19 +54,19 @@ export default function Page() {
           description={
             data.studio?.description ? (
               <div className="flex flex-col gap-5">
-                {data.studio?.description || ''}
+                <p className="text-justify">{data.studio?.description || ''}</p>
                 <div className="flex gap-3 items-center justify-center flex-row flex-wrap">
-                  <PageLink href={data.studio.website || ''} text="Website">
-                    <TfiWorld size={24} />
-                  </PageLink>
-                  <PageLink href={data.studio.steam || ''} text="Steam">
-                    <FaSteam size={24} />
-                  </PageLink>
                   <PageLink href={data.studio.ios || ''} text="Play Store">
                     <FaGooglePlay size={24} />
                   </PageLink>
                   <PageLink href={data.studio.android || ''} text="App Store">
                     <FaAppStoreIos size={24} />
+                  </PageLink>
+                  <PageLink href={data.studio.website || ''} text="Website">
+                    <TfiWorld size={24} />
+                  </PageLink>
+                  <PageLink href={data.studio.steam || ''} text="Steam">
+                    <FaSteam size={24} />
                   </PageLink>
                 </div>
               </div>

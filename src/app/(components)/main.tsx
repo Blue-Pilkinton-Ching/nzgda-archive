@@ -49,7 +49,7 @@ export default function Main({
                 ></Image>
               )}
             </div>
-            <div className="max-w-[min(calc(100vw-40px),500px)] w-max lg:w-auto text-lg text-justify sm:text-start">
+            <div className="max-w-[min(calc(100vw-40px),500px)] w-max lg:w-auto text-xl text-justify sm:text-start">
               {description}
             </div>
           </div>

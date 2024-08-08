@@ -8,14 +8,15 @@ import Image from 'next/image'
 import logo from '../../../../../public/images/NZGDA.png'
 import Link from 'next/link'
 
-import google from '../../../../../public/images/google-badge.svg'
-import apple from '../../../../../public/images/apple-badge.svg'
-
 import back from '../../../../../public/images/back.svg'
 import '@/utils/client/firebase'
 import GameSection from '@/app/games/gamesection'
 import { getAllGames } from '@/api/games'
 import { getGameByID } from '@/api/game'
+import PageLink from '@/app/(components)/page-link'
+import { TfiWorld } from 'react-icons/tfi'
+import { FaSteam } from 'react-icons/fa6'
+import { FaAppStoreIos, FaGooglePlay } from 'react-icons/fa'
 
 export default function Page() {
   const [game, setGame] = useState<Game | null>()
@@ -110,9 +111,34 @@ export default function Page() {
               </Link>
               {game.name}
             </h1>
-            <p className="sm:text-xl text-lg whitespace-pre-line">
+            <p className="sm:text-xl text-lg whitespace-pre-line text-justify">
               {game.description}
             </p>
+            <p className="text-lg">Year of Release: {game.yearOfRelease}</p>
+            <div className="flex flex-col gap-5">
+              <div className="flex gap-3 items-center justify-center flex-row flex-wrap">
+                {game.iosLink && (
+                  <PageLink href={game.iosLink || ''} text="Play Store">
+                    <FaAppStoreIos size={24} />
+                  </PageLink>
+                )}
+                {game.androidLink && (
+                  <PageLink href={game.androidLink || ''} text="App Store">
+                    <FaGooglePlay size={24} />
+                  </PageLink>
+                )}
+                {game.websiteLink && (
+                  <PageLink href={game.websiteLink || ''} text="Website">
+                    <TfiWorld size={24} />
+                  </PageLink>
+                )}
+                {game.steamLink && (
+                  <PageLink href={game.steamLink || ''} text="Steam">
+                    <FaSteam size={24} />
+                  </PageLink>
+                )}
+              </div>
+            </div>
             {/* <div className="flex justify-center gap-8">
               {game.androidLink ? (
                 <div>
