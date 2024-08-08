@@ -34,7 +34,9 @@ export default function Page() {
         <div>{error}</div>
       ) : studios.length > 0 ? (
         <>
-          <H1 href="/games">New Zealand Game Studios</H1>
+          <div>
+            <H1 href="/games">New Zealand Game Studios</H1>
+          </div>
           <p className="max-w-[440px] mx-auto mb-10">
             A list of some of the different Studios with Games you can find on
             this site!

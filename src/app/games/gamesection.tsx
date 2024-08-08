@@ -56,7 +56,7 @@ export default function GameSection({
             <>
               {games.map((element) => (
                 <Card key={element.id} game={element} />
-              ))}{' '}
+              ))}
             </>
           }
         />
@@ -86,7 +86,7 @@ export default function GameSection({
           ) : (
             <>
               <div className="h-[180px] flex items-center justify-center">
-                <p className="text-neutral-400 text-2xl font-bold">
+                <p className="text-neutral-400 text-2xl font-bold text-center">
                   Couldn&apos;t find any games!
                 </p>
               </div>

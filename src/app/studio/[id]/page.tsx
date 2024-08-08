@@ -8,6 +8,8 @@ import { getAllGames } from '@/api/games'
 import { useParams, useSearchParams } from 'next/navigation'
 import { ScrollableGamesSection } from '@/app/games/scrollable-games-section'
 import GameSection from '@/app/games/gamesection'
+import PageLink from '@/app/(components)/page-link'
+import { TfiWorld } from 'react-icons/tfi'
 
 export default function Page() {
   const [data, setData] = useState<{ games: Game[]; studio: Studio }>({
@@ -45,11 +47,22 @@ export default function Page() {
   return (
     <>
       <Main
+        studio
         title={data.studio?.name || ''}
         hideFeaturedContent
-        description={data.studio?.description || ''}
+        description={
+          <>
+            <div className="flex flex-col gap-5">
+              {data.studio?.description || ''}
+              <div className="flex gap-3 items-center justify-center">
+                <PageLink href={data.studio.website || ''} text="Website">
+                  <TfiWorld />
+                </PageLink>
+              </div>
+            </div>
+          </>
+        }
       >
-        <div>{data.studio.website}</div>
         <div>
           <GameSection
             games={data.games.filter(
@@ -57,7 +70,9 @@ export default function Page() {
                 !element.hidden && element.studio_id === Number(params.id)
             )}
             smallTitle={'Games'}
-            largeTitle={`Games by ${data.studio?.name}`}
+            largeTitle={
+              data.studio?.name ? `Games by ${data.studio?.name}` : ''
+            }
           />
         </div>
       </Main>
