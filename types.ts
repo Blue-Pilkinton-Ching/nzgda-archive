@@ -50,6 +50,9 @@ export type UserPrivilege =
 
 export interface Studio {
   id: number
+  steam: string
+  ios: string
+  android: string
   name: string
   website: string
   description: string

@@ -62,7 +62,7 @@ export default function GameForm({
       case 'Description':
         setDescription(event.target.value)
         break
-      case 'Embed External Game URL':
+      case 'Embed External Game or Trailer':
         setExternalURL(event.target.value)
         break
       case 'Max Width':
@@ -171,7 +171,7 @@ export default function GameForm({
     } else if (thumbnail != undefined) {
       if (!externalURL && !banner) {
         alert(
-          'You must upload a game, a banner, or provide an external game link'
+          'You must upload a banner, embed a game trailer or provide an external game link'
         )
         return
       }
@@ -341,8 +341,8 @@ export default function GameForm({
                 value={externalURL}
                 type="url"
                 maxLength={2048}
-                name={'Embed External Game URL'}
-                tooltip="If your game is hosted on another site, you can add the embed url here"
+                name={'Embed External Game or Trailer'}
+                tooltip="If you want to display the game trailer or if the game is hosted on another site, you can add the embed url here. Eg: https://www.youtube.com/embed/VBlFHuCzPgY?si=iU4Me3nVQNxmPcCj"
               />
               <Input
                 onChange={onGameInputChange}

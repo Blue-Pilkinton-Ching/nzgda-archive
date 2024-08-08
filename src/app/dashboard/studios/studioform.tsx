@@ -18,12 +18,18 @@ interface FormState {
   description: string
   name: string
   website: string
+  steam: string
+  ios: string
+  android: string
 }
 
 type FormAction =
   | { type: 'description'; value: string }
   | { type: 'website'; value: string }
   | { type: 'name'; value: string }
+  | { type: 'steam'; value: string }
+  | { type: 'ios'; value: string }
+  | { type: 'android'; value: string }
   | { type: 'reset'; value: Studio }
 
 function reducer(state: FormState, action: FormAction): FormState {
@@ -34,11 +40,20 @@ function reducer(state: FormState, action: FormAction): FormState {
       return { ...state, website: action.value }
     case 'name':
       return { ...state, name: action.value }
+    case 'steam':
+      return { ...state, steam: action.value }
+    case 'ios':
+      return { ...state, ios: action.value }
+    case 'android':
+      return { ...state, android: action.value }
     case 'reset':
       return {
         description: action.value.description,
         name: action.value.name,
         website: action.value.website,
+        steam: action.value.steam,
+        ios: action.value.ios,
+        android: action.value.android,
       }
     default:
       return state
@@ -50,6 +65,9 @@ export default function StudioForm({ edit, studio }: StudioFormProps) {
     description: '',
     name: '',
     website: '',
+    steam: '',
+    ios: '',
+    android: '',
   })
 
   const [user] = useAuthState(getAuth())
@@ -73,6 +91,9 @@ export default function StudioForm({ edit, studio }: StudioFormProps) {
           name: formState.name,
           description: formState.description,
           website: formState.website,
+          steam: formState.steam,
+          ios: formState.ios,
+          android: formState.android,
         } as Studio,
         user as User
       )
@@ -113,6 +134,9 @@ export default function StudioForm({ edit, studio }: StudioFormProps) {
           description: formState.description,
           website: formState.website,
           id: studio?.id,
+          steam: formState.steam,
+          ios: formState.ios,
+          android: formState.android,
         } as Studio,
         user as User
       )
@@ -214,6 +238,45 @@ export default function StudioForm({ edit, studio }: StudioFormProps) {
                 onChange={(e) =>
                   dispatchFormState({
                     type: 'website',
+                    value: e.currentTarget.value,
+                  })
+                }
+              ></Input>
+              <Input
+                tooltip={'The steam page of the studio.'}
+                name={'Steam Page'}
+                value={formState.steam}
+                type="url"
+                maxLength={2000}
+                onChange={(e) =>
+                  dispatchFormState({
+                    type: 'steam',
+                    value: e.currentTarget.value,
+                  })
+                }
+              ></Input>
+              <Input
+                tooltip={'The app store page for this studio.'}
+                name={'IOS Page'}
+                value={formState.ios}
+                type="url"
+                maxLength={2000}
+                onChange={(e) =>
+                  dispatchFormState({
+                    type: 'ios',
+                    value: e.currentTarget.value,
+                  })
+                }
+              ></Input>
+              <Input
+                tooltip={'The play store page for this studio.'}
+                name={'Android Page'}
+                value={formState.android}
+                type="url"
+                maxLength={2000}
+                onChange={(e) =>
+                  dispatchFormState({
+                    type: 'android',
                     value: e.currentTarget.value,
                   })
                 }

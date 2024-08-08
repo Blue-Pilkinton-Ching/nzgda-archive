@@ -28,14 +28,14 @@ export default function GameBackground({
       </nav>
       <div className="absolute right-0 w-[40%] lg:w-fit top-0 -z-10">
         <Image quality={100} src={background} alt={'background'}></Image>
-      </div>{' '}
+      </div>
       {bothsides ? (
         <div className="absolute left-0 w-[40%] lg:w-fit top-0 -z-10">
           <Image
             quality={100}
             src={background}
             alt={'background'}
-            className="-scale-x-100 -translate-x-1/2 -translate-y-1/2"
+            className="-scale-x-100 -translate-x-[40%] -rotate-12 -translate-y-[60%]"
           ></Image>
         </div>
       ) : null}

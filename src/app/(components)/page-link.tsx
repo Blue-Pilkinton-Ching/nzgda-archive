@@ -12,12 +12,14 @@ export default function PageLink({
 }) {
   return (
     <>
-      <button className="hover:scale-105 active:scale-95 duration-200 text-white rounded-md bg-mainred py-1.5 px-3 flex flex-row items-center gap-4 text-lg font-medium">
+      <Link
+        className="hover:scale-105 active:scale-95 duration-200 text-white rounded-md bg-mainred py-1.5 px-3 flex flex-row items-center gap-4 text-lg font-medium"
+        target="_blank"
+        href={href}
+      >
         {children}
-        <Link target="_blank" href={href}>
-          {text}
-        </Link>
-      </button>
+        {text}
+      </Link>
     </>
   )
 }

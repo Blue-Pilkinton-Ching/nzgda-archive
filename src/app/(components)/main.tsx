@@ -49,9 +49,9 @@ export default function Main({
                 ></Image>
               )}
             </div>
-            <p className="max-w-[min(calc(100vw-40px),500px)] w-max lg:w-auto text-lg text-justify sm:text-start">
+            <div className="max-w-[min(calc(100vw-40px),500px)] w-max lg:w-auto text-lg text-justify sm:text-start">
               {description}
-            </p>
+            </div>
           </div>
           {hideFeaturedContent ? null : (
             <div className="w-full hidden sm:block">
