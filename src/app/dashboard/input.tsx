@@ -8,11 +8,13 @@ export default function Input({
   value,
   maxLength,
   onChange,
+  date = false,
 }: {
   required?: boolean
   name: string
   type?: string
   tooltip?: string
+  date?: boolean
   value: string | boolean
   maxLength: number
   onChange: (
@@ -63,6 +65,7 @@ export default function Input({
             type={type}
             checked={currentValue as boolean}
             maxLength={maxLength}
+            max={date ? 9999 : undefined}
             name={name}
             id={name}
             required={required}

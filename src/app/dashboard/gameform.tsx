@@ -39,6 +39,13 @@ export default function GameForm({
   const [bannerWarning, setBannerWarning] = useState('')
   const [isEducational, setIsEducational] = useState(false)
 
+  const [steamLink, setSteamLink] = useState('`')
+  const [iosLink, setIosLink] = useState('')
+  const [androidLink, setAndriodLink] = useState('')
+  const [websiteLink, setWebsiteLink] = useState('')
+
+  const [yearOfRelease, setYearOfRelease] = useState(0)
+
   const [submitting, setSubmitting] = useState(false)
 
   const [user] = useAuthState(getAuth())
@@ -61,6 +68,21 @@ export default function GameForm({
         break
       case 'Description':
         setDescription(event.target.value)
+        break
+      case 'IOS Link':
+        setIosLink(event.target.value)
+        break
+      case 'Android Link':
+        setAndriodLink(event.target.value)
+        break
+      case 'Website Link':
+        setWebsiteLink(event.target.value)
+        break
+      case 'Steam Link':
+        setSteamLink(event.target.value)
+        break
+      case 'Year of Release':
+        setYearOfRelease(Number(event.target.value))
         break
       case 'Embed External Game or Trailer':
         setExternalURL(event.target.value)
@@ -147,8 +169,13 @@ export default function GameForm({
 
       let data = {
         name,
-        description,
+        iosLink,
+        androidLink,
+        steamLink,
+        websiteLink,
+        yearOfRelease,
         url: externalURL,
+        description,
         width: Number(width) ? Number(width) : null,
         height: Number(height) ? Number(height) : null,
         tags: tags,
@@ -181,6 +208,11 @@ export default function GameForm({
 
       const data: any = {
         name,
+        iosLink,
+        androidLink,
+        steamLink,
+        websiteLink,
+        yearOfRelease,
         description,
         url: externalURL,
         width: Number(width) ? Number(width) : null,
@@ -229,6 +261,11 @@ export default function GameForm({
 
   async function resetGame() {
     setName(game?.name || '')
+    setYearOfRelease(game?.yearOfRelease || 2024)
+    setWebsiteLink(game?.websiteLink || '')
+    setSteamLink(game?.steamLink || '')
+    setIosLink(game?.iosLink || '')
+    setAndriodLink(game?.androidLink || '')
     setDescription(game?.description || '')
     setExternalURL(game?.url || '')
     setWidth(game?.width?.toString() || '')
@@ -314,10 +351,53 @@ export default function GameForm({
               ) : null}
               <Input
                 onChange={onGameInputChange}
+                value={String(yearOfRelease)}
+                type="number"
+                tooltip="The year this game was or will be released"
+                date
+                required
+                maxLength={4}
+                name={'Year of Release'}
+              />
+              <Input
+                onChange={onGameInputChange}
                 value={tags}
                 type="text"
                 maxLength={200}
                 name={'Tags'}
+                tooltip="Comma seperated list of tags for this game"
+              />
+              <Input
+                onChange={onGameInputChange}
+                value={websiteLink}
+                type="url"
+                maxLength={2048}
+                name={'Website Link'}
+                tooltip="URL for this game's website"
+              />
+              <Input
+                onChange={onGameInputChange}
+                value={steamLink}
+                type="url"
+                maxLength={2048}
+                name={'Steam Link'}
+                tooltip="URL for this game's Steam Page"
+              />
+              <Input
+                onChange={onGameInputChange}
+                value={iosLink}
+                type="url"
+                maxLength={2048}
+                name={'IOS Link'}
+                tooltip="URL for this game on the App Store."
+              />
+              <Input
+                onChange={onGameInputChange}
+                value={androidLink}
+                type="url"
+                maxLength={2048}
+                name={'Android Link'}
+                tooltip="URL for this game on the Play Store."
               />
               {/* <Input
                 onChange={onGameInputChange}

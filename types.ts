@@ -18,10 +18,10 @@ export interface Game {
   hidden: boolean
   featured: boolean
   iosLink?: string
+  yearOfRelease: number
   androidLink?: string
   steamLink?: string
-  websiteLinks?: string
-  additionalLinks?: string
+  websiteLink?: string
 }
 export interface UserTypes {
   admins: Admin[]
