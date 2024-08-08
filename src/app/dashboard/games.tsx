@@ -242,14 +242,12 @@ export default function Games({
                   >
                     <td>{element.id}</td>
                     <td>
-                      <div
-                        className="hover:underline cursor-pointer"
-                        onClick={() =>
-                          router.push(`/dashboard/edit/${element.id}`)
-                        }
+                      <Link
+                        className="hover:underline"
+                        href={`/dashboard/edit/${element.id}`}
                       >
                         {element.name}
-                      </div>
+                      </Link>
                     </td>
                     {admin ? (
                       <>
@@ -316,12 +314,12 @@ export default function Games({
               <tr key={index} className="*:p-1 odd:bg-white even:bg-zinc-100">
                 <td>{element.id}</td>
                 <td>
-                  <div
-                    className="hover:underline cursor-pointer"
-                    onClick={() => router.push(`/dashboard/edit/${element.id}`)}
+                  <Link
+                    className="hover:underline"
+                    href={`/dashboard/edit/${element.id}`}
                   >
                     {element.name}
-                  </div>
+                  </Link>
                 </td>
                 <td className={`${admin ? '' : 'hidden'} w-14`}>
                   <IconButton
@@ -392,14 +390,12 @@ export default function Games({
                   >
                     <td>{element.id}</td>
                     <td>
-                      <div
-                        className="hover:underline cursor-pointer"
-                        onClick={() =>
-                          router.push(`/dashboard/edit/${element.id}`)
-                        }
+                      <Link
+                        className="hover:underline"
+                        href={`/dashboard/edit/${element.id}`}
                       >
                         {element.name}
-                      </div>
+                      </Link>
                     </td>
                     <td>
                       <IconButton

@@ -62,13 +62,6 @@ export default function Games() {
     }
   }
 
-  console.log(
-    games?.filter(
-      (x) => x.studio_id === studios.find((s) => s.name === studio)?.id
-    ),
-    games
-  )
-
   return (
     <>
       {games && studios ? (

@@ -86,7 +86,14 @@ export default function Studios({
           {studios.map((element, key) => {
             return (
               <tr key={key} className="even:bg-zinc-100 odd:bg-white">
-                <td className="pl-2">{element.name}</td>
+                <td className="pl-2">
+                  <Link
+                    className="hover:underline"
+                    href={`/dashboard/studios/edit/${element.id}`}
+                  >
+                    {element.name}
+                  </Link>
+                </td>
                 <td>
                   <Link href={`/dashboard/studios/edit/${element.id}`}>
                     <IconButton onClick={() => {}}>
