@@ -6,11 +6,12 @@ import Input from './input'
 import Image from 'next/image'
 import '../../utils/client/firebase'
 import { ChangeEvent, useEffect, useState } from 'react'
-import { Game, Studio } from '../../../types'
+import { Game, Link, Studio } from '../../../types'
 import { useRouter } from 'next/navigation'
 import { useAuthState } from 'react-firebase-hooks/auth'
 import { User, getAuth } from 'firebase/auth'
 import { addGame, editGameByID } from '@/api/game'
+import { LinkInput } from './link-input'
 
 export default function GameForm({
   edit,
@@ -43,6 +44,8 @@ export default function GameForm({
   const [iosLink, setIosLink] = useState('')
   const [androidLink, setAndriodLink] = useState('')
   const [websiteLink, setWebsiteLink] = useState('')
+
+  const [links, setLinks] = useState<Link[]>([])
 
   const [yearOfRelease, setYearOfRelease] = useState(0)
 
@@ -182,6 +185,7 @@ export default function GameForm({
         studio_id: admin ? studio : -1,
         isApp: displayAppBadge,
         educational: isEducational,
+        otherLinks: JSON.stringify(links.slice(0, links.length - 1)),
       }
 
       form.append('data', JSON.stringify(data))
@@ -224,6 +228,7 @@ export default function GameForm({
         approved: false,
         featured: false,
         hidden: false,
+        otherLinks: JSON.stringify(links.slice(0, links.length - 1)),
       }
 
       form.append('data', JSON.stringify(data))
@@ -274,6 +279,26 @@ export default function GameForm({
     setStudio(game?.studio_id || studios[0].id || 1)
     setDisplayAppBadge(game?.isApp || false)
     setIsEducational(game?.educational || false)
+
+    if (game?.otherLinks) {
+      const result = await JSON.parse(game?.otherLinks)
+
+      setLinks(
+        result || [
+          {
+            label: '',
+            url: '',
+          },
+        ]
+      )
+    } else {
+      setLinks([
+        {
+          label: '',
+          url: '',
+        },
+      ])
+    }
   }
 
   return (
@@ -399,6 +424,77 @@ export default function GameForm({
                 name={'Android Link'}
                 tooltip="URL for this game on the Play Store."
               />
+              <div className={`flex-col flex mb-3`}>
+                <div className={`flex flex-col`}>
+                  <label
+                    htmlFor={'Custom Links'}
+                    className="text-left text-base font-bold mb-1"
+                  >
+                    Custom Links
+                  </label>
+                  <p className={`text-zinc-500 text-sm mb-3 `}>
+                    Add as many or as few as you want. Each link will be labeled
+                    by the label, and link to the URL.
+                  </p>
+                </div>
+                <div className="w-full flex gap-3 flex-row font-semibold mb-2">
+                  <div className="w-full">Label</div>
+                  <div className="w-full">URL</div>
+                </div>
+                {links.map((link, index) => {
+                  return (
+                    <>
+                      <LinkInput
+                        required={link.label.length > 0 || link.url.length > 0}
+                        key={index}
+                        label={link.label}
+                        url={link.url}
+                        onChangeLabel={(label) => {
+                          setLinks((ls) => {
+                            ls[index] = {
+                              label: label,
+                              url: ls[index].url,
+                            }
+                            if (index === ls.length - 1) {
+                              return [...ls, { label: '', url: '' }]
+                            } else {
+                              return [
+                                ...ls.filter(
+                                  (l, i) =>
+                                    l.label.length > 0 ||
+                                    l.url.length > 0 ||
+                                    i === ls.length - 1
+                                ),
+                              ]
+                            }
+                          })
+                        }}
+                        onChangeURL={(url) => {
+                          setLinks((ls) => {
+                            ls[index] = {
+                              label: ls[index].label,
+                              url: url,
+                            }
+
+                            if (index === ls.length - 1) {
+                              return [...ls, { label: '', url: '' }]
+                            } else {
+                              return [
+                                ...ls.filter(
+                                  (l, i) =>
+                                    l.label.length > 0 ||
+                                    l.url.length > 0 ||
+                                    i === ls.length - 1
+                                ),
+                              ]
+                            }
+                          })
+                        }}
+                      ></LinkInput>
+                    </>
+                  )
+                })}
+              </div>
               {/* <Input
                 onChange={onGameInputChange}
                 value={isEducational}

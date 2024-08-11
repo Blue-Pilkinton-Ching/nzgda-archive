@@ -17,6 +17,7 @@ import PageLink from '@/app/(components)/page-link'
 import { TfiWorld } from 'react-icons/tfi'
 import { FaSteam } from 'react-icons/fa6'
 import { FaAppStoreIos, FaGooglePlay } from 'react-icons/fa'
+import type { Link as LinkType } from '@/../types'
 
 export default function Page() {
   const [game, setGame] = useState<Game | null>()
@@ -25,6 +26,7 @@ export default function Page() {
   const gameView = useRef<HTMLIFrameElement>(null)
   const [isFullscreen, setFullscreen] = useState(false)
   const [iosFullscreen, setIOSFullscreen] = useState(false)
+  const [links, setLinks] = useState<LinkType[]>([])
 
   const params = useParams<{ id: string }>()
 
@@ -55,6 +57,12 @@ export default function Page() {
       const res = await getGameByID(Number(params.id))
 
       setGame(res.body)
+
+      const links = res.body.otherLinks
+
+      if (links) {
+        setLinks(await JSON.parse(links))
+      }
     } catch (error) {
       console.error(error)
       setError('Failed to fetch Game :(')
@@ -137,6 +145,16 @@ export default function Page() {
                     <FaSteam size={24} />
                   </PageLink>
                 )}
+                {links &&
+                  links.map((link) => (
+                    <>
+                      <PageLink
+                        href={link.url}
+                        text={link.label}
+                        key={link.label}
+                      ></PageLink>
+                    </>
+                  ))}
               </div>
             </div>
             {/* <div className="flex justify-center gap-8">

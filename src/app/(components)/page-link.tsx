@@ -8,7 +8,7 @@ export default function PageLink({
 }: {
   href: string
   text: string
-  children: React.ReactNode
+  children?: React.ReactNode
 }) {
   return (
     <>

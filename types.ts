@@ -22,7 +22,14 @@ export interface Game {
   androidLink?: string
   steamLink?: string
   websiteLink?: string
+  otherLinks?: string
 }
+
+export interface Link {
+  label: string
+  url: string
+}
+
 export interface UserTypes {
   admins: Admin[]
   privileged: Admin[]
