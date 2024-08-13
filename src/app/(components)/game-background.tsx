@@ -13,7 +13,7 @@ export default function GameBackground({
 }) {
   return (
     <>
-      <nav className="*:*:drop-shadow-md shadow backdrop-blur w-full flex justify-center h-12 active:*:scale-90 items-center hover:*:scale-110 hover:*:text-mainred *:duration-200 text-black *:drop-shadow-md font-medium text-xl">
+      <nav className="px-3 bg-white w-full flex justify-center sm:justify-start h-12 active:*:scale-90 items-center hover:*:scale-110 hover:*:text-mainred *:duration-200 text-black shadow font-medium text-xl">
         <li className="list-none">
           <a href="/games">GAMES</a>
         </li>

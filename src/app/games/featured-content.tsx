@@ -61,7 +61,7 @@ export default function FeaturedContent() {
               href={`/game/${featuredGames[featuredIndex].id}/${urlName(
                 featuredGames[featuredIndex].name
               )}`}
-              className=" max-w-[80%] aspect-video"
+              className=" max-w-[80%]"
             >
               <div
                 className={`hover:scale-[1.02] active:scale-100 duration-100 ${
@@ -82,7 +82,7 @@ export default function FeaturedContent() {
                   alt="Placeholder"
                   height={450}
                   width={800}
-                  className="shadow-md rounded-xl w-auto h-[20vw] lg:h-[22vw] aspect-video xl:h-[min(25vw,450px)]"
+                  className="shadow-md rounded-xl w-auto h-[20vw] lg:h-[22vw] xl:h-[min(25vw,450px)]"
                 ></Image>
                 <div className="absolute w-full bottom-0 lg:h-[72px] h-14 bg-gradient-to-t from-10% via-75% from-mainred/90 via-mainred/75 0 to-mainred/0 rounded-b-lg">
                   <div className=" text-white drop-shadow-md translate-y-1 gap-1.5 flex text-center px-3 items-center justify-center w-full h-full my-auto text-2xl">
