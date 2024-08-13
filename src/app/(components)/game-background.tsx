@@ -1,25 +1,35 @@
 import Footer from './footer'
-
 import Image from 'next/image'
-
 import background from '@/../public/images/game-background.png'
 
-export default function GameBackground({
+export default async function GameBackground({
   children,
   bothsides = false,
+  selectedMenu,
 }: {
   children: React.ReactNode
   bothsides?: boolean
+  selectedMenu?: 'games' | 'studios'
 }) {
   return (
     <>
       <nav className="px-3 bg-white w-full flex justify-center sm:justify-start h-12 active:*:scale-90 items-center hover:*:scale-110 hover:*:text-mainred *:duration-200 text-black shadow font-medium text-xl">
         <li className="list-none">
-          <a href="/games">GAMES</a>
+          <a
+            href={`/games`}
+            className={selectedMenu === 'games' ? 'underline' : ''}
+          >
+            GAMES
+          </a>
         </li>
         <span className="mx-3">|</span>
         <li className="list-none">
-          <a href="/studios">STUDIOS</a>
+          <a
+            href="/studios"
+            className={selectedMenu === 'studios' ? 'underline' : ''}
+          >
+            STUDIOS
+          </a>
         </li>
         <span className="mx-3">|</span>
         <li className="list-none">

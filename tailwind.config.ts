@@ -11,6 +11,7 @@ const config: Config = {
       colors: {
         mainred: '#e60024',
         maingreen: '#00A98F',
+        mainpeach: '#FF886E',
       },
     },
   },
