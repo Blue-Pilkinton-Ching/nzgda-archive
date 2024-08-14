@@ -61,6 +61,9 @@ export interface Studio {
   ios: string
   android: string
   name: string
+  cityOrRegion: string
+  yearFounded: number
+  otherLinks: string
   website: string
   description: string
   date_created: string

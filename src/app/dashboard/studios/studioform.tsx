@@ -1,5 +1,5 @@
 import { useEffect, useReducer, useState } from 'react'
-import { Studio } from '../../../../types'
+import { Link, Studio } from '../../../../types'
 import Input from './../input'
 import back from '../../../../public/images/back.svg'
 import Image from 'next/image'
@@ -8,6 +8,7 @@ import Button from '@/app/(components)/button'
 import { useAuthState } from 'react-firebase-hooks/auth'
 import { getAuth, User } from 'firebase/auth'
 import { addStudio, editStudio as editStudioData } from '@/api/studios'
+import { LinkInput } from '../link-input'
 
 export interface StudioFormProps {
   edit: boolean
@@ -21,6 +22,21 @@ interface FormState {
   steam: string
   ios: string
   android: string
+  yearFounded: number
+  otherLinks: Link[]
+  cityOrRegion: string
+}
+
+interface StudioState {
+  description: string
+  name: string
+  website: string
+  steam: string
+  ios: string
+  android: string
+  yearFounded: number
+  otherLinks: Link[]
+  cityOrRegion: string
 }
 
 type FormAction =
@@ -30,7 +46,10 @@ type FormAction =
   | { type: 'steam'; value: string }
   | { type: 'ios'; value: string }
   | { type: 'android'; value: string }
-  | { type: 'reset'; value: Studio }
+  | { type: 'yearFounded'; value: string }
+  | { type: 'cityOrRegion'; value: string }
+  | { type: 'otherLinks'; value: Link[] }
+  | { type: 'reset'; value: StudioState }
 
 function reducer(state: FormState, action: FormAction): FormState {
   switch (action.type) {
@@ -46,14 +65,23 @@ function reducer(state: FormState, action: FormAction): FormState {
       return { ...state, ios: action.value }
     case 'android':
       return { ...state, android: action.value }
+    case 'yearFounded':
+      return { ...state, yearFounded: Number(action.value) }
+    case 'cityOrRegion':
+      return { ...state, cityOrRegion: action.value }
+    case 'otherLinks':
+      return { ...state, otherLinks: action.value }
     case 'reset':
       return {
-        description: action.value.description,
-        name: action.value.name,
-        website: action.value.website,
-        steam: action.value.steam,
-        ios: action.value.ios,
-        android: action.value.android,
+        description: action.value.description || '',
+        name: action.value.name || '',
+        website: action.value.website || '',
+        steam: action.value.steam || '',
+        ios: action.value.ios || '',
+        android: action.value.android || '',
+        yearFounded: action.value.yearFounded || 0,
+        cityOrRegion: action.value.cityOrRegion || '',
+        otherLinks: action.value.otherLinks,
       }
     default:
       return state
@@ -68,6 +96,14 @@ export default function StudioForm({ edit, studio }: StudioFormProps) {
     steam: '',
     ios: '',
     android: '',
+    yearFounded: 0,
+    otherLinks: [
+      {
+        label: '',
+        url: '',
+      },
+    ],
+    cityOrRegion: '',
   })
 
   const [user] = useAuthState(getAuth())
@@ -76,9 +112,26 @@ export default function StudioForm({ edit, studio }: StudioFormProps) {
 
   useEffect(() => {
     if (studio) {
-      dispatchFormState({ type: 'reset', value: studio })
+      resetFormFromData(studio)
     }
   }, [studio])
+
+  async function resetFormFromData(newStudio: Studio) {
+    let links = (await JSON.parse(newStudio.otherLinks)) as Link[]
+
+    if (links.length === 0) {
+      links = [
+        {
+          label: '',
+          url: '',
+        },
+      ]
+    }
+
+    const data = { ...newStudio, otherLinks: links } as StudioState
+
+    dispatchFormState({ type: 'reset', value: data })
+  }
 
   async function createStudio() {
     let res
@@ -94,6 +147,9 @@ export default function StudioForm({ edit, studio }: StudioFormProps) {
           steam: formState.steam,
           ios: formState.ios,
           android: formState.android,
+          yearFounded: formState.yearFounded,
+          cityOrRegion: formState.cityOrRegion,
+          otherLinks: JSON.stringify(formState.otherLinks),
         } as Studio,
         user as User
       )
@@ -137,6 +193,9 @@ export default function StudioForm({ edit, studio }: StudioFormProps) {
           steam: formState.steam,
           ios: formState.ios,
           android: formState.android,
+          yearFounded: formState.yearFounded,
+          cityOrRegion: formState.cityOrRegion,
+          otherLinks: JSON.stringify(formState.otherLinks),
         } as Studio,
         user as User
       )
@@ -281,6 +340,117 @@ export default function StudioForm({ edit, studio }: StudioFormProps) {
                   })
                 }
               ></Input>
+              <div className={`flex-col flex mb-3`}>
+                <div className={`flex flex-col`}>
+                  <label
+                    htmlFor={'Custom Links'}
+                    className="text-left text-base font-bold mb-1"
+                  >
+                    Custom Links
+                  </label>
+                  <p className={`text-zinc-500 text-sm mb-3 `}>
+                    Add as many or as few as you want. Each link will be labeled
+                    by the label, and link to the URL.
+                  </p>
+                </div>
+                <div className="w-full flex gap-3 flex-row font-semibold mb-2">
+                  <div className="w-full">Label</div>
+                  <div className="w-full">URL</div>
+                </div>
+                {formState.otherLinks.map((link, index) => {
+                  return (
+                    <>
+                      <LinkInput
+                        required={link.label.length > 0 || link.url.length > 0}
+                        key={index}
+                        label={link.label}
+                        url={link.url}
+                        onChangeLabel={(label) => {
+                          let links = formState.otherLinks
+
+                          links[index] = {
+                            label: label,
+                            url: links[index].url,
+                          }
+                          if (index === formState.otherLinks.length - 1) {
+                            links = [...links, { label: '', url: '' }]
+                          } else {
+                            links = [
+                              ...links.filter(
+                                (l, i) =>
+                                  l.label.length > 0 ||
+                                  l.url.length > 0 ||
+                                  i === formState.otherLinks.length - 1
+                              ),
+                            ]
+                          }
+
+                          dispatchFormState({
+                            type: 'otherLinks',
+                            value: links,
+                          })
+                        }}
+                        onChangeURL={(url) => {
+                          let links = formState.otherLinks
+
+                          links[index] = {
+                            label: links[index].label,
+                            url: url,
+                          }
+
+                          if (index === links.length - 1) {
+                            links = [...links, { label: '', url: '' }]
+                          } else {
+                            links = [
+                              ...links.filter(
+                                (l, i) =>
+                                  l.label.length > 0 ||
+                                  l.url.length > 0 ||
+                                  i === links.length - 1
+                              ),
+                            ]
+                          }
+
+                          dispatchFormState({
+                            type: 'otherLinks',
+                            value: links,
+                          })
+                        }}
+                      ></LinkInput>
+                    </>
+                  )
+                })}
+              </div>
+              <Input
+                tooltip={'The year the studio was founded.'}
+                name={'Year Founded'}
+                value={formState.yearFounded.toString()}
+                type="number"
+                required
+                maxLength={4}
+                onChange={(e) =>
+                  dispatchFormState({
+                    type: 'yearFounded',
+                    value: e.currentTarget.value,
+                  })
+                }
+              ></Input>
+              <Input
+                tooltip={
+                  'The city or region the studio is located in. Eg: Auckland, or Wellington Region'
+                }
+                name={'City'}
+                value={formState.cityOrRegion}
+                type="text"
+                required
+                maxLength={50}
+                onChange={(e) =>
+                  dispatchFormState({
+                    type: 'cityOrRegion',
+                    value: e.currentTarget.value,
+                  })
+                }
+              ></Input>
               <div className="flex justify-center *:w-32 gap-4">
                 <Button
                   inverted
@@ -293,10 +463,7 @@ export default function StudioForm({ edit, studio }: StudioFormProps) {
                   <Button
                     onClick={(e) => {
                       e.preventDefault()
-                      dispatchFormState({
-                        type: 'reset',
-                        value: studio as Studio,
-                      })
+                      resetFormFromData(studio as Studio)
                     }}
                     className="bg-black text-white"
                     invertedClassName="bg-white text-black"
