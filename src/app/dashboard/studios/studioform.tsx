@@ -276,6 +276,7 @@ export default function StudioForm({ edit, studio }: StudioFormProps) {
                 tooltip={
                   'The description of the studio to display on the website. There is a 2000 character limit.'
                 }
+                type="textarea"
                 name={'Description'}
                 value={formState.description}
                 required
