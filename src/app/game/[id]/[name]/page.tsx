@@ -110,13 +110,13 @@ export default function Page() {
       <div className="flex items-center xl:min-h-[calc(100vh-80px-48px)] xl:mb-10 min-h-[calc(100vh-40px-48px)] mb-5">
         <div className="flex flex-1 flex-col-reverse xl:flex-row justify-evenly items-start gap-4 xl:gap-10 *:max-w-[800px] *:xl:max-w-none ">
           <div className="space-y-6 xl:min-w-[500px] xl:w-[500px] flex justify-center flex-col">
-            <h1 className="sm:text-4xl text-3xl text-mainred font-semibold text-wrap flex items-center">
-              <Link
+            <h1 className="sm:text-5xl text-3xl text-mainred font-semibold text-wrap flex items-center">
+              {/* <Link
                 className="hover:scale-125 active:scale-95 duration-100 hover:rotate-12 active:-rotate-12 flex items-center mr-5 w-full max-w-12"
                 href={'/games'}
               >
                 <Image src={back} alt={'back'}></Image>
-              </Link>
+              </Link> */}
               {game.name}
             </h1>
             <p className="sm:text-xl text-lg whitespace-pre-line text-justify">

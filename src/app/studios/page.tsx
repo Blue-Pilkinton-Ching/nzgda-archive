@@ -42,7 +42,7 @@ export default function Page() {
         }
       >
         {loading ? (
-          <div className="text-2xl font-bold">Loading...</div>
+          <div className="text-2xl font-bold text-mainred">Loading...</div>
         ) : error ? (
           <div>{error}</div>
         ) : studios.length > 0 ? (
@@ -69,7 +69,10 @@ export default function Page() {
                     {studios.sort().map((studio: Studio) => (
                       <tr key={studio.id} className="text-xl">
                         <td>
-                          <Link href={`/studio/${studio.id}`}>
+                          <Link
+                            className="underline decoration-1 duration-200 hover:text-mainred hover:scale-125 "
+                            href={`/studio/${studio.id}`}
+                          >
                             {studio.name}
                           </Link>
                         </td>

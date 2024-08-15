@@ -52,6 +52,7 @@ export default function Page() {
         <div>{error}</div>
       ) : (
         <Main
+          dontDisplayLogo
           studio
           title={data.studio?.name || ''}
           hideFeaturedContent

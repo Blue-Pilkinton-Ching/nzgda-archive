@@ -11,12 +11,14 @@ export default function Main({
   children,
   description,
   hideFeaturedContent = false,
+  dontDisplayLogo = false,
   title = '',
   studio = false,
 }: {
   children: React.ReactNode
   description: React.ReactNode
   hideFeaturedContent?: boolean
+  dontDisplayLogo?: boolean
   title?: string
   studio?: boolean
 }) {
@@ -42,33 +44,39 @@ export default function Main({
                 {title}
               </h1>
             ) : (
-              <div className="flex flex-col mx-auto sm:mx-0">
-                <Image
-                  quality={100}
-                  src={logo}
-                  alt="logo"
-                  className="w-[80%] sm:w-auto sm:mx-0 mx-auto md:min-w-[350px] xl:w-full drop-shadow"
-                ></Image>
-                <div
-                  className={`text-3xl pt-4 justify-between flex w-full ${lato.className} text-mainred `}
-                >
-                  <span>G</span>
-                  <span>A</span>
-                  <span>M</span>
-                  <span>E</span>
-                  <span>S</span>
-                  <span className="w-3"></span>
-                  <span>D</span>
-                  <span>I</span>
-                  <span>R</span>
-                  <span>E</span>
-                  <span>C</span>
-                  <span>T</span>
-                  <span>O</span>
-                  <span>R</span>
-                  <span>Y</span>
-                </div>
-              </div>
+              <>
+                {!dontDisplayLogo && (
+                  <>
+                    <div className="flex flex-col mx-auto sm:mx-0">
+                      <Image
+                        quality={100}
+                        src={logo}
+                        alt="logo"
+                        className="w-[80%] sm:w-auto sm:mx-0 mx-auto md:min-w-[350px] xl:w-full drop-shadow"
+                      ></Image>
+                      <div
+                        className={`text-3xl pt-4 justify-between flex w-full ${lato.className} text-mainred `}
+                      >
+                        <span>G</span>
+                        <span>A</span>
+                        <span>M</span>
+                        <span>E</span>
+                        <span>S</span>
+                        <span className="w-3"></span>
+                        <span>D</span>
+                        <span>I</span>
+                        <span>R</span>
+                        <span>E</span>
+                        <span>C</span>
+                        <span>T</span>
+                        <span>O</span>
+                        <span>R</span>
+                        <span>Y</span>
+                      </div>
+                    </div>
+                  </>
+                )}
+              </>
             )}
           </div>
           <div className="w-full md:max-w-[min(calc(100vw-40px),500px)] lg:w-auto sm:text-xl text-lg text-justify sm:text-start">
