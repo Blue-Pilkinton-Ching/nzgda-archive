@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import { MouseEvent } from 'react'
 
 export default function Dropdown({
   options,
@@ -6,12 +7,14 @@ export default function Dropdown({
   inverted,
   text,
   query,
+  onClick,
 }: {
   options: string[]
   text: string
   className?: string
   query: string
   inverted?: boolean
+  onClick: (option: string) => void
 }) {
   return (
     <>
@@ -53,27 +56,25 @@ export default function Dropdown({
             aria-labelledby="dropdownDefaultButton"
           >
             <li>
-              <Link
-                href={`/games`}
+              <button
+                onClick={() => onClick('None')}
                 className="block px-4 py-2 font-semibold hover:bg-neutral-100 *:active:scale-90"
-                scroll={false}
               >
                 <p className="duration-200 w-min text-nowrap overflow-ellipsis ">
                   None
                 </p>
-              </Link>
+              </button>
             </li>
             {options.map((option) => (
               <li key={option}>
-                <Link
-                  scroll={false}
-                  href={`/games?${query}=${encodeURIComponent(option)}`}
+                <button
+                  onClick={() => onClick(option)}
                   className="block px-4 py-2 hover:bg-neutral-100 *:active:scale-90"
                 >
                   <p className="w-min text-nowrap overflow-ellipsis duration-200">
                     {option}
                   </p>
-                </Link>
+                </button>
               </li>
             ))}
           </ul>

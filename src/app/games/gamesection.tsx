@@ -9,6 +9,7 @@ export default function GameSection({
   smallTitle,
   largeTitle,
   titleChildren,
+  platform,
   scrollable = false,
 }: {
   games: Game[]
@@ -16,6 +17,7 @@ export default function GameSection({
   largeTitle: string
   titleChildren?: React.ReactNode
   scrollable?: boolean
+  platform?: string
 }) {
   const { width } = useWindowSize()
 
