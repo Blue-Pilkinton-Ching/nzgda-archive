@@ -37,7 +37,7 @@ export default function Main({
                 : 'lg:w-[350px] min-w-[240px] w-full h-[50%] items-center flex drop-shadow mb-8'
             }
           >
-            {studio ? (
+            {title ? (
               <h1 className="drop-shadow-md sm:text-7xl text-5xl text-mainred text-center sm:text-start font-bold">
                 {title}
               </h1>

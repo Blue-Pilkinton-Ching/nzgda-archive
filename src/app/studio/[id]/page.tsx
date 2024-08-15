@@ -34,9 +34,9 @@ export default function Page() {
     ])
 
     if (gamesRes.status === 'fulfilled' && studioRes.status === 'fulfilled') {
-      const links = await JSON.parse(studioRes.value.body.otherLinks)
+      const l = await JSON.parse(studioRes.value.body.otherLinks)
 
-      setLinks(links as Link[])
+      setLinks(l as Link[])
       setData({
         games: gamesRes.value.body,
         studio: studioRes.value.body,
@@ -80,15 +80,16 @@ export default function Page() {
                   <PageLink href={data.studio.steam || ''} text="Steam">
                     <FaSteam size={24} />
                   </PageLink>
-                  {links.map((link) => {
-                    return (
-                      <PageLink
-                        key={link.label}
-                        href={link.url}
-                        text={link.label}
-                      ></PageLink>
-                    )
-                  })}
+                  {links &&
+                    links.map((link) => {
+                      return (
+                        <PageLink
+                          key={link.label}
+                          href={link.url}
+                          text={link.label}
+                        ></PageLink>
+                      )
+                    })}
                 </div>
               </div>
             ) : null
