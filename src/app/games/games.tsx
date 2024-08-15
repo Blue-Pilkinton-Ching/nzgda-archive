@@ -19,8 +19,10 @@ export default function Games() {
   const [games, setGames] = useState<Game[]>()
   const [studios, setStudios] = useState<Studio[]>([])
   const [studio, setStudio] = useState<string | null>()
-  const [platform, setPlatform] = useState<string>('None')
+  const [platform, setPlatform] = useState<string>('All')
   const params = useSearchParams()
+
+  const [year, setYear] = useState(0)
 
   const [educational, setEducational] = useState(false)
 
@@ -52,7 +54,7 @@ export default function Games() {
           ((platform === 'IOS' && x.iosLink) ||
             (platform === 'Android' && x.androidLink) ||
             (platform === 'Steam' && x.steamLink) ||
-            !platform)
+            platform === 'All')
       )
     )
   }, [allGames, params, platform, studio])
@@ -76,16 +78,10 @@ export default function Games() {
       {games && studios ? (
         <>
           <GameSection
-            smallTitle={studio ? studio : 'All Games'}
-            largeTitle={
-              studio
-                ? `${
-                    platform !== 'None' ? `${platform} ` : ''
-                  }Games by ${studio}`
-                : `${platform !== 'None' ? `${platform} ` : 'All'} Games`
-            }
+            smallTitle={`Browse Games`}
+            largeTitle={`Browse Games`}
             titleChildren={
-              <div className="flex items-center gap-4">
+              <div className="flex items-center md:gap-4 gap-x-2 flex-wrap justify-center">
                 {/* <IconButton
                       onClick={() => {
                         setEducational(!educational)
@@ -107,19 +103,33 @@ export default function Games() {
                     </IconButton> */}
                 <Dropdown
                   onClick={(option) => {
+                    setYear(option === 'All' ? 0 : Number(option))
+                  }}
+                  text={year === 0 ? 'Year' : year.toString()}
+                  inverted
+                  width={100}
+                  maxHeight={200}
+                  options={Array.from(
+                    { length: new Date().getFullYear() - 1980 + 1 },
+                    (_, i) => (1980 + i).toString()
+                  ).reverse()}
+                />{' '}
+                <Dropdown
+                  onClick={(option) => {
                     setPlatform(option)
                   }}
-                  text="Select Platform"
-                  query="platform"
+                  width={124}
+                  text={platform === 'All' ? 'Platform' : platform}
                   inverted
                   options={['Steam', 'IOS', 'Android']}
                 />
                 <Dropdown
+                  maxHeight={200}
+                  width={155}
                   onClick={(option) => {
-                    setStudio(option === 'None' ? null : option)
+                    setStudio(option === 'All' ? null : option)
                   }}
-                  query="studio"
-                  text="Select Studio"
+                  text={studio ? studio : 'Studio'}
                   options={studios?.map((x) => x.name)}
                 />
               </div>

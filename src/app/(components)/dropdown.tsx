@@ -6,15 +6,17 @@ export default function Dropdown({
   className,
   inverted,
   text,
-  query,
   onClick,
+  maxHeight,
+  width,
 }: {
   options: string[]
   text: string
   className?: string
-  query: string
   inverted?: boolean
   onClick: (option: string) => void
+  maxHeight?: number
+  width?: number
 }) {
   return (
     <>
@@ -24,10 +26,11 @@ export default function Dropdown({
           data-dropdown-toggle="dropdown"
           className={
             inverted
-              ? 'text-black focus:text-mainred border border-white focus:border-mainred group-hover/button:border-mainred group-hover/button:text-mainred hover:text-mainred font-medium rounded-lg peer/button text-sm px-5 py-2.5 text-center inline-flex items-center w-44'
-              : 'text-white bg-mainred focus:ring-4 ring-green-200 peer/button hover:ring-4 group-hover/button:ring-4 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center w-44'
+              ? 'text-nowrap text-black focus:text-mainred border border-white focus:border-mainred group-hover/button:border-mainred group-hover/button:text-mainred hover:text-mainred font-medium rounded-lg peer/button text-sm px-5 py-2.5 text-center justify-center inline-flex items-center'
+              : 'text-nowrap text-white bg-mainred focus:ring-4 ring-green-200 peer/button hover:ring-4 group-hover/button:ring-4 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center justify-center'
           }
           type="button"
+          style={width ? { width: `${width}px` } : undefined}
         >
           {text}{' '}
           <svg
@@ -49,19 +52,21 @@ export default function Dropdown({
 
         <div
           id="dropdown"
-          className="my-2 inset-x-0 mx-auto absolute z-10 hidden peer-focus/button:block group-hover/button:block hover:block bg-white divide-y divide-gray-100 rounded-lg shadow w-44"
+          className="my-2 inset-x-0 mx-auto absolute z-10 hidden peer-focus/button:block group-hover/button:block hover:block bg-white divide-y divide-gray-100 rounded-lg shadow"
+          style={width ? { width: `${width}px` } : undefined}
         >
           <ul
-            className="py-2 text-sm text-mainred shadow-md"
+            className={`py-2 text-sm text-mainred shadow-md overflow-y-auto `}
             aria-labelledby="dropdownDefaultButton"
+            style={{ maxHeight: `${maxHeight}px` }}
           >
             <li>
               <button
-                onClick={() => onClick('None')}
-                className="block px-4 py-2 font-semibold hover:bg-neutral-100 *:active:scale-90"
+                onClick={() => onClick('All')}
+                className="block px-4 py-2 font-semibold hover:bg-neutral-100 *:active:scale-90 w-full"
               >
-                <p className="duration-200 w-min text-nowrap overflow-ellipsis ">
-                  None
+                <p className="w-min duration-200 text-nowrap overflow-ellipsis">
+                  All
                 </p>
               </button>
             </li>
@@ -69,7 +74,7 @@ export default function Dropdown({
               <li key={option}>
                 <button
                   onClick={() => onClick(option)}
-                  className="block px-4 py-2 hover:bg-neutral-100 *:active:scale-90"
+                  className="block px-4 py-2 hover:bg-neutral-100 *:active:scale-90 w-full"
                 >
                   <p className="w-min text-nowrap overflow-ellipsis duration-200">
                     {option}
