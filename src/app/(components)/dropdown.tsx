@@ -3,9 +3,15 @@ import Link from 'next/link'
 export default function Dropdown({
   options,
   className,
+  inverted,
+  text,
+  query,
 }: {
   options: string[]
+  text: string
   className?: string
+  query: string
+  inverted?: boolean
 }) {
   return (
     <>
@@ -13,10 +19,14 @@ export default function Dropdown({
         <button
           id="dropdownDefaultButton"
           data-dropdown-toggle="dropdown"
-          className="text-white bg-mainred focus:ring-4 ring-green-200 peer/button hover:ring-4 group-hover/button:ring-4 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center w-44"
+          className={
+            inverted
+              ? 'text-black focus:text-mainred border border-white focus:border-mainred group-hover/button:border-mainred group-hover/button:text-mainred hover:text-mainred font-medium rounded-lg peer/button text-sm px-5 py-2.5 text-center inline-flex items-center w-44'
+              : 'text-white bg-mainred focus:ring-4 ring-green-200 peer/button hover:ring-4 group-hover/button:ring-4 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center w-44'
+          }
           type="button"
         >
-          Filter by Studio{' '}
+          {text}{' '}
           <svg
             className="w-2.5 h-2.5 ms-3"
             aria-hidden="true"
@@ -57,7 +67,7 @@ export default function Dropdown({
               <li key={option}>
                 <Link
                   scroll={false}
-                  href={`/games?studio=${encodeURIComponent(option)}`}
+                  href={`/games?${query}=${encodeURIComponent(option)}`}
                   className="block px-4 py-2 hover:bg-neutral-100 *:active:scale-90"
                 >
                   <p className="w-min text-nowrap overflow-ellipsis duration-200">

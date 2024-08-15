@@ -72,18 +72,13 @@ export default function FeaturedContent() {
                     : ''
                 }`}
               >
-                <Image
-                  quality={90}
-                  priority
+                <iframe
                   src={
-                    featuredGames[featuredIndex].banner ||
-                    `https://placehold.co/800x450.jpg?text=${featuredGames[featuredIndex].name}`
+                    (featuredGames[featuredIndex].banner ||
+                      featuredGames[featuredIndex].url) as string
                   }
-                  alt="Placeholder"
-                  height={450}
-                  width={800}
-                  className="shadow-md rounded-xl w-auto h-[20vw] lg:h-[22vw] xl:h-[min(25vw,450px)]"
-                ></Image>
+                  className="shadow-md aspect-video rounded-xl w-auto h-[20vw] lg:h-[22vw] xl:h-[min(25vw,450px)]"
+                ></iframe>
                 <div className="absolute w-full bottom-0 lg:h-[72px] h-14 bg-gradient-to-t from-10% via-75% from-mainred/90 via-mainred/75 0 to-mainred/0 rounded-b-lg">
                   <div className=" text-white drop-shadow-md translate-y-1 gap-1.5 flex text-center px-3 items-center justify-center w-full h-full my-auto text-2xl">
                     <p className="font-thin drop-shadow-md">Featured</p>

@@ -18,6 +18,7 @@ export default function Games() {
   const [games, setGames] = useState<Game[]>()
   const [studios, setStudios] = useState<Studio[]>([])
   const [studio, setStudio] = useState<string | null>()
+  const [platform, setPlatform] = useState<string | null>()
 
   const [educational, setEducational] = useState(false)
 
@@ -34,11 +35,20 @@ export default function Games() {
     try {
       let res = await getAllGames()
       if (res.ok) {
-        if (params.get('admin') === 'true') {
-          setGames(res.body)
-        } else {
-          setGames((res.body as Game[]).filter((x) => x.approved))
-        }
+        const platform = params.get('platform')
+
+        console.log(platform)
+
+        setGames(
+          (res.body as Game[]).filter(
+            (x) =>
+              (params.get('admin') === 'true' || x.approved) &&
+              ((platform === 'IOS' && x.iosLink) ||
+                (platform === 'Android' && x.androidLink) ||
+                (platform === 'Steam' && x.steamLink) ||
+                !platform)
+          )
+        )
       } else {
         throw new Error(res.text)
       }
@@ -90,7 +100,17 @@ export default function Games() {
                         />
                       )}
                     </IconButton> */}
-                <Dropdown options={studios?.map((x) => x.name)} />
+                <Dropdown
+                  text="Select Platform"
+                  query="platform"
+                  inverted
+                  options={['Steam', 'IOS', 'Android']}
+                />
+                <Dropdown
+                  query="studio"
+                  text="Select Studio"
+                  options={studios?.map((x) => x.name)}
+                />
               </div>
             }
             games={
