@@ -149,7 +149,9 @@ export default function StudioForm({ edit, studio }: StudioFormProps) {
           android: formState.android,
           yearFounded: formState.yearFounded,
           cityOrRegion: formState.cityOrRegion,
-          otherLinks: JSON.stringify(formState.otherLinks),
+          otherLinks: JSON.stringify(
+            formState.otherLinks.slice(0, formState.otherLinks.length - 1)
+          ),
         } as Studio,
         user as User
       )
@@ -195,7 +197,9 @@ export default function StudioForm({ edit, studio }: StudioFormProps) {
           android: formState.android,
           yearFounded: formState.yearFounded,
           cityOrRegion: formState.cityOrRegion,
-          otherLinks: JSON.stringify(formState.otherLinks),
+          otherLinks: JSON.stringify(
+            formState.otherLinks.slice(0, formState.otherLinks.length - 1)
+          ),
         } as Studio,
         user as User
       )
