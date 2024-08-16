@@ -54,10 +54,11 @@ export default function Games() {
           ((platform === 'IOS' && x.iosLink) ||
             (platform === 'Android' && x.androidLink) ||
             (platform === 'Steam' && x.steamLink) ||
-            platform === 'All')
+            platform === 'All') &&
+          (year === 0 || Number(x.yearOfRelease) === year)
       )
     )
-  }, [allGames, params, platform, studio])
+  }, [allGames, params, platform, studio, year])
 
   async function fetchStudios() {
     try {
