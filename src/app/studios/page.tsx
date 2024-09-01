@@ -70,7 +70,7 @@ export default function Page() {
                       <tr key={studio.id} className="text-xl">
                         <td>
                           <Link
-                            className="underline decoration-1 duration-200 hover:text-mainred hover:scale-125 "
+                            className="underline decoration-1 underline-offset-4 duration-200 hover:text-mainred hover:scale-125 "
                             href={`/studio/${studio.id}`}
                           >
                             {studio.name}
