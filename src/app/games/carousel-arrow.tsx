@@ -10,11 +10,11 @@ export default function CarouselArrow({
   isLeft: boolean
 }) {
   return (
-    <button className="hover:scale-110 active:scale-95 duration-300 drop-shadow-lg drop-shadow-black">
+    <button className="hover:scale-110 active:scale-95 duration-300 drop-shadow-black">
       <Image
         src={arrow}
         alt={`Arrow ${isLeft ? 'left' : 'right'}`}
-        className={`h-[40%] max-h-32  ${
+        className={`h-[25%] max-h-32  ${
           isLeft ? '-scale-x-100' : ''
         } drop-shadow-md drop-shadow-black`}
         onClick={onClick}
