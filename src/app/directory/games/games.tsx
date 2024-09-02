@@ -1,12 +1,12 @@
 'use client'
 
-import { Studio, Game } from '../../../types'
+import { Studio, Game } from '../../../../types'
 import React, { useEffect, useState } from 'react'
 
 import '@/utils/client/firebase'
-import Dropdown from '../(components)/dropdown'
+import Dropdown from '../../(components)/dropdown'
 import GameSection from './gamesection'
-import { IconButton } from '../(components)/iconButton'
+import { IconButton } from '../../(components)/iconButton'
 import { IoSchool, IoSchoolOutline } from 'react-icons/io5'
 import { getAllGames } from '@/api/games'
 import { getAllStudios } from '@/api/studios'

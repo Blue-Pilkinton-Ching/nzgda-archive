@@ -1,5 +1,5 @@
 import { useWindowSize } from '@uidotdev/usehooks'
-import { Game } from '../../../types'
+import { Game } from '../../../../types'
 import Card from './card'
 import React from 'react'
 import { ScrollableGamesSection } from './scrollable-games-section'

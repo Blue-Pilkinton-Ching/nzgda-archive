@@ -3,7 +3,7 @@
 import Link from 'next/link'
 import URLName from '@/utils/client/get-url-friendly-name'
 
-import { Game } from '../../../types'
+import { Game } from '../../../../types'
 import CardContent from './card-content'
 import { getAnalytics, logEvent } from 'firebase/analytics'
 

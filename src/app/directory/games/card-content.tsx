@@ -1,6 +1,6 @@
 import Image from 'next/image'
 
-import { Game } from '../../../types'
+import { Game } from '../../../../types'
 
 export default function CardContent({ game }: { game: Game }) {
   return (

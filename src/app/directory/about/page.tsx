@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import Image from 'next/image'
 
-import back from '../../../public/images/back.svg'
+import back from '../../../../public/images/back.svg'
 
 const classes =
   'font-bold text-wrap sm:text-3xl text-2xl hover:*:underline hover:brightness-75 duration-100 *:mb-4 inline'
@@ -28,7 +28,7 @@ export default function Page() {
       </Link>
       <br />
       <Link
-        href={'/games'}
+        href={'/directory/games'}
         className="duration-100 text-mainred *:mb-4 hover:scale-125 active:scale-95 hover:rotate-12 active:-rotate-12 "
       >
         <Image src={back} alt={back} className="w-14 "></Image>

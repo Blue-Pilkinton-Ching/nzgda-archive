@@ -10,7 +10,7 @@ import Link from 'next/link'
 
 import back from '../../../../../public/images/back.svg'
 import '@/utils/client/firebase'
-import GameSection from '@/app/games/gamesection'
+import GameSection from '@/app/directory/games/gamesection'
 import { getAllGames } from '@/api/games'
 import { getGameByID } from '@/api/game'
 import PageLink from '@/app/(components)/page-link'

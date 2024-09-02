@@ -1,7 +1,7 @@
 import React from 'react'
 import Image from 'next/image'
 
-import back from '../../../public/images/back.svg'
+import back from '../../../../public/images/back.svg'
 import Link from 'next/link'
 
 export default function H1({

@@ -1,10 +1,10 @@
 'use client'
 
 import Link from 'next/link'
-import { Game } from '../../../types'
+import { Game } from '../../../../types'
 import Image from 'next/image'
 import urlName from '@/utils/client/get-url-friendly-name'
-import charactors from '../../../public/images/game-characters.png'
+import charactors from '../../../../public/images/game-characters.png'
 
 import { getAllGames } from '@/api/games'
 import { useEffect, useState } from 'react'
