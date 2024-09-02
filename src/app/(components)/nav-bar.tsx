@@ -15,7 +15,7 @@ export function NavBar() {
         <a
           href={`/directory/games`}
           className={`${
-            pathname === '/directory/games' || pathname === '/directory/game'
+            pathname === '/directory/games' || pathname.startsWith('/game/')
               ? 'underline'
               : ''
           } underline-offset-4 ${lato.className} `}
@@ -28,8 +28,7 @@ export function NavBar() {
         <a
           href="/directory/studios"
           className={`${
-            pathname === '/directory/studios' ||
-            pathname === '/directory/studio'
+            pathname === '/directory/studios' || pathname.startsWith('/studio/')
               ? 'underline'
               : ''
           } underline-offset-4 ${lato.className} `}
