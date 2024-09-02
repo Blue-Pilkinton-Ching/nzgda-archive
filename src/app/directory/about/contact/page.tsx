@@ -11,9 +11,9 @@ export default function Page() {
         <br />
         <H2>Want to get in touch?</H2>
         <P>
-          Email Us heihei@tvnz.co.nz We always love hearing from our wonderful
-          community, but if you have a question make sure to check out Help &
-          FAQs first — you may find the answer to your question there.
+          Email Us heihei@tvnz.co.nz <br /> We always love hearing from our
+          wonderful community, but if you have a question make sure to check out
+          Help & FAQs first — you may find the answer to your question there.
         </P>
       </About>
     </>
