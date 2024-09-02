@@ -6,7 +6,5 @@ export interface ILayoutProps {
 }
 
 export default function Layout(props: ILayoutProps) {
-  return (
-    <GameBackground selectedMenu="studios">{props.children} </GameBackground>
-  )
+  return <GameBackground>{props.children} </GameBackground>
 }

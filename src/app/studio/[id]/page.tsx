@@ -51,61 +51,64 @@ export default function Page() {
       {error ? (
         <div>{error}</div>
       ) : (
-        <></>
-        // <Main
-        //   description={
-        //     data.studio?.description ? (
-        //       <div className="flex flex-col gap-5">
-        //         <p className="text-justify">{data.studio?.description || ''}</p>
-        //         <div>
-        //           <p className="text-lg">
-        //             Year Founded: {data.studio.yearFounded}
-        //           </p>
-        //           <p className="text-lg">
-        //             Location: {data.studio.cityOrRegion}
-        //           </p>
-        //         </div>
-        //         <div className="flex gap-3 items-center justify-center flex-row flex-wrap">
-        //           <PageLink href={data.studio.ios || ''} text="Play Store">
-        //             <FaGooglePlay size={24} />
-        //           </PageLink>
-        //           <PageLink href={data.studio.android || ''} text="App Store">
-        //             <FaAppStoreIos size={24} />
-        //           </PageLink>
-        //           <PageLink href={data.studio.website || ''} text="Website">
-        //             <TfiWorld size={24} />
-        //           </PageLink>
-        //           <PageLink href={data.studio.steam || ''} text="Steam">
-        //             <FaSteam size={24} />
-        //           </PageLink>
-        //           {links &&
-        //             links.map((link) => {
-        //               return (
-        //                 <PageLink
-        //                   key={link.label}
-        //                   href={link.url}
-        //                   text={link.label}
-        //                 ></PageLink>
-        //               )
-        //             })}
-        //         </div>
-        //       </div>
-        //     ) : null
-        //   }
-        // >
-        //   <div>
-        //     <GameSection
-        //       games={data.games.filter(
-        //         (element) =>
-        //           !element.hidden && element.studio_id === Number(params.id)
-        //       )}
-        //       smallTitle={'Games'}
-        //       largeTitle={
-        //         data.studio?.name ? `Games by ${data.studio?.name}` : ''
-        //       }
-        //     />
-        //   </div>
-        // </Main>
+        <Main
+          SideContent={
+            <>
+              {data.studio?.description ? (
+                <div className="flex flex-col gap-5">
+                  <p className="text-justify">
+                    {data.studio?.description || ''}
+                  </p>
+                  <div>
+                    <p className="text-lg">
+                      Year Founded: {data.studio.yearFounded}
+                    </p>
+                    <p className="text-lg">
+                      Location: {data.studio.cityOrRegion}
+                    </p>
+                  </div>
+                  <div className="flex gap-3 items-center justify-center flex-row flex-wrap">
+                    <PageLink href={data.studio.ios || ''} text="Play Store">
+                      <FaGooglePlay size={24} />
+                    </PageLink>
+                    <PageLink href={data.studio.android || ''} text="App Store">
+                      <FaAppStoreIos size={24} />
+                    </PageLink>
+                    <PageLink href={data.studio.website || ''} text="Website">
+                      <TfiWorld size={24} />
+                    </PageLink>
+                    <PageLink href={data.studio.steam || ''} text="Steam">
+                      <FaSteam size={24} />
+                    </PageLink>
+                    {links &&
+                      links.map((link) => {
+                        return (
+                          <PageLink
+                            key={link.label}
+                            href={link.url}
+                            text={link.label}
+                          ></PageLink>
+                        )
+                      })}
+                  </div>
+                </div>
+              ) : null}
+            </>
+          }
+        >
+          <div>
+            <GameSection
+              games={data.games.filter(
+                (element) =>
+                  !element.hidden && element.studio_id === Number(params.id)
+              )}
+              smallTitle={'Games'}
+              largeTitle={
+                data.studio?.name ? `Games by ${data.studio?.name}` : ''
+              }
+            />
+          </div>
+        </Main>
       )}
     </>
   )
