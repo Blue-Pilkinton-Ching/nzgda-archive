@@ -59,15 +59,24 @@ export default function Page() {
                   {data.studio?.description ? (
                     <div className="flex justify-evenly mb-5 items-center min-h-[350px]">
                       <div className="flex flex-col gap-5">
+                        <h1 className="text-7xl font-semibold text-mainred">
+                          {data.studio.name}
+                        </h1>
                         <p className="text-justify">
                           {data.studio?.description || ''}
                         </p>
                         <div>
                           <p className="text-lg">
-                            Year Founded: {data.studio.yearFounded}
+                            Year Founded:{' '}
+                            <strong className="font-medium">
+                              {data.studio.yearFounded}
+                            </strong>
                           </p>
                           <p className="text-lg">
-                            Location: {data.studio.cityOrRegion}
+                            Location:{' '}
+                            <strong className="font-medium">
+                              {data.studio.cityOrRegion}
+                            </strong>
                           </p>
                         </div>
                         <div className="flex gap-3 items-center justify-center flex-row flex-wrap">

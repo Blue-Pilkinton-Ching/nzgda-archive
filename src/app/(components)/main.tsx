@@ -14,7 +14,7 @@ export default function Main({
 }) {
   return (
     <>
-      <section className="flex justify-evenly mb-5 items-center min-h-[350px]">
+      <section className="flex justify-evenly mb-5 items-center min-h-[350px] xl:gap-12 2xl:gap-24">
         {SideContent}
         <div className="hidden md:block">
           <FeaturedContent />
