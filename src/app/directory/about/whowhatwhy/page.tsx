@@ -10,7 +10,6 @@ export default function Page() {
       <br />
       <H1>The Who, What and Why</H1>
       <br />
-      <br />
       <H2>Who is HEIHEI?</H2>
       <P>
         HEIHEI is brought to you by a mighty tag team duo of NZ on Air and TVNZ,

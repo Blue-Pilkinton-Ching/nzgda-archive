@@ -41,7 +41,10 @@ export function NavBar() {
         <a
           href="/directory/about"
           className={`${
-            pathname === '/directory/about' ? 'underline' : ''
+            pathname === '/directory/about' ||
+            pathname.startsWith('/directory/about/')
+              ? 'underline'
+              : ''
           } underline-offset-4 ${lato.className} `}
         >
           ABOUT
