@@ -4,6 +4,7 @@ import { getAllStudios } from '@/api/studios'
 import { Studio } from '../../../../types'
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
+import getURLFriendlyName from '@/utils/client/get-url-friendly-name'
 
 export default function Page() {
   const [studios, setStudios] = useState<Studio[]>([])
@@ -41,7 +42,6 @@ export default function Page() {
               A list of some of the different Studios with Games you can find on
               this site!
             </p>
-
             <div className="w-full">
               <table className="w-full">
                 <thead>
@@ -57,7 +57,9 @@ export default function Page() {
                       <td>
                         <Link
                           className="underline decoration-1 underline-offset-4 duration-200 hover:text-mainred hover:scale-125 "
-                          href={`/studio/${studio.id}`}
+                          href={`/studio/${studio.id}/${getURLFriendlyName(
+                            studio.name
+                          )}`}
                         >
                           {studio.name}
                         </Link>
