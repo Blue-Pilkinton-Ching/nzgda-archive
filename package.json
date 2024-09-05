@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@tailwindcss/line-clamp": "^0.4.4",
     "@uidotdev/usehooks": "^2.4.1",
     "dotenv": "^16.4.5",
     "firebase": "^10.6.0",

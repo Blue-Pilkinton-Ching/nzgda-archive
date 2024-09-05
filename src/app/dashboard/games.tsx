@@ -210,7 +210,7 @@ export default function Games({
         <>
           <div className="flex justify-between">
             <h1 className="text-4xl font-bold">Unapproved Games</h1>
-            <Link href={'/games?admin=true'} className="mb-4">
+            <Link href={'/directory/games?admin=true'} className="mb-4">
               <Button
                 className="bg-black text-white float-right mt-0"
                 invertedClassName="bg-white text-black"
