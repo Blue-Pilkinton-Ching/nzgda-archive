@@ -17,7 +17,8 @@ import PageLink from '@/app/(components)/page-link'
 import { TfiWorld } from 'react-icons/tfi'
 import { FaSteam } from 'react-icons/fa6'
 import { FaAppStoreIos, FaGooglePlay } from 'react-icons/fa'
-import type { Link as LinkType } from '@/../types'
+import type { Link as LinkType, Studio } from '@/../types'
+import { getAllStudios } from '@/api/studios'
 
 export default function Page() {
   const [game, setGame] = useState<Game | null>()
@@ -27,6 +28,7 @@ export default function Page() {
   const [isFullscreen, setFullscreen] = useState(false)
   const [iosFullscreen, setIOSFullscreen] = useState(false)
   const [links, setLinks] = useState<LinkType[]>([])
+  const [studios, setStudios] = useState<Studio[]>()
 
   const params = useParams<{ id: string }>()
 
@@ -35,6 +37,7 @@ export default function Page() {
 
     getGame()
     fetchGames()
+    getStudios()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
@@ -45,6 +48,20 @@ export default function Page() {
     } catch (error) {
       console.error(error)
       setError('Failed to fetch games :(')
+    }
+  }
+
+  async function getStudios() {
+    let data: Studio[]
+
+    try {
+      const studios = await getAllStudios()
+
+      data = studios.body as Studio[]
+
+      setStudios(data)
+    } catch (error) {
+      console.error(error)
     }
   }
 
@@ -110,15 +127,16 @@ export default function Page() {
       <div className="flex items-center xl:min-h-[calc(100vh-80px-48px)] xl:mb-10 min-h-[calc(100vh-40px-48px)] mb-5">
         <div className="flex flex-1 flex-col-reverse xl:flex-row justify-evenly items-start gap-4 xl:gap-10 *:max-w-[800px] *:xl:max-w-none ">
           <div className="space-y-6 xl:min-w-[500px] xl:w-[500px] flex justify-center flex-col">
-            <h1 className="sm:text-5xl text-3xl text-mainred font-semibold text-wrap flex items-center">
-              {/* <Link
-                className="hover:scale-125 active:scale-95 duration-100 hover:rotate-12 active:-rotate-12 flex items-center mr-5 w-full max-w-12"
-                href={'/games'}
-              >
-                <Image src={back} alt={'back'}></Image>
-              </Link> */}
-              {game.name}
-            </h1>
+            <div>
+              <h1 className="sm:text-5xl text-3xl text-mainred font-semibold text-wrap flex items-center">
+                {game.name}
+              </h1>
+              <h2 className="sm:text-2xl text-3xl text-mainpeach font-semibold text-wrap flex items-center">
+                {studios
+                  ? `By ${studios.find((x) => x.id === game.studio_id)?.name}`
+                  : '...'}
+              </h2>
+            </div>
             <p className="sm:text-xl text-lg whitespace-pre-line text-justify">
               {game.description}
             </p>

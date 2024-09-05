@@ -250,10 +250,12 @@ export default function GameForm({
         return
       case 401:
         alert('You are Unauthorized to make that action')
+        console.error(res.status, res.text, res.body)
         setSubmitting(false)
         return
       case 500:
         alert('An error occured while saving the game')
+        console.error(res.status, res.text, res.body)
         setSubmitting(false)
         return
       default:
