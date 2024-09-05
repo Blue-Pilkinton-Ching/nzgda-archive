@@ -79,7 +79,7 @@ export default function Page() {
                             </strong>
                           </p>
                         </div>
-                        <div className="flex gap-3 items-center justify-center flex-row flex-wrap">
+                        <div className="flex gap-3 items-center justify-start flex-row flex-wrap">
                           <PageLink
                             href={data.studio.ios || ''}
                             text="Play Store"

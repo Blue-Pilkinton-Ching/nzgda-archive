@@ -124,7 +124,7 @@ export default function Page() {
             </p>
             <p className="text-lg">Year of Release: {game.yearOfRelease}</p>
             <div className="flex flex-col gap-5">
-              <div className="flex gap-3 items-center justify-center flex-row flex-wrap">
+              <div className="flex gap-3 items-center justify-start flex-row flex-wrap">
                 {game.iosLink && (
                   <PageLink href={game.iosLink || ''} text="Play Store">
                     <FaAppStoreIos size={24} />
