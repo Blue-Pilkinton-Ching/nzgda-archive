@@ -3,8 +3,6 @@ import FeaturedContent from '../directory/games/featured-content'
 import { Suspense } from 'react'
 import { Lato } from 'next/font/google'
 
-const lato = Lato({ weight: '400', subsets: ['latin'] })
-
 export default function Main({
   children,
   SideContent,
