@@ -192,10 +192,12 @@ export default function GameForm({
 
       if (thumbnail) {
         form.append('thumbnail', thumbnail)
+        console.log(thumbnail)
       }
 
       if (banner) {
         form.append('banner', banner)
+        console.log(banner)
       }
 
       res = await editGameByID(form, user as User, (game as Game).id)
