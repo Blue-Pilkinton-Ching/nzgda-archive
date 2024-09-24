@@ -141,11 +141,12 @@ export default function Games() {
                     (x) =>
                       x.studio_id === studios.find((s) => s.name === studio)?.id
                   )
-                : games.sort(
-                    (a, b) =>
-                      (b.sort ? b.sort : b.id * 100) -
-                      (a.sort ? a.sort : a.id * 100)
-                  )
+                : // : games.sort(
+                  //     (a, b) =>
+                  //       (b.sort ? b.sort : b.id * 100) -
+                  //       (a.sort ? a.sort : a.id * 100)
+                  //   )
+                  games.sort((a, b) => b.yearOfRelease - a.yearOfRelease)
             }
           />
         </>
