@@ -65,39 +65,41 @@ export default function GameForm({
     >,
     name: string
   ) {
+    const { value } = event.target
+
     switch (name) {
       case 'Name':
-        setName(event.target.value)
+        setName((prevName) => value)
         break
       case 'Description':
-        setDescription(event.target.value)
+        setDescription((prevDescription) => value)
         break
       case 'IOS Link':
-        setIosLink(event.target.value)
+        setIosLink((prevIosLink) => value)
         break
       case 'Android Link':
-        setAndriodLink(event.target.value)
+        setAndriodLink((prevAndroidLink) => value)
         break
       case 'Website Link':
-        setWebsiteLink(event.target.value)
+        setWebsiteLink((prevWebsiteLink) => value)
         break
       case 'Steam Link':
-        setSteamLink(event.target.value)
+        setSteamLink((prevSteamLink) => value)
         break
       case 'Year of Release':
-        setYearOfRelease(Number(event.target.value))
+        setYearOfRelease((prevYearOfRelease) => Number(value))
         break
       case 'Embed External Game or Trailer':
-        setExternalURL(event.target.value)
+        setExternalURL((prevExternalURL) => value)
         break
       case 'Max Width':
-        setWidth(event.target.value)
+        setWidth((prevWidth) => value)
         break
       case 'Max Height':
-        setHeight(event.target.value)
+        setHeight((prevHeight) => value)
         break
       case 'Tags':
-        setTags(event.target.value)
+        setTags((prevTags) => value)
         break
       case 'Studio':
         setStudio(studios.find((s) => s.name === event.target.value)?.id || -1)

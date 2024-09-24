@@ -5,7 +5,7 @@ export default function Input({
   name,
   type = 'text',
   tooltip,
-  value,
+  value = '',
   maxLength,
   onChange,
   date = false,
@@ -22,12 +22,6 @@ export default function Input({
     name: string
   ) => void
 }) {
-  const [currentValue, setCurrentValue] = useState<string | boolean>('')
-
-  useEffect(() => {
-    setCurrentValue(value)
-  }, [value])
-
   return (
     <>
       <div
@@ -50,7 +44,7 @@ export default function Input({
         {type === 'textarea' ? (
           <textarea
             onChange={(event) => onChange(event, name)}
-            value={currentValue as string}
+            value={value as string}
             required={required}
             name={name}
             maxLength={maxLength}
@@ -61,9 +55,9 @@ export default function Input({
         ) : (
           <input
             onChange={(event) => onChange(event, name)}
-            value={currentValue as string}
+            value={value as string}
             type={type}
-            checked={currentValue as boolean}
+            checked={value as boolean}
             maxLength={maxLength}
             max={date ? 9999 : undefined}
             name={name}
