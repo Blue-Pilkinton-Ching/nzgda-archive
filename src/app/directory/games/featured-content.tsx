@@ -53,6 +53,8 @@ export default function FeaturedContent() {
     }
   }
 
+  console.log(featuredGames)
+
   return (
     <>
       {featuredGames != undefined && featuredGames.length > 0 ? (
@@ -89,13 +91,20 @@ export default function FeaturedContent() {
                     : ''
                 }`}
               >
-                <iframe
-                  src={
-                    (featuredGames[featuredIndex].banner ||
-                      featuredGames[featuredIndex].url) as string
-                  }
-                  className="shadow-md aspect-video rounded-xl w-auto h-[20vw] lg:h-[22vw] xl:h-[min(25vw,450px)]"
-                ></iframe>
+                {featuredGames[featuredIndex].banner ? (
+                  <div className="shadow-md aspect-video rounded-xl w-auto h-[20vw] lg:h-[22vw] xl:h-[min(25vw,450px)]">
+                    <Image
+                      src={featuredGames[featuredIndex].banner}
+                      alt={featuredGames[featuredIndex].name}
+                      layout="fill"
+                    />
+                  </div>
+                ) : (
+                  <iframe
+                    src={featuredGames[featuredIndex].url as string}
+                    className="shadow-md aspect-video rounded-xl w-auto h-[20vw] lg:h-[22vw] xl:h-[min(25vw,450px)]"
+                  ></iframe>
+                )}
                 <div className="flex items-center absolute w-full bottom-0 lg:h-[72px] h-14 bg-gradient-to-t from-10% via-75% from-mainred/90 via-mainred/75 0 to-mainred/0 rounded-b-lg">
                   <div className="text-white overflow-hidden translate-y-1 px-3 w-full text-2xl">
                     <div className="whitespace-nowrap text-center overflow-hidden text-ellipsis">
