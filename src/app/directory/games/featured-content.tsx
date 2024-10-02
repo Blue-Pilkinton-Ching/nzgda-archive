@@ -92,7 +92,7 @@ export default function FeaturedContent() {
                 {featuredGames[featuredIndex].banner ? (
                   <div className="shadow-md aspect-video rounded-xl w-auto h-[20vw] lg:h-[22vw] xl:h-[min(25vw,450px)]">
                     <Image
-                      src={featuredGames[featuredIndex].banner}
+                      src={featuredGames[featuredIndex].banner as string}
                       alt={featuredGames[featuredIndex].name}
                       layout="fill"
                     />
