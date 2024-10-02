@@ -128,10 +128,10 @@ export default function Page() {
         <div className="flex flex-1 flex-col-reverse xl:flex-row justify-evenly items-start gap-4 xl:gap-10 *:max-w-[800px] *:xl:max-w-none ">
           <div className="space-y-6 xl:min-w-[500px] xl:w-[500px] flex justify-center flex-col">
             <div>
-              <h1 className="sm:text-5xl text-3xl text-mainred font-semibold text-wrap flex items-center">
+              <h1 className="sm:text-5xl text-3xl text-black drop-shadow-sm font-semibold text-wrap flex items-center">
                 {game.name}
               </h1>
-              <h2 className="sm:text-2xl text-3xl text-mainpeach font-semibold text-wrap flex items-center">
+              <h2 className="sm:text-2xl text-3xl text-black drop-shadow-sm font-semibold text-wrap flex items-center">
                 {studios
                   ? `By ${studios.find((x) => x.id === game.studio_id)?.name}`
                   : '...'}
