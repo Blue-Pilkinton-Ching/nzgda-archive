@@ -289,14 +289,7 @@ export default function GameForm({
     if (game?.otherLinks) {
       const result = await JSON.parse(game?.otherLinks)
 
-      setLinks(
-        result || [
-          {
-            label: '',
-            url: '',
-          },
-        ]
-      )
+      setLinks([...result, { label: '', url: '' }])
     } else {
       setLinks([
         {
@@ -524,7 +517,7 @@ export default function GameForm({
                 type="url"
                 maxLength={2048}
                 name={'Embed External Game or Trailer'}
-                tooltip="If you want to display the game trailer or if the game is hosted on another site, you can add the embed url here. Eg: https://www.youtube.com/embed/VBlFHuCzPgY?si=iU4Me3nVQNxmPcCj"
+                tooltip="If you want to display the game trailer you can add the url here. Eg: https://www.youtube.com/embed/VBlFHuCzPgY?si=iU4Me3nVQNxmPcCj"
               />
               <Input
                 onChange={onGameInputChange}

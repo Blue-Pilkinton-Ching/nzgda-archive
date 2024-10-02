@@ -4,7 +4,7 @@ import * as React from 'react'
 import { Lato } from 'next/font/google'
 import { usePathname } from 'next/navigation'
 
-const lato = Lato({ weight: '400', subsets: ['latin'] })
+const lato = Lato({ weight: '300', subsets: ['latin'] })
 
 export function NavBar() {
   const pathname = usePathname()
@@ -18,7 +18,7 @@ export function NavBar() {
             pathname === '/directory/games' || pathname.startsWith('/game/')
               ? 'underline'
               : ''
-          } underline-offset-4 ${lato.className} `}
+          } underline-offset-2 decoration-1 ${lato.className} `}
         >
           GAMES
         </a>
@@ -31,7 +31,7 @@ export function NavBar() {
             pathname === '/directory/studios' || pathname.startsWith('/studio/')
               ? 'underline'
               : ''
-          } underline-offset-4 ${lato.className} `}
+          } underline-offset-2 decoration-1 ${lato.className} `}
         >
           STUDIOS
         </a>
@@ -45,7 +45,7 @@ export function NavBar() {
             pathname.startsWith('/directory/about/')
               ? 'underline'
               : ''
-          } underline-offset-4 ${lato.className} `}
+          } underline-offset-2 decoration-1 ${lato.className} `}
         >
           ABOUT
         </a>

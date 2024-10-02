@@ -15,7 +15,7 @@ export default function Footer() {
         </div>
         <div className="absolute w-[35%] sm:w-44 left-[50%] -translate-x-1/2 translate-y-1/4">
           <Link
-            href={'/about'}
+            href={'/directory/about'}
             className="flex justify-center hover:scale-105 duration-100 items-center gap-[10%] *:text-mainred *:font-semibold *:text-xl hover:*:underline hover:*:cursor-pointer"
           >
             <div>
