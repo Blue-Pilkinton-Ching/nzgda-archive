@@ -519,7 +519,7 @@ export default function GameForm({
                 name={'Embed External Game or Trailer'}
                 tooltip="If you want to display the game trailer you can add the url here. Eg: https://www.youtube.com/embed/VBlFHuCzPgY?si=iU4Me3nVQNxmPcCj"
               />
-              <Input
+              {/* <Input
                 onChange={onGameInputChange}
                 value={width}
                 type="number"
@@ -534,7 +534,7 @@ export default function GameForm({
                 maxLength={4}
                 tooltip="Same as width, but for height. (eg: 1080)"
                 name={'Max Height'}
-              />
+              /> */}
               <br />
               <>
                 <label

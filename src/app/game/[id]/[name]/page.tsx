@@ -6,9 +6,6 @@ import { useParams } from 'next/navigation'
 import Image from 'next/image'
 
 import logo from '../../../../../public/images/NZGDA.png'
-import Link from 'next/link'
-
-import back from '../../../../../public/images/back.svg'
 import '@/utils/client/firebase'
 import GameSection from '@/app/directory/games/gamesection'
 import { getAllGames } from '@/api/games'

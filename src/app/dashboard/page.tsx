@@ -53,7 +53,9 @@ export default function Page() {
           invalidateData={() => fetchDashboardData(user as User)}
         />
       ) : (
-        <p className="text-xl font-semibold my-5">Loading dashboard...</p>
+        <p className="text-xl font-semibold my-5 w-full text-center">
+          Loading dashboard...
+        </p>
       )}
     </>
   )

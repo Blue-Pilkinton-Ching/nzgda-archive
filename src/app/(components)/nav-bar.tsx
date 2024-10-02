@@ -10,8 +10,8 @@ export function NavBar() {
   const pathname = usePathname()
 
   return (
-    <>
-      <li className="list-none">
+    <div className="flex flex-row">
+      <li className="list-none active:scale-90 hover:scale-110 hover:text-mainred duration-200">
         <a
           href={`/directory/games`}
           className={`${
@@ -24,7 +24,7 @@ export function NavBar() {
         </a>
       </li>
       <span className={`mx-3 ` + lato.className}>|</span>
-      <li className="list-none">
+      <li className="list-none active:scale-90 hover:scale-110 hover:text-mainred duration-200">
         <a
           href="/directory/studios"
           className={`${
@@ -37,7 +37,7 @@ export function NavBar() {
         </a>
       </li>
       <span className={`mx-3 ` + lato.className}>|</span>
-      <li className="list-none">
+      <li className="list-none active:scale-90 hover:scale-110 hover:text-mainred duration-200">
         <a
           href="/directory/about"
           className={`${
@@ -50,6 +50,6 @@ export function NavBar() {
           ABOUT
         </a>
       </li>
-    </>
+    </div>
   )
 }
