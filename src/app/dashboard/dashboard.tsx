@@ -38,7 +38,7 @@ export default function Dashboard({
 
   return (
     <>
-      <div className="max-w-[800px] text-wrap mx-auto text-left mt-20 text-lg mb-12 font-sans text-black">
+      <div className="max-w-[800px] text-wrap mx-auto text-left mt-10 text-lg mb-12 font-sans text-black">
         {adminUser ? (
           <div className="flex justify-center gap-10">
             <Button

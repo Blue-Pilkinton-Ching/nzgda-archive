@@ -53,8 +53,6 @@ export default function FeaturedContent() {
     }
   }
 
-  console.log(featuredGames)
-
   return (
     <>
       {featuredGames != undefined && featuredGames.length > 0 ? (
