@@ -73,7 +73,7 @@ export default function EditGame() {
   return (
     <>
       {message ? (
-        <p>{message}</p>
+        <p className="w-full text-center font-semibold text-xl">{message}</p>
       ) : (
         <GameForm
           edit

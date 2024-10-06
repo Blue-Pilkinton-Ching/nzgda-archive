@@ -325,7 +325,9 @@ export default function GameForm({
         </div>
         <div className={submitting ? 'hidden' : 'block'}>
           {edit && !game ? (
-            <p>Loading Game...</p>
+            <p className="w-full text-center font-semibold text-xl">
+              Loading Game...
+            </p>
           ) : (
             <form className={`flex-col mx-auto flex`} onSubmit={formSubmit}>
               <Input
