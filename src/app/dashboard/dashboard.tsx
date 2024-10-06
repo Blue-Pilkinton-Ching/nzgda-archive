@@ -30,7 +30,7 @@ export default function Dashboard({
 
   if (!dashboardData) {
     return (
-      <div className="text-xl text-mainred font-semibold">
+      <div className="text-xl font-semibold w-full text-center">
         Loading dashboard...
       </div>
     )
