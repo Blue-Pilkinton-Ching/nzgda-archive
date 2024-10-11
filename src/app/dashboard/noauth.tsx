@@ -47,8 +47,6 @@ export default function NoAuth() {
   async function requestAuthorisation(
     event: React.MouseEvent<HTMLButtonElement>
   ) {
-    event.currentTarget.disabled = true
-
     setLoading(true)
 
     try {
