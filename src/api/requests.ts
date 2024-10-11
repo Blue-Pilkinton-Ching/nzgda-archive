@@ -9,6 +9,12 @@ export async function requestPrivilege(admin: Admin, user: User) {
     .ok((res) => true)
     .set('Authorization', `Bearer ${await user.getIdToken(true)}`)
 }
+export async function getRequestPending(admin: Admin, user: User) {
+  return request
+    .get(`/api/requests/${admin.uid}`)
+    .ok((res) => true)
+    .set('Authorization', `Bearer ${await user.getIdToken(true)}`)
+}
 
 export async function allowPrivilegeRequest(admin: Admin, user: User) {
   return request
