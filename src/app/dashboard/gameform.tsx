@@ -89,7 +89,7 @@ export default function GameForm({
       case 'Year of Release':
         setYearOfRelease((prevYearOfRelease) => Number(value))
         break
-      case 'Embed External Game or Trailer':
+      case 'Embed Game Trailer':
         setExternalURL((prevExternalURL) => value)
         break
       case 'Max Width':
@@ -158,6 +158,45 @@ export default function GameForm({
         break
     }
   }
+  function convertToYouTubeEmbed(url: string): string {
+    // Regular expressions for different YouTube URL formats
+    const youtubeRegex = /^(https?:\/\/)?(www\.)?(youtube\.com|youtu\.be)\/.+/
+    const embedRegex = /^(https?:\/\/)?(www\.)?youtube\.com\/embed\/.+/
+
+    // Check if the URL is a YouTube video URL
+    if (youtubeRegex.test(url)) {
+      // Check if it's already an embed URL
+      if (embedRegex.test(url)) {
+        return url // Return the original URL if it's already an embed URL
+      }
+
+      // Extract the video ID
+      let videoId: string | null = null
+
+      try {
+        const parsedUrl = new URL(url)
+
+        if (parsedUrl.hostname.includes('youtube.com')) {
+          videoId = parsedUrl.searchParams.get('v')
+        } else if (parsedUrl.hostname.includes('youtu.be')) {
+          // Remove any trailing slash and get the last segment
+          videoId =
+            parsedUrl.pathname.replace(/\/$/, '').split('/').pop() || null
+        }
+      } catch (error) {
+        // If URL parsing fails, return the original URL
+        return url
+      }
+
+      // If a valid video ID is found, construct the embed URL
+      if (videoId) {
+        return `https://www.youtube.com/embed/${videoId}`
+      }
+    }
+
+    // Return the original URL if it's not a valid YouTube video URL
+    return url
+  }
 
   async function formSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault()
@@ -179,7 +218,7 @@ export default function GameForm({
         steamLink,
         websiteLink,
         yearOfRelease,
-        url: externalURL,
+        url: convertToYouTubeEmbed(externalURL),
         description,
         width: Number(width) ? Number(width) : null,
         height: Number(height) ? Number(height) : null,
@@ -222,7 +261,7 @@ export default function GameForm({
         websiteLink,
         yearOfRelease,
         description,
-        url: externalURL,
+        url: convertToYouTubeEmbed(externalURL),
         width: Number(width) ? Number(width) : null,
         height: Number(height) ? Number(height) : null,
         tags: tags,
@@ -518,7 +557,7 @@ export default function GameForm({
                 value={externalURL}
                 type="url"
                 maxLength={2048}
-                name={'Embed External Game or Trailer'}
+                name={'Embed Game Trailer'}
                 tooltip="If you want to display the game trailer you can add the url here. Eg: https://www.youtube.com/embed/VBlFHuCzPgY?si=iU4Me3nVQNxmPcCj"
               />
               {/* <Input
