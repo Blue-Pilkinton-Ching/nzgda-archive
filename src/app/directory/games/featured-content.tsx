@@ -15,8 +15,6 @@ export default function FeaturedContent() {
   const [featuredGames, setFeaturedGames] = useState<Game[]>()
   const [studios, setStudios] = useState<Studio[]>()
   const [featuredIndex, setFeaturedIndex] = useState(0)
-  const [wobble, setWobble] = useState({ active: false, direction: 'left' })
-
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
@@ -61,14 +59,9 @@ export default function FeaturedContent() {
             <CarouselArrow
               isLeft={true}
               onClick={() => {
-                setWobble({ active: true, direction: 'right' })
                 setFeaturedIndex(
                   (i) => ((i + 1) % featuredGames.length) % featuredGames.length
                 )
-                setTimeout(
-                  () => setWobble({ active: false, direction: 'right' }),
-                  400
-                ) // Increased timeout
               }}
             />
           ) : null}
@@ -81,13 +74,7 @@ export default function FeaturedContent() {
               className=" max-w-[80%]"
             >
               <div
-                className={`hover:scale-[1.02] active:scale-100 duration-100 ${
-                  wobble.active
-                    ? wobble.direction === 'left'
-                      ? 'wobbleLeft'
-                      : 'wobbleRight'
-                    : ''
-                }`}
+                className={`hover:scale-[1.02] active:scale-100 duration-100 `}
               >
                 {featuredGames[featuredIndex].banner ? (
                   <div className="shadow-md aspect-video rounded-xl w-auto h-[20vw] lg:h-[22vw] xl:h-[min(25vw,450px)]">
@@ -131,12 +118,7 @@ export default function FeaturedContent() {
             <CarouselArrow
               isLeft={false}
               onClick={() => {
-                setWobble({ active: true, direction: 'right' })
                 setFeaturedIndex((i) => (i + 1) % featuredGames.length)
-                setTimeout(
-                  () => setWobble({ active: false, direction: 'right' }),
-                  400
-                ) // Increased timeout
               }}
             />
           ) : null}
