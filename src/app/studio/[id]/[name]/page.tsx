@@ -80,27 +80,38 @@ export default function Page() {
                           </p>
                         </div>
                         <div className="flex gap-3 items-center justify-start flex-row flex-wrap">
-                          <PageLink
-                            href={data.studio.ios || ''}
-                            text="Play Store"
-                          >
-                            <FaGooglePlay size={24} />
-                          </PageLink>
-                          <PageLink
-                            href={data.studio.android || ''}
-                            text="App Store"
-                          >
-                            <FaAppStoreIos size={24} />
-                          </PageLink>
-                          <PageLink
-                            href={data.studio.website || ''}
-                            text="Website"
-                          >
-                            <TfiWorld size={24} />
-                          </PageLink>
-                          <PageLink href={data.studio.steam || ''} text="Steam">
-                            <FaSteam size={24} />
-                          </PageLink>
+                          {data.studio.ios && (
+                            <PageLink
+                              href={data.studio.ios || ''}
+                              text="Play Store"
+                            >
+                              <FaGooglePlay size={24} />
+                            </PageLink>
+                          )}
+                          {data.studio.android && (
+                            <PageLink
+                              href={data.studio.android || ''}
+                              text="App Store"
+                            >
+                              <FaAppStoreIos size={24} />
+                            </PageLink>
+                          )}
+                          {data.studio.website && (
+                            <PageLink
+                              href={data.studio.website || ''}
+                              text="Website"
+                            >
+                              <TfiWorld size={24} />
+                            </PageLink>
+                          )}
+                          {data.studio.steam && (
+                            <PageLink
+                              href={data.studio.steam || ''}
+                              text="Steam"
+                            >
+                              <FaSteam size={24} />
+                            </PageLink>
+                          )}
                           {links &&
                             links.map((link) => {
                               return (

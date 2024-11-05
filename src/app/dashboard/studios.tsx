@@ -7,7 +7,7 @@ import { MdDeleteForever, MdDone, MdEdit } from 'react-icons/md'
 import { Studio } from '../../../types'
 import Button from '../(components)/button'
 import Confirm from './confirm'
-import { addStudio, deleteStudioByID, editStudio } from '@/api/studios'
+import { deleteStudioByID } from '@/api/studios'
 import Link from 'next/link'
 
 export default function Studios({
