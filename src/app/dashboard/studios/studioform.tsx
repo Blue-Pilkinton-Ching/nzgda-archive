@@ -25,6 +25,7 @@ interface FormState {
   yearFounded: number
   otherLinks: Link[]
   cityOrRegion: string
+  nzgdaMember: boolean
 }
 
 interface StudioState {
@@ -37,10 +38,12 @@ interface StudioState {
   yearFounded: number
   otherLinks: Link[]
   cityOrRegion: string
+  nzgdaMember: boolean
 }
 
 type FormAction =
   | { type: 'description'; value: string }
+  | { type: 'nzgdaMember'; value: boolean }
   | { type: 'website'; value: string }
   | { type: 'name'; value: string }
   | { type: 'steam'; value: string }
@@ -71,6 +74,8 @@ function reducer(state: FormState, action: FormAction): FormState {
       return { ...state, cityOrRegion: action.value }
     case 'otherLinks':
       return { ...state, otherLinks: action.value }
+    case 'nzgdaMember':
+      return { ...state, nzgdaMember: action.value }
     case 'reset':
       return {
         description: action.value.description || '',
@@ -82,6 +87,7 @@ function reducer(state: FormState, action: FormAction): FormState {
         yearFounded: action.value.yearFounded || 0,
         cityOrRegion: action.value.cityOrRegion || '',
         otherLinks: action.value.otherLinks,
+        nzgdaMember: action.value.nzgdaMember || false,
       }
     default:
       return state
@@ -104,6 +110,7 @@ export default function StudioForm({ edit, studio }: StudioFormProps) {
       },
     ],
     cityOrRegion: '',
+    nzgdaMember: false,
   })
 
   const [user] = useAuthState(getAuth())
@@ -152,6 +159,7 @@ export default function StudioForm({ edit, studio }: StudioFormProps) {
           otherLinks: JSON.stringify(
             formState.otherLinks.slice(0, formState.otherLinks.length - 1)
           ),
+          nzgdaMember: formState.nzgdaMember,
         } as Studio,
         user as User
       )
@@ -200,6 +208,7 @@ export default function StudioForm({ edit, studio }: StudioFormProps) {
           otherLinks: JSON.stringify(
             formState.otherLinks.slice(0, formState.otherLinks.length - 1)
           ),
+          nzgdaMember: formState.nzgdaMember,
         } as Studio,
         user as User
       )
@@ -440,6 +449,19 @@ export default function StudioForm({ edit, studio }: StudioFormProps) {
                   })
                 }
               ></Input>
+              <Input
+                tooltip={'Is this studio a member of NZGDA?'}
+                name={'NZGDA Member'}
+                value={formState.nzgdaMember}
+                type="checkbox"
+                maxLength={0}
+                onChange={(e) =>
+                  dispatchFormState({
+                    type: 'nzgdaMember',
+                    value: (e.target as HTMLInputElement).checked, // Use checked instead of value
+                  })
+                }
+              />
               <Input
                 tooltip={
                   'The city or region the studio is located in. Eg: Auckland, or Wellington Region'

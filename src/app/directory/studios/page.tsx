@@ -49,6 +49,7 @@ export default function Page() {
                     <th>Name</th>
                     <th>Location</th>
                     <th>Year Founded</th>
+                    <th>NZGDA Member</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y-4 divide-white">
@@ -66,6 +67,7 @@ export default function Page() {
                       </td>
                       <td>{studio.cityOrRegion}</td>
                       <td>{studio.yearFounded}</td>
+                      <td>{studio.nzgdaMember ? 'Yes' : 'No'}</td>
                     </tr>
                   ))}
                 </tbody>

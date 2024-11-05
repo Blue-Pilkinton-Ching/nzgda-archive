@@ -1,8 +1,8 @@
 import { IconButton } from '../(components)/iconButton'
-import { FormEvent, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useAuthState } from 'react-firebase-hooks/auth'
 import { User, getAuth } from 'firebase/auth'
-import { MdDeleteForever, MdDone, MdEdit } from 'react-icons/md'
+import { MdDeleteForever, MdEdit } from 'react-icons/md'
 
 import { Studio } from '../../../types'
 import Button from '../(components)/button'

@@ -68,4 +68,5 @@ export interface Studio {
   description: string
   date_created: string
   date_updated: string
+  nzgdaMember: boolean
 }
