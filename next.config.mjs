@@ -4,7 +4,7 @@ const nextConfig = {
     return [
       {
         source: '/api/:slug*',
-        destination: `http://localhost:3006/:slug*`,
+        destination: `${process.env.API_ORIGIN}/:slug*`,
       },
     ]
   },
