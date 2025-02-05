@@ -1,12 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  rewrites: async () => {
-    return [
-      {
-        source: '/api/:slug*',
-        destination: `${process.env.API_ORIGIN}/:slug*`,
-      },
-    ]
+  env: {
+    API_ORIGIN: process.env.API_ORIGIN,
   },
   images: {
     remotePatterns: [
