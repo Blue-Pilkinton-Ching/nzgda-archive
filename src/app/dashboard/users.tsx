@@ -4,13 +4,14 @@ import { IconButton } from '../(components)/iconButton'
 import { Studio, Admin, UserTypes } from '../../../types'
 import { FaCheck, FaXmark } from 'react-icons/fa6'
 import { MdDeleteForever } from 'react-icons/md'
+import { MdGroupAdd } from 'react-icons/md'
 import Confirm from './confirm'
 import { useEffect, useState } from 'react'
 import { useAuthState } from 'react-firebase-hooks/auth'
 import { getAuth } from 'firebase/auth'
 import type { User } from 'firebase/auth'
 import { allowPrivilegeRequest, denyPrivilegeRequest } from '@/api/requests'
-import { revokeAdmin } from '@/api/admins'
+import { promoteAdmin, revokeAdmin } from '@/api/admins'
 
 export default function Users({
   className,
@@ -38,6 +39,32 @@ export default function Users({
     let res
     try {
       res = await allowPrivilegeRequest(authRequest, user as User)
+    } catch (error) {
+      alert('An error occured while adding user')
+      console.error(error)
+      return
+    }
+    switch (res.status) {
+      case 200:
+        invalidateUsers()
+        return
+      case 401:
+        alert('You are Unauthorized to make that action')
+        return
+      case 500:
+        alert('A server error occured while adding user')
+        return
+      default:
+        alert('An unknown error occured')
+        console.error(res.status, res.text, res.body)
+        return
+    }
+  }
+
+  async function promoteUser(admin: Admin) {
+    let res
+    try {
+      res = await promoteAdmin(admin.uid, user as User)
     } catch (error) {
       alert('An error occured while adding user')
       console.error(error)
@@ -134,34 +161,34 @@ export default function Users({
           onConfirm={confirmAction || (() => {})}
           onCancel={() => setConfirmText('')}
         />
-        <h1 className="pl-2 text-4xl font-bold">User Requests</h1>
+        <h1 className='pl-2 text-4xl font-bold'>User Requests</h1>
         <br />
-        <table className="w-full ">
+        <table className='w-full '>
           <thead>
-            <tr className="*:p-1">
+            <tr className='*:p-1'>
               <th>Email Address</th>
-              <th className="w-14 text-left">Studio</th>
-              <th className="w-14 text-center">Accept</th>
-              <th className="w-14 text-center">Deny</th>
+              <th className='w-14 text-left'>Studio</th>
+              <th className='w-14 text-center'>Accept</th>
+              <th className='w-14 text-center'>Deny</th>
             </tr>
           </thead>
-          <tbody className="w-full">
+          <tbody className='w-full'>
             {requests.map((request, index) => {
               return (
-                <tr key={index} className="*:p-1 odd:bg-white even:bg-pink-50">
+                <tr key={index} className='*:p-1 odd:bg-white even:bg-pink-50'>
                   <td>
                     <div>{request.email}</div>
                   </td>
                   <td>
                     <select
-                      id="Partner / Studio"
-                      name="Partner / Studio"
+                      id='Partner / Studio'
+                      name='Partner / Studio'
                       value={
                         studios.find((s) => s.id === request.studio)?.name ||
                         '-- select --'
                       }
                       onChange={(event) => setUser(request, event.target.value)}
-                      className="cursor-pointer text-ellipsis max-w-44 py-0.5 px-2 rounded-lg flex-1 border-zinc-500 border shadow-md focus:border-black outline-none text-lg"
+                      className='cursor-pointer text-ellipsis max-w-44 py-0.5 px-2 rounded-lg flex-1 border-zinc-500 border shadow-md focus:border-black outline-none text-lg'
                     >
                       <option disabled>-- select --</option>
                       {studios.map((studio) => {
@@ -192,7 +219,7 @@ export default function Users({
                         }
                       }}
                     >
-                      <FaCheck className="w-full" size={'30px'} />
+                      <FaCheck className='w-full' size={'30px'} />
                     </IconButton>
                   </td>
                   <td>
@@ -208,7 +235,7 @@ export default function Users({
                         )
                       }}
                     >
-                      <FaXmark className="w-full" size={'30px'} />
+                      <FaXmark className='w-full' size={'30px'} />
                     </IconButton>
                   </td>
                 </tr>
@@ -220,47 +247,66 @@ export default function Users({
       <br />
       <br />
       <div className={className}>
-        <h1 className="pl-2 text-4xl font-bold">Current Users</h1>
+        <h1 className='pl-2 text-4xl font-bold'>Current Users</h1>
         <br />
-        <table className="w-full ">
+        <table className='w-full '>
           <thead>
-            <tr className="*:p-1">
+            <tr className='*:p-1'>
               <th>Email Address</th>
-              <th className="w-14 text-left">Studio</th>
-              <th className="w-14 text-center">Revoke</th>
+              <th className='w-14 text-left'>Studio</th>
+              <th className='w-14 text-center'>Promote</th>
+              <th className='w-14 text-center'>Revoke</th>
             </tr>
           </thead>
-          <tbody className="w-full">
+          <tbody className='w-full'>
             {admins.map((admin, index) => {
               return (
-                <tr key={index} className="*:p-1 odd:bg-white even:bg-pink-50">
+                <tr key={index} className='*:p-1 odd:bg-white even:bg-pink-50'>
                   <td>
                     <div>{admin.email}</div>
                   </td>
                   <td>
-                    <div className="text-nowrap">
+                    <div className='text-nowrap'>
                       {studios.find((x) => x.id === admin.studio)?.name || (
                         <strong>Admin</strong>
                       )}
                     </div>
                   </td>
                   {admin.studio === 0 ? null : (
-                    <td>
-                      <IconButton
-                        onClick={() => {
-                          setConfirmAction(() => {
-                            return () => {
-                              deleteUser(admin)
-                            }
-                          })
-                          setConfirmText(
-                            'Are you sure you want to revoke the Authorization of this user? This action is irreversible.'
-                          )
-                        }}
-                      >
-                        <MdDeleteForever className="w-full" size={'30px'} />
-                      </IconButton>
-                    </td>
+                    <>
+                      <td>
+                        <IconButton
+                          onClick={() => {
+                            setConfirmAction(() => {
+                              return () => {
+                                promoteUser(admin)
+                              }
+                            })
+                            setConfirmText(
+                              'Are you sure you want to give this user admin privileges? This action is irreversible.'
+                            )
+                          }}
+                        >
+                          <MdGroupAdd className='w-full' size={'30px'} />
+                        </IconButton>
+                      </td>
+                      <td>
+                        <IconButton
+                          onClick={() => {
+                            setConfirmAction(() => {
+                              return () => {
+                                deleteUser(admin)
+                              }
+                            })
+                            setConfirmText(
+                              'Are you sure you want to revoke the Authorization of this user? This action is irreversible.'
+                            )
+                          }}
+                        >
+                          <MdDeleteForever className='w-full' size={'30px'} />
+                        </IconButton>
+                      </td>
+                    </>
                   )}
                 </tr>
               )

@@ -24,3 +24,11 @@ export async function getPrivilege(user: User) {
     .ok((res) => true)
     .set('Authorization', `Bearer ${await user.getIdToken(true)}`)
 }
+
+export async function promoteAdmin(adminUID: string, user: User) {
+  return request
+    .patch(`${apiOrigin}/admins`)
+    .ok((res) => true)
+    .send({ uid: adminUID })
+    .set('Authorization', `Bearer ${await user.getIdToken(true)}`)
+}
