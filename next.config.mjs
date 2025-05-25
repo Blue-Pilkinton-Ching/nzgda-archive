@@ -19,7 +19,13 @@ const nextConfig = {
       },
       {
         protocol: 'https',
-        hostname: 'nzgda-archive.s3.ap-southeast-2.amazonaws.com',
+        hostname: 'nzgda-games.syd1.cdn.digitaloceanspaces.com',
+        port: '',
+        pathname: '/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'nzgda-games.syd1.digitaloceanspaces.com',
         port: '',
         pathname: '/**',
       },
